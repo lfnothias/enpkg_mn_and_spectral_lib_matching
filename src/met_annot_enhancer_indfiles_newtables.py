@@ -357,6 +357,7 @@ class SimilarityNetwork:
 
 
 
+#######################################################################3
 
 
 
@@ -372,9 +373,6 @@ class SimilarityNetwork:
 
 
 
-
-# timer is started
-start_time = time.time()
 
 print('Cleaning the spectral database metadata fields ...')
 
@@ -400,6 +398,8 @@ adducts_df['max'] = adducts_df['adduct_mass'] + \
 repository_path_list = [x[0] for x in os.walk(repository_path)]
 repository_path_list.remove(repository_path)
 
+start_time = time.time()
+
 for sample_dir in repository_path_list:
 
     sample = sample_dir.split(repository_path,1)[1]
@@ -415,7 +415,9 @@ for sample_dir in repository_path_list:
         continue
     
     if samples_metadata[sampletype_header][0] == 'sample':
-        print('Treating file ' + sample)
+        print('''
+        Treating file''' + sample
+        )
 
         isdb_results_path = sample_dir + '/' + sample + isdb_output_suffix + '.tsv'
         mn_ci_ouput_path = sample_dir + '/' + sample + mn_output_suffix + '_ci.tsv'
@@ -426,7 +428,7 @@ for sample_dir in repository_path_list:
         taxon_info_output_path = sample_dir + '/' + sample + '_taxon_info.json'
 
         print('''
-        Proceeding to spectral matching ...
+        Proceeding to spectral matching...
         ''')
 
         spectrums_query = list(load_from_mgf(spectra_file_path))
@@ -466,19 +468,17 @@ for sample_dir in repository_path_list:
             df.to_csv(isdb_results_path, mode='a', header=not os.path.exists(isdb_results_path), sep = '\t')
 
         print('''
-        Spectral matching done !
+        Spectral matching done!
         ''')
 
         print('''
-        Proceeding to Molecular Netorking computation...
+        Proceeding to Molecular Networking...
         ''')      
         if mn_score == 'modifiedcosine':
             cosine = ModifiedCosine(tolerance=float(msms_mz_tol))
         else:
             cosine = CosineGreedy(tolerance=float(msms_mz_tol))
 
-        scans_id_map[i] = int(s.metadata['scans'])
-        #similarity_score = PrecursorMzMatch(tolerance=float(mn_parent_mz_tol), tolerance_type="Dalton")
         scores = calculate_scores(spectrums_query, spectrums_query, cosine)
         ms_network = SimilarityNetwork(identifier_key="scans", score_cutoff = mn_score_cutoff, top_n = mn_top_n, max_links = mn_max_links, link_method = 'mutual')
         ms_network.create_network(scores)
@@ -649,7 +649,7 @@ for sample_dir in repository_path_list:
                     record_path=['unmatched_names']
                     )
 
-        df_species_tnrs_matched.info()
+        #df_species_tnrs_matched.info()
 
         # We then want to match with the accepted name instead of the synonym in case both are present. 
         # We thus order by matched_name and then by is_synonym status prior to returning the first row.
