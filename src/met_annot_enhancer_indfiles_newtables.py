@@ -676,7 +676,7 @@ for sample_dir in repository_path_list:
         tl = []
 
         for i in taxon_info:
-            with open(str(species_output_path), 'w') as out:
+            with open(str(taxon_info_output_path), 'w') as out:
                 tl.append(i.response_dict)
                 yo = json.dumps(tl)
                 out.write('{}\n'.format(yo))
