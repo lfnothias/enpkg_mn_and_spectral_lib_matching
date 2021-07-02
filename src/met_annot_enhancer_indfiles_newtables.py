@@ -422,6 +422,8 @@ for sample_dir in repository_path_list:
         repond_table_path = sample_dir + '/' + sample  + repond_table_suffix + '.tsv'
         repond_table_flat_path = sample_dir + '/' + sample + repond_table_suffix + '_flat.tsv'
         mn_graphml_ouput_path = sample_dir + '/' + sample + mn_output_suffix + '_mn.graphml'
+        species_output_path = sample_dir + '/' + sample + '_species.json'
+        taxon_info_output_path = sample_dir + '/' + sample + '_taxon_info.json'
 
         print('''
         Proceeding to spectral matching ...
@@ -610,7 +612,7 @@ for sample_dir in repository_path_list:
                     'structure_taxonomy_npclassifier_02superclass', 'structure_taxonomy_npclassifier_03class',
                     'organism_name', 'organism_taxonomy_ottid',
                     'organism_taxonomy_01domain', 'organism_taxonomy_02kingdom', 'organism_taxonomy_03phylum',
-                    'organism_taxonomy_04class', 'organism_taxonomy_05order', 'organism_taxonomy_06family', 'organism_taxonomy_07tribe', 'organism_taxonomy_08genus', 'organism_taxonomy_09species', 'organism_taxonomy_10varietas' ]
+                    'organism_taxonomy_04class', 'organism_taxonomy_05order', 'organism_taxonomy_06family', 'organism_taxonomy_08genus', 'organism_taxonomy_09species', 'organism_taxonomy_10varietas' ]
 
         dt_isdb_results = pd.merge(
             left=dt_isdb_results, right=db_metadata[cols_to_use], left_on='short_inchikey', right_on='short_inchikey', how='outer')
@@ -631,11 +633,11 @@ for sample_dir in repository_path_list:
 
         species_tnrs_matched = OT.tnrs_match(species, context_name=None, do_approximate_matching=True, include_suppressed=False)
 
-        with open(str(sample_dir +'species.json'), 'w') as out:
+        with open(str(species_output_path), 'w') as out:
             sf = json.dumps(species_tnrs_matched.response_dict, indent=2, sort_keys=True)
             out.write('{}\n'.format(sf))
 
-        with open(str(sample_dir +'species.json')) as tmpfile:
+        with open(str(species_output_path)) as tmpfile:
                 jsondic = json.loads(tmpfile.read())
 
         json_normalize(jsondic)
@@ -674,12 +676,12 @@ for sample_dir in repository_path_list:
         tl = []
 
         for i in taxon_info:
-            with open(str(sample_dir +'taxon_info.json'), 'w') as out:
+            with open(str(species_output_path), 'w') as out:
                 tl.append(i.response_dict)
                 yo = json.dumps(tl)
                 out.write('{}\n'.format(yo))
 
-        with open(str(sample_dir +'taxon_info.json')) as tmpfile:
+        with open(str(taxon_info_output_path)) as tmpfile:
             jsondic = json.loads(tmpfile.read())
 
         df = json_normalize(jsondic)
@@ -705,7 +707,7 @@ for sample_dir in repository_path_list:
 
         # here we want to have these columns whatevere happens
         col_list = ['ott_id', 'domain', 'kingdom', 'phylum',
-                                'class', 'order', 'family', 'tribe', 'genus', 'unique_name']
+                                'class', 'order', 'family', 'genus', 'unique_name']
 
         df_tax_lineage_filtered_flat = df_tax_lineage_filtered_flat.reindex(columns=col_list, fill_value = np.NaN)
 
@@ -716,7 +718,6 @@ for sample_dir in repository_path_list:
                     'class': 'query_otol_class',
                     'order': 'query_otol_order',
                     'family': 'query_otol_family',
-                    'tribe': 'query_otol_tribe',
                     'genus': 'query_otol_genus',
                     'unique_name': 'query_otol_species'}
 
@@ -730,7 +731,6 @@ for sample_dir in repository_path_list:
                     'query_otol_class',
                     'query_otol_order',
                     'query_otol_family',
-                    'query_otol_tribe',
                     'query_otol_genus',
                     'query_otol_species']
 
@@ -742,7 +742,7 @@ for sample_dir in repository_path_list:
         # Here we will add three columns (even for the simple repond this way it will be close to the multiple species repond)
         # these line will need to be defined as function arguments
         cols_att = ['query_otol_domain', 'query_otol_kingdom', 'query_otol_phylum', 'query_otol_class',
-                    'query_otol_order', 'query_otol_family', 'query_otol_tribe', 'query_otol_genus', 'query_otol_species']
+                    'query_otol_order', 'query_otol_family', 'query_otol_genus', 'query_otol_species']
         for col in cols_att:
             dt_isdb_results[col] = samples_metadata[col][0]
 
@@ -751,15 +751,15 @@ for sample_dir in repository_path_list:
         ''')
 
         cols_ref = ['organism_taxonomy_01domain', 'organism_taxonomy_02kingdom',  'organism_taxonomy_03phylum', 'organism_taxonomy_04class',
-                    'organism_taxonomy_05order', 'organism_taxonomy_06family', 'organism_taxonomy_07tribe', 'organism_taxonomy_08genus', 'organism_taxonomy_09species']
+                    'organism_taxonomy_05order', 'organism_taxonomy_06family','organism_taxonomy_08genus', 'organism_taxonomy_09species']
 
         cols_match = ['matched_domain', 'matched_kingdom', 'matched_phylum', 'matched_class',
-                    'matched_order', 'matched_family', 'matched_tribe', 'matched_genus', 'matched_species']
+                    'matched_order', 'matched_family', 'matched_genus', 'matched_species']
 
         col_prev = None
         for col_ref, col_att, col_match in zip(cols_ref, cols_att, cols_match):
-                dt_isdb_results[col_ref].fillna('Unknown', inplace=True)
-                dt_isdb_results[col_att].fillna('Unknown', inplace=True)
+                dt_isdb_results[col_ref].fillna('unknown', inplace=True)
+                dt_isdb_results[col_att].fillna('unknown', inplace=True)
                 dt_isdb_results[col_ref] = dt_isdb_results[col_ref].apply(lambda x: [x])
                 dt_isdb_results[col_att] = dt_isdb_results[col_att].apply(lambda x: [x])
                 dt_isdb_results[col_match] = [list(set(a).intersection(set(b))) for a, b in zip(dt_isdb_results[col_ref], dt_isdb_results[col_att])] # Allows to compare 2 lists
@@ -797,8 +797,6 @@ for sample_dir in repository_path_list:
             str(dt_isdb_results['matched_order'].count()))
         print('Number of annotations reweighted at the family level: ' +
             str(dt_isdb_results['matched_family'].count()))
-        print('Number of annotations reweighted at the tribe level: ' +
-            str(dt_isdb_results['matched_tribe'].count()))
         print('Number of annotations reweighted at the genus level: ' +
             str(dt_isdb_results['matched_genus'].count()))
         print('Number of annotations reweighted at the species level: ' +
@@ -897,7 +895,7 @@ for sample_dir in repository_path_list:
        
         dt_isdb_results_chem_rew['lowest_matched_taxon'] = dt_isdb_results_chem_rew['matched_species']
         dt_isdb_results_chem_rew['lowest_matched_taxon'] = dt_isdb_results_chem_rew['lowest_matched_taxon'].replace('nan', np.NaN)
-        col_matched = ['matched_genus', 'matched_tribe', 'matched_family', 'matched_order', 'matched_order', 'matched_phylum', 'matched_kingdom', 'matched_domain']
+        col_matched = ['matched_genus', 'matched_family', 'matched_order', 'matched_order', 'matched_phylum', 'matched_kingdom', 'matched_domain']
         for col in col_matched:
             dt_isdb_results_chem_rew[col] = dt_isdb_results_chem_rew[col].replace('nan', np.NaN)  
             dt_isdb_results_chem_rew['lowest_matched_taxon'].fillna(dt_isdb_results_chem_rew[col], inplace=True)
