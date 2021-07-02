@@ -18,12 +18,15 @@ spectral_match_params:
   - msms_mz_tol: 0.01 # the msms mass tolerance to use for spectral matching (in Da)
   - min_cos: 0.3 # the minimal cosine to use for spectral matching
   - min_peaks: 6 # the minimal matching peaks number to use for spectral matching
+  - match_score: modifiedcosine # modifiedcosine or cosinegreedy
 
 networking_params:
   - mn_parent_mz_tol: 0.01 # the parent mass tolerance to use for spectral matching (in Da)
   - mn_msms_mz_tol: 0.01 # the msms mass tolerance to use for spectral matching (in Da)
-  - mn_min_cos: 0.7 # the minimal cosine to use for spectral matching
-  - mn_min_peaks: 6 # the minimal matching peaks number to use for spectral matching
+  - mn_score_cutoff: 0.7 
+  - mn_max_links: 10 
+  - mn_top_n: 15
+  - mn_score: modifiedcosine # modifiedcosine or cosinegreedy
 
 repond_params:
   - top_to_output: 1

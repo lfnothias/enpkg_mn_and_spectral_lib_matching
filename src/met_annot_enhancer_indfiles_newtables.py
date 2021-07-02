@@ -28,7 +28,7 @@ from matchms.filtering import select_by_mz
 from matchms.similarity import PrecursorMzMatch
 from matchms import calculate_scores
 from matchms.similarity import CosineGreedy
-from matchms.networking import SimilarityNetwork
+from matchms.similarity import ModifiedCosine
 
 # We deactivate the iloc warning see https://stackoverflow.com/a/20627316
 pd.options.mode.chained_assignment = None  # default='warn'
@@ -48,11 +48,14 @@ parent_mz_tol = params_list['spectral_match_params'][0]['parent_mz_tol']
 msms_mz_tol = params_list['spectral_match_params'][1]['msms_mz_tol']
 min_cos = params_list['spectral_match_params'][2]['min_cos']
 min_peaks = params_list['spectral_match_params'][3]['min_peaks']
+match_score = params_list['spectral_match_params'][4]['match_score']
 
 mn_parent_mz_tol = params_list['networking_params'][0]['mn_parent_mz_tol']
 mn_msms_mz_tol = params_list['networking_params'][1]['mn_msms_mz_tol']
-mn_min_cos = params_list['networking_params'][2]['mn_min_cos']
-mn_min_peaks = params_list['networking_params'][3]['mn_min_peaks']
+mn_score_cutoff = params_list['networking_params'][2]['mn_score_cutoff']
+mn_max_links = params_list['networking_params'][3]['mn_max_links']
+mn_top_n = params_list['networking_params'][4]['mn_top_n']
+mn_score = params_list['networking_params'][5]['mn_score']
 
 top_to_output= params_list['repond_params'][0]['top_to_output']
 ppm_tol = params_list['repond_params'][1]['ppm_tol']
@@ -68,7 +71,6 @@ mn_output_suffix = params_list['output_params'][1]['mn_output_suffix']
 repond_table_suffix = params_list['output_params'][2]['repond_table_suffix']
 
 # Defining functions 
-
 
 @contextlib.contextmanager
 def nostdout():
@@ -93,6 +95,284 @@ def connected_component_subgraphs(G):
             for c in nx.connected_components(G):
                 yield G.subgraph(c)
 
+
+######################## MN FUNCTIONS FROM MATCHMS ####################################3
+
+from typing import Tuple
+from matchms import Scores               
+def get_top_hits(scores: Scores, identifier_key: str = "spectrumid",
+                 top_n: int = 25, search_by: str = "queries",
+                 ignore_diagonal: bool = False) -> Tuple[dict, dict]:
+    """Get top_n highest scores (and indices) for every entry.
+    Parameters
+    ----------
+    scores
+        Matchms Scores object containing all similarities.
+    identifier_key
+        Metadata key for unique intentifier for each spectrum in scores.
+        Will also be used for the naming the network nodes. Default is 'spectrumid'.
+    top_n
+        Return the indexes and scores for the top_n highest scores. Scores between
+        a spectrum with itself (diagonal of scores.scores) will not be taken into
+        account.
+    search_by
+        Chose between 'queries' or 'references' which decides if the top_n matches
+        for every spectrum in scores.queries or in scores.references will be
+        collected and returned
+    ignore_diagonal
+        Set to True if scores.scores is symmetric (i.e. if references and queries
+        were the same) and if scores between spectra with themselves should be
+        excluded.
+    """
+    assert search_by in ["queries", "references"], \
+        "search_by must be 'queries' or 'references"
+
+    similars_idx = dict()
+    similars_scores = dict()
+
+    if search_by == "queries":
+        for i, spec in enumerate(scores.queries):
+            spec_id = spec.get(identifier_key)
+            idx = scores.similarity_function.sort(scores.scores[:, i])
+            if ignore_diagonal:
+                similars_idx[spec_id] = idx[idx != i][:top_n]
+            else:
+                similars_idx[spec_id] = idx[:top_n]
+            similars_scores[spec_id] = scores.scores[similars_idx[spec_id], i]
+    elif search_by == "references":
+        for i, spec in enumerate(scores.references):
+            spec_id = spec.get(identifier_key)
+            idx = scores.similarity_function.sort(scores.scores[i, :])
+            if ignore_diagonal:
+                similars_idx[spec_id] = idx[idx != i][:top_n]
+            else:
+                similars_idx[spec_id] = idx[:top_n]
+            similars_scores[spec_id] = scores.scores[i, similars_idx[spec_id]]
+    return similars_idx, similars_scores
+
+def create_network(self, scores: Scores):
+    """
+    Function to create network from given top-n similarity values. Expects that
+    similarities given in scores are from an all-vs-all comparison including all
+    possible pairs.
+    Parameters
+    ----------
+    scores
+        Matchms Scores object containing all spectrums and pair similarities for
+        generating a network.
+    """
+    assert self.top_n >= self.max_links, "top_n must be >= max_links"
+    assert np.all(scores.queries == scores.references), \
+        "Expected symmetric scores object with queries==references"
+    unique_ids = list({s.get(self.identifier_key) for s in scores.queries})
+
+    # Initialize network graph, add nodes
+    msnet = nx.Graph()
+    msnet.add_nodes_from(unique_ids)
+
+    # Collect location and score of highest scoring candidates for queries and references
+    similars_idx, similars_scores = get_top_hits(scores, identifier_key=self.identifier_key,
+                                                    top_n=self.top_n,
+                                                    search_by="queries",
+                                                    ignore_diagonal=True)
+    similars_scores = self._select_edge_score(similars_scores, scores.scores.dtype)
+
+    # Add edges based on global threshold (cutoff) for weights
+    for i, spec in enumerate(scores.queries):
+        query_id = spec.get(self.identifier_key)
+
+        ref_candidates = np.array([scores.references[x].get(self.identifier_key)
+                                        for x in similars_idx[query_id]])
+        idx = np.where((similars_scores[query_id] >= self.score_cutoff) &
+                            (ref_candidates != query_id))[0][:self.max_links]
+        if self.link_method == "single":
+            new_edges = [(query_id, str(ref_candidates[x]),
+                            float(similars_scores[query_id][x])) for x in idx]
+        elif self.link_method == "mutual":
+            new_edges = [(query_id, str(ref_candidates[x]),
+                            float(similars_scores[query_id][x]))
+                            for x in idx if i in similars_idx[ref_candidates[x]][:]]
+        else:
+            raise ValueError("Link method not kown")
+
+        msnet.add_weighted_edges_from(new_edges)
+
+    if not self.keep_unconnected_nodes:
+        msnet.remove_nodes_from(list(nx.isolates(msnet)))
+    self.graph = msnet
+
+
+from typing import Optional
+import networkx as nx
+import numpy
+from matchms import Scores
+
+
+class SimilarityNetwork:
+    """Create a spectal network from spectrum similarities.
+    For example
+    .. testcode::
+        import numpy as np
+        from matchms import Spectrum, calculate_scores
+        from matchms.similarity import ModifiedCosine
+        from matchms.networking import SimilarityNetwork
+        spectrum_1 = Spectrum(mz=np.array([100, 150, 200.]),
+                              intensities=np.array([0.7, 0.2, 0.1]),
+                              metadata={"precursor_mz": 100.0,
+                                        "testID": "one"})
+        spectrum_2 = Spectrum(mz=np.array([104.9, 140, 190.]),
+                              intensities=np.array([0.4, 0.2, 0.1]),
+                              metadata={"precursor_mz": 105.0,
+                                        "testID": "two"})
+        # Use factory to construct a similarity function
+        modified_cosine = ModifiedCosine(tolerance=0.2)
+        spectrums = [spectrum_1, spectrum_2]
+        scores = calculate_scores(spectrums, spectrums, modified_cosine)
+        ms_network = SimilarityNetwork(identifier_key="testID")
+        ms_network.create_network(scores)
+        nodes = list(ms_network.graph.nodes())
+        nodes.sort()
+        print(nodes)
+    Should output
+    .. testoutput::
+        ['one', 'two']
+    """
+    def __init__(self, identifier_key: str = "spectrumid",
+                 top_n: int = 20,
+                 max_links: int = 10,
+                 score_cutoff: float = 0.7,
+                 link_method: str = 'single',
+                 keep_unconnected_nodes: bool = True):
+        """
+        Parameters
+        ----------
+        identifier_key
+            Metadata key for unique intentifier for each spectrum in scores.
+            Will also be used for the naming the network nodes. Default is 'spectrumid'.
+        top_n
+            Consider edge between spectrumA and spectrumB if score falls into
+            top_n for spectrumA or spectrumB (link_method="single"), or into
+            top_n for spectrumA and spectrumB (link_method="mutual"). From those
+            potential links, only max_links will be kept, so top_n must be >= max_links.
+        max_links
+            Maximum number of links to add per node. Default = 10.
+            Due to incoming links, total number of links per node can be higher.
+            The links are populated by looping over the query spectrums.
+            Important side note: The max_links restriction is strict which means that
+            if scores around max_links are equal still only max_links will be added
+            which can results in some random variations (sorting spectra with equal
+            scores restuls in a random order of such elements).
+        score_cutoff
+            Threshold for given similarities. Edges/Links will only be made for
+            similarities > score_cutoff. Default = 0.7.
+        link_method
+            Chose between 'single' and 'mutual'. 'single will add all links based
+            on individual nodes. 'mutual' will only add links if that link appears
+            in the given top-n list for both nodes.
+        keep_unconnected_nodes
+            If set to True (default) all spectra will be included as nodes even
+            if they have no connections/edges of other spectra. If set to False
+            all nodes without connections will be removed.
+        """
+        # pylint: disable=too-many-arguments
+        self.identifier_key = identifier_key
+        self.top_n = top_n
+        self.max_links = max_links
+        self.score_cutoff = score_cutoff
+        self.link_method = link_method
+        self.keep_unconnected_nodes = keep_unconnected_nodes
+        self.graph: Optional[nx.Graph] = None
+        """NetworkX graph. Set after calling create_network()"""
+
+    @staticmethod
+    def _select_edge_score(similars_scores: dict, scores_type: numpy.dtype):
+        """Chose one value if score contains multiple values (e.g. "score" and "matches")"""
+        if len(scores_type) > 1 and "score" in scores_type.names:
+            return {key: value["score"] for key, value in similars_scores.items()}
+        if len(scores_type) > 1:  # Assume that first entry is desired score
+            return {key: value[0] for key, value in similars_scores.items()}
+        return similars_scores
+
+    def create_network(self, scores: Scores):
+        """
+        Function to create network from given top-n similarity values. Expects that
+        similarities given in scores are from an all-vs-all comparison including all
+        possible pairs.
+        Parameters
+        ----------
+        scores
+            Matchms Scores object containing all spectrums and pair similarities for
+            generating a network.
+        """
+        assert self.top_n >= self.max_links, "top_n must be >= max_links"
+        assert numpy.all(scores.queries == scores.references), \
+            "Expected symmetric scores object with queries==references"
+        unique_ids = list({s.get(self.identifier_key) for s in scores.queries})
+
+        # Initialize network graph, add nodes
+        msnet = nx.Graph()
+        msnet.add_nodes_from(unique_ids)
+
+        # Collect location and score of highest scoring candidates for queries and references
+        similars_idx, similars_scores = get_top_hits(scores, identifier_key=self.identifier_key,
+                                                     top_n=self.top_n,
+                                                     search_by="queries",
+                                                     ignore_diagonal=True)
+        similars_scores = self._select_edge_score(similars_scores, scores.scores.dtype)
+
+        # Add edges based on global threshold (cutoff) for weights
+        for i, spec in enumerate(scores.queries):
+            query_id = spec.get(self.identifier_key)
+
+            ref_candidates = numpy.array([scores.references[x].get(self.identifier_key)
+                                          for x in similars_idx[query_id]])
+            idx = numpy.where((similars_scores[query_id] >= self.score_cutoff) &
+                              (ref_candidates != query_id))[0][:self.max_links]
+            if self.link_method == "single":
+                new_edges = [(query_id, str(ref_candidates[x]),
+                              float(similars_scores[query_id][x])) for x in idx]
+            elif self.link_method == "mutual":
+                new_edges = [(query_id, str(ref_candidates[x]),
+                              float(similars_scores[query_id][x]))
+                             for x in idx if i in similars_idx[ref_candidates[x]][:]]
+            else:
+                raise ValueError("Link method not kown")
+
+            msnet.add_weighted_edges_from(new_edges)
+
+        if not self.keep_unconnected_nodes:
+            msnet.remove_nodes_from(list(nx.isolates(msnet)))
+        self.graph = msnet
+
+    def export_to_graphml(self, filename: str):
+        """Save the network as .graphml file.
+        Parameters
+        ----------
+        filename
+            Specify filename for exporting the graph.
+        """
+        if not self.graph:
+            raise ValueError("No network found. Make sure to first run .create_network() step")
+        nx.write_graphml_lxml(self.graph, filename)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # timer is started
 start_time = time.time()
 
@@ -100,13 +380,13 @@ print('Cleaning the spectral database metadata fields ...')
 
 spectrums_db = list(load_from_mgf(db_file_path))
 
-with nostdout():
-    spectrums_db_cleaned = [metadata_processing(s) for s in spectrums_db]
+
+spectrums_db_cleaned = [metadata_processing(s) for s in spectrums_db]
 
 print('A total of %s clean spectra were found in the spectral library.' % len(spectrums_db_cleaned))
 
 
-if polarity == 'Pos':
+if polarity == 'pos':
     adducts_df = pd.read_csv(adducts_pos_path, compression='gzip', sep='\t')
 else:
     adducts_df = pd.read_csv(adducts_neg_path, compression='gzip', sep='\t')
@@ -138,10 +418,10 @@ for sample_dir in repository_path_list:
         print('Treating file ' + sample)
 
         isdb_results_path = sample_dir + '/' + sample + isdb_output_suffix + '.tsv'
-        mn_nodes_ouput_path = sample_dir + '/' + sample + mn_output_suffix + '_nodes.txt'
-        mn_edges_ouput_path = sample_dir + '/' + sample + mn_output_suffix + '_edges.txt'
+        mn_ci_ouput_path = sample_dir + '/' + sample + mn_output_suffix + '_ci.tsv'
         repond_table_path = sample_dir + '/' + sample  + repond_table_suffix + '.tsv'
         repond_table_flat_path = sample_dir + '/' + sample + repond_table_suffix + '_flat.tsv'
+        mn_graphml_ouput_path = sample_dir + '/' + sample + mn_output_suffix + '_mn.graphml'
 
         print('''
         Proceeding to spectral matching ...
@@ -165,11 +445,14 @@ for sample_dir in repository_path_list:
             for s in chunk:
                 scans_id_map[i] = int(s.metadata['scans'])
                 i += 1
-            cosinegreedy = CosineGreedy(tolerance=float(msms_mz_tol))
+            if match_score == 'modifiedcosine':
+                cosine = ModifiedCosine(tolerance=float(msms_mz_tol))
+            else:
+                cosine = CosineGreedy(tolerance=float(msms_mz_tol))
             data = []
             for (x,y) in tzip(idx_row,idx_col):
                 if x<y:
-                    msms_score, n_matches = cosinegreedy.pair(chunk[x], spectrums_db_cleaned[y])[()]
+                    msms_score, n_matches = cosine.pair(chunk[x], spectrums_db_cleaned[y])[()]
                     if (msms_score>float(min_cos)) & (n_matches>int(min_peaks)):
                         feature_id = scans_id_map[x]
                         data.append({'msms_score':msms_score,
@@ -187,34 +470,31 @@ for sample_dir in repository_path_list:
         print('''
         Proceeding to Molecular Netorking computation...
         ''')      
+        if mn_score == 'modifiedcosine':
+            cosine = ModifiedCosine(tolerance=float(msms_mz_tol))
+        else:
+            cosine = CosineGreedy(tolerance=float(msms_mz_tol))
 
-        similarity_score = PrecursorMzMatch(tolerance=float(mn_parent_mz_tol), tolerance_type="Dalton")
-        scores = calculate_scores(spectrums_query, spectrums_query, similarity_score)
-        indices = np.where(np.asarray(scores.scores))
-        idx_row, idx_col = indices
-        cosine_greedy = CosineGreedy(tolerance=float(mn_msms_mz_tol))
-        data = []
-        for (x,y) in zip(idx_row,idx_col):
-            if x<y:
-                msms_score, n_matches = cosine_greedy.pair(spectrums_query[x], spectrums_query[y])[()]
-                if (msms_score>float(mn_min_cos)) & (n_matches>int(mn_min_peaks)):
-                    data.append({'msms_score':msms_score,
-                                'matched_peaks':n_matches,
-                                'feature_id':x + 1,
-                                'reference_id':y + 1})
-        df = pd.DataFrame(data)
-        
-        G = nx.from_pandas_edgelist(df, 'feature_id', 'reference_id')
-
-        components = connected_component_subgraphs(G)
+        scans_id_map[i] = int(s.metadata['scans'])
+        #similarity_score = PrecursorMzMatch(tolerance=float(mn_parent_mz_tol), tolerance_type="Dalton")
+        scores = calculate_scores(spectrums_query, spectrums_query, cosine)
+        ms_network = SimilarityNetwork(identifier_key="scans", score_cutoff = mn_score_cutoff, top_n = mn_top_n, max_links = mn_max_links, link_method = 'mutual')
+        ms_network.create_network(scores)
+        ms_network.export_to_graphml(mn_graphml_ouput_path)
+        components = connected_component_subgraphs(ms_network.graph)
 
         comp_dict = {idx: comp.nodes() for idx, comp in enumerate(components)}
         attr = {n: {'component_id' : comp_id} for comp_id, nodes in comp_dict.items() for n in nodes}
         comp = pd.DataFrame.from_dict(attr, orient = 'index')
         comp.reset_index(inplace = True)
         comp.rename(columns={'index': 'feature_id'}, inplace=True)
-        comp.to_csv(mn_nodes_ouput_path, sep = '\t', index = False)
-        df.to_csv(mn_edges_ouput_path, sep = '\t', index = False)
+        count = comp.groupby('component_id').count()
+        count['new_ci'] = np.where(count['feature_id'] > 1, count.index, -1)
+        new_ci = pd.Series(count.new_ci.values,index=count.index).to_dict()
+        comp['component_id'] = comp['component_id'].map(new_ci)
+        spectrums_query_metadata_df = pd.DataFrame(s.metadata for s in spectrums_query)
+        comp = comp.merge(spectrums_query_metadata_df[['feature_id', 'precursor_mz']], how='left')
+        comp.to_csv(mn_ci_ouput_path, sep = '\t', index = False)
 
         print('''
         Molecular Networking done !
@@ -231,7 +511,7 @@ for sample_dir in repository_path_list:
             'inchikey': 'short_inchikey',
             'msms_score': 'score_input'}, inplace=True)
 
-        clusterinfo_summary = pd.read_csv(mn_nodes_ouput_path,
+        clusterinfo_summary = pd.read_csv(mn_ci_ouput_path,
                                         sep='\t',
                                         usecols=['feature_id', 'precursor_mz', 'component_id'],
                                         error_bad_lines=False, low_memory=True)
@@ -479,7 +759,9 @@ for sample_dir in repository_path_list:
         col_prev = None
         for col_ref, col_att, col_match in zip(cols_ref, cols_att, cols_match):
                 dt_isdb_results[col_ref].fillna('Unknown', inplace=True)
+                dt_isdb_results[col_att].fillna('Unknown', inplace=True)
                 dt_isdb_results[col_ref] = dt_isdb_results[col_ref].apply(lambda x: [x])
+                dt_isdb_results[col_att] = dt_isdb_results[col_att].apply(lambda x: [x])
                 dt_isdb_results[col_match] = [list(set(a).intersection(set(b))) for a, b in zip(dt_isdb_results[col_ref], dt_isdb_results[col_att])] # Allows to compare 2 lists
                 dt_isdb_results[col_match] = dt_isdb_results[col_match].apply(lambda y: np.nan if len(y)==0 else y)
                 if col_prev != None:
