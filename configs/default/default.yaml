@@ -36,7 +36,9 @@ repond_params:
   - sampletype_header: 'sample_type'
   - use_post_taxo: True
   - top_N_chemical_consistency: 15
-  - min_score_ms1: 5
+  - min_score_taxo_ms1: 6
+  - min_score_chemo_ms1: 2
+
 
 output_params:
   - isdb_output_suffix: '_isdb_matched_pos'

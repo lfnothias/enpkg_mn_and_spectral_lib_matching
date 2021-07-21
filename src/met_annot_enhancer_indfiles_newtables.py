@@ -65,7 +65,8 @@ organism_header = params_list['repond_params'][3]['organism_header']
 sampletype_header = params_list['repond_params'][4]['sampletype_header']
 use_post_taxo = params_list['repond_params'][5]['use_post_taxo']
 top_N_chemical_consistency = params_list['repond_params'][6]['top_N_chemical_consistency']
-min_score_ms1 = params_list['repond_params'][7]['min_score_ms1']
+min_score_taxo_ms1 = params_list['repond_params'][7]['min_score_taxo_ms1']
+min_score_chemo_ms1 = params_list['repond_params'][8]['min_score_chemo_ms1']
 
 isdb_output_suffix = params_list['output_params'][0]['isdb_output_suffix']
 mn_output_suffix = params_list['output_params'][1]['mn_output_suffix']
@@ -498,11 +499,11 @@ for sample_dir in repository_path_list:
 
         if polarity == 'pos':
             dt_isdb_results = dt_isdb_results[
-                (dt_isdb_results['score_taxo'] >= min_score_ms1) | (
+                (dt_isdb_results['score_taxo'] >= min_score_taxo_ms1) | (
                 dt_isdb_results['libname'] == 'ISDB')]
         else:
             dt_isdb_results = dt_isdb_results[
-                (dt_isdb_results['score_taxo'] >= min_score_ms1) | (
+                (dt_isdb_results['score_taxo'] >= min_score_taxo_ms1) | (
                 dt_isdb_results['libname'] == 'ISDB')]
 
 
@@ -586,6 +587,7 @@ for sample_dir in repository_path_list:
             "structure_taxonomy_npclassifier_03class_score"
         ]].max(axis=1)
 
+
         dt_isdb_results['final_score'] = dt_isdb_results['score_input'] + dt_isdb_results['score_taxo'] + dt_isdb_results['score_max_consistency']
 
         dt_isdb_results['rank_final'] = dt_isdb_results.groupby(
@@ -599,6 +601,11 @@ for sample_dir in repository_path_list:
             str(len(dt_isdb_results[(dt_isdb_results['structure_taxonomy_npclassifier_02superclass_score'] == 2)])))
         print('Number of annotations reweighted at the NPClassifier class level: ' +
             str(len(dt_isdb_results[(dt_isdb_results['structure_taxonomy_npclassifier_03class_score'] == 3)])))
+
+        
+        dt_isdb_results_chem_rew = dt_isdb_results_chem_rew[
+            (dt_isdb_results_chem_rew['score_max_consistency'] >= min_score_chemo_ms1) | (dt_isdb_results_chem_rew['libname'] == 'ISDB')
+            ]
 
 
         dt_isdb_results_chem_rew = dt_isdb_results.loc[(
