@@ -30,9 +30,12 @@ from matchms import calculate_scores
 from matchms.similarity import CosineGreedy
 from matchms.similarity import ModifiedCosine
 from matchms.networking import SimilarityNetwork
+# from ms2deepscore import MS2DeepScore
+# from ms2deepscore.models import load_model
 
-# We deactivate the iloc warning see https://stackoverflow.com/a/20627316
-pd.options.mode.chained_assignment = None  # default='warn'
+pd.options.mode.chained_assignment = None
+
+os.chdir('C:/Users/gaudrya.FARMA/Github/indifiles_annotation')
 
 with open (r'configs/default/default.yaml') as file:    
     params_list = yaml.load(file, Loader=yaml.FullLoader)
@@ -47,9 +50,10 @@ adducts_neg_path = params_list['paths'][6]['adducts_neg_path']
 
 parent_mz_tol = params_list['spectral_match_params'][0]['parent_mz_tol']
 msms_mz_tol = params_list['spectral_match_params'][1]['msms_mz_tol']
-min_cos = params_list['spectral_match_params'][2]['min_cos']
+min_score = params_list['spectral_match_params'][2]['min_score']
 min_peaks = params_list['spectral_match_params'][3]['min_peaks']
 match_score = params_list['spectral_match_params'][4]['match_score']
+model_path = params_list['spectral_match_params'][5]['model_path']
 
 mn_parent_mz_tol = params_list['networking_params'][0]['mn_parent_mz_tol']
 mn_msms_mz_tol = params_list['networking_params'][1]['mn_msms_mz_tol']
@@ -57,6 +61,7 @@ mn_score_cutoff = params_list['networking_params'][2]['mn_score_cutoff']
 mn_max_links = params_list['networking_params'][3]['mn_max_links']
 mn_top_n = params_list['networking_params'][4]['mn_top_n']
 mn_score = params_list['networking_params'][5]['mn_score']
+mn_model_path = params_list['networking_params'][6]['mn_model_path']
 
 top_to_output= params_list['repond_params'][0]['top_to_output']
 ppm_tol = params_list['repond_params'][1]['ppm_tol']
@@ -175,20 +180,32 @@ for sample_dir in repository_path_list:
                 scans_id_map[i] = int(s.metadata['scans'])
                 i += 1
             if match_score == 'modifiedcosine':
-                cosine = ModifiedCosine(tolerance=float(msms_mz_tol))
-            else:
-                cosine = CosineGreedy(tolerance=float(msms_mz_tol))
+                score = ModifiedCosine(tolerance=float(msms_mz_tol))
+            elif match_score == 'cosinegreedy':
+                score = CosineGreedy(tolerance=float(msms_mz_tol))
+            elif match_score == 'ms2deepscore':
+                model = load_model(model_path)
+                score = MS2DeepScore(model)            
             data = []
             for (x,y) in tzip(idx_row,idx_col):
                 if x<y:
-                    msms_score, n_matches = cosine.pair(chunk[x], spectrums_db_cleaned[y])[()]
-                    if (msms_score>float(min_cos)) & (n_matches>int(min_peaks)):
-                        feature_id = scans_id_map[x]
-                        data.append({'msms_score':msms_score,
-                                    'matched_peaks':n_matches,
-                                    'feature_id': feature_id,
-                                    'reference_id':y + 1,
-                                    'inchikey': spectrums_db_cleaned[y].get("name")})
+                    if (match_score == 'cosinegreedy') | (match_score == 'modifiedcosine'):
+                        msms_score, n_matches = score.pair(chunk[x], spectrums_db_cleaned[y])[()]
+                        if (msms_score>float(min_score)) & (n_matches>int(min_peaks)):
+                            feature_id = scans_id_map[x]
+                            data.append({'msms_score':msms_score,
+                                        'matched_peaks':n_matches,
+                                        'feature_id': feature_id,
+                                        'reference_id':y + 1,
+                                        'inchikey': spectrums_db_cleaned[y].get("name")})
+                    elif match_score == 'ms2deepscore':
+                        msms_score = score.pair(chunk[x], spectrums_db_cleaned[y])                        
+                        if msms_score>float(min_score):
+                            feature_id = scans_id_map[x]
+                            data.append({'msms_score':msms_score,
+                                        'feature_id': feature_id,
+                                        'reference_id':y + 1,
+                                        'inchikey': spectrums_db_cleaned[y].get("name")})
             df = pd.DataFrame(data)
             df.to_csv(isdb_results_path, mode='a', header=not os.path.exists(isdb_results_path), sep = '\t')
 
@@ -200,11 +217,14 @@ for sample_dir in repository_path_list:
         Proceeding to Molecular Networking...
         ''')      
         if mn_score == 'modifiedcosine':
-            cosine = ModifiedCosine(tolerance=float(msms_mz_tol))
-        else:
-            cosine = CosineGreedy(tolerance=float(msms_mz_tol))
+            score = ModifiedCosine(tolerance=float(msms_mz_tol))
+        elif mn_score == 'cosinegreedy':
+            score = CosineGreedy(tolerance=float(msms_mz_tol))
+        elif mn_score == 'ms2deepscore':
+            model = load_model(mn_model_path)
+            score = MS2DeepScore(model)
 
-        scores = calculate_scores(spectrums_query, spectrums_query, cosine)
+        scores = calculate_scores(spectrums_query, spectrums_query, score, is_symmetric=True)
         ms_network = SimilarityNetwork(identifier_key="scans", score_cutoff = mn_score_cutoff, top_n = mn_top_n, max_links = mn_max_links, link_method = 'mutual')
         ms_network.create_network(scores)
         ms_network.export_to_graphml(mn_graphml_ouput_path)
@@ -232,7 +252,7 @@ for sample_dir in repository_path_list:
                                     usecols=['msms_score', 'feature_id', 'reference_id', 'inchikey'],
                                     error_bad_lines=False, low_memory=True)
 
-        dt_isdb_results['libname'] = 'DNP_ISDB'
+        dt_isdb_results['libname'] = 'ISDB'
 
         dt_isdb_results.rename(columns={
             'inchikey': 'short_inchikey',
@@ -497,14 +517,9 @@ for sample_dir in repository_path_list:
 
         # Filter out MS1 annotations without a reweighting at the family level at least
 
-        if polarity == 'pos':
-            dt_isdb_results = dt_isdb_results[
-                (dt_isdb_results['score_taxo'] >= min_score_taxo_ms1) | (
-                dt_isdb_results['libname'] == 'ISDB')]
-        else:
-            dt_isdb_results = dt_isdb_results[
-                (dt_isdb_results['score_taxo'] >= min_score_taxo_ms1) | (
-                dt_isdb_results['libname'] == 'ISDB')]
+        dt_isdb_results = dt_isdb_results[
+            (dt_isdb_results['score_taxo'] >= min_score_taxo_ms1) | (
+            dt_isdb_results['libname'] == 'ISDB')]
 
 
         print('Total number of annotations after filtering MS1 annotations not reweighted at taxonomical level min: ' +
@@ -531,7 +546,7 @@ for sample_dir in repository_path_list:
         # we set the spectral score column as float
         dt_isdb_results["score_input"] = pd.to_numeric(
             dt_isdb_results["score_input"], downcast="float")
-        # and we add it to the max txo score :
+        # and we add it to the max taxo score :
         dt_isdb_results['score_input_taxo'] = dt_isdb_results['score_taxo'] + \
             dt_isdb_results['score_input']
 
@@ -603,9 +618,9 @@ for sample_dir in repository_path_list:
             str(len(dt_isdb_results[(dt_isdb_results['structure_taxonomy_npclassifier_03class_score'] == 3)])))
 
         
-        dt_isdb_results_chem_rew = dt_isdb_results_chem_rew[
-            (dt_isdb_results_chem_rew['score_max_consistency'] >= min_score_chemo_ms1) | (dt_isdb_results_chem_rew['libname'] == 'ISDB')
-            ]
+        # dt_isdb_results_chem_rew = dt_isdb_results_chem_rew[
+        #     (dt_isdb_results_chem_rew['score_max_consistency'] >= min_score_chemo_ms1) | (dt_isdb_results_chem_rew['libname'] == 'ISDB')
+        #     ]
 
 
         dt_isdb_results_chem_rew = dt_isdb_results.loc[(

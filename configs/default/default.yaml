@@ -5,20 +5,21 @@
 # parameters
 
 paths:
-  - repository_path: 'C:/Users/gaudrya.FARMA/Desktop/test_indi_files/' # The path were you want your folder to be placed
+  - repository_path: 'C:/Users/gaudrya.FARMA/Desktop/test_oswalk/' # The path were you want your folder to be placed
   - spectra_suffix: '_features_ms2_pos.mgf' # The path were you want your folder to be placed 
   - metadata_sample_suffix: '_metadata.tsv' # The path were you want your folder to be placed  
-  - metadata_path: db_metadata/210523_lotus_dnp_metadata.csv  # Path to your spectral library file
+  - metadata_path: db_metadata/210715_inhouse_metadata.csv  # Path to your spectral library file
   - db_file_path: db_spectra/LOTUS_DNP_ISDB.mgf # Path to the metadata of the spectral file
   - adducts_pos_path: data_loc/db_prepared_pos.tsv.gz # Path to the adducts file in pos mode
   - adducts_neg_path: data_loc/db_prepared_neg.tsv.gz # Path to the adducts file in neg mode
 
 spectral_match_params:
-  - parent_mz_tol: 0.01 # the parent mass tolerance to use for spectral matching (in Da)
-  - msms_mz_tol: 0.01 # the msms mass tolerance to use for spectral matching (in Da)
-  - min_cos: 0.3 # the minimal cosine to use for spectral matching
-  - min_peaks: 6 # the minimal matching peaks number to use for spectral matching
-  - match_score: modifiedcosine # modifiedcosine or cosinegreedy
+  - parent_mz_tol: 0.01 # the parent mass tolerance to use for spectral matching (in Da) (if cosine)
+  - msms_mz_tol: 0.01 # the msms mass tolerance to use for spectral matching (in Da) (if cosine)
+  - min_score: 0.3 # the minimal cosine to use for spectral matching (if cosine)
+  - min_peaks: 6 # the minimal matching peaks number to use for spectral matching (if cosine)
+  - match_score: modifiedcosine # modifiedcosine, cosinegreedy, ms2deepscore
+  - model_path: 'data_loc/MS2DeepScore_allGNPSpositive_10k_500_500_200.hdf5'
 
 networking_params:
   - mn_parent_mz_tol: 0.01 # the parent mass tolerance to use for spectral matching (in Da)
@@ -26,7 +27,8 @@ networking_params:
   - mn_score_cutoff: 0.7 
   - mn_max_links: 10 
   - mn_top_n: 15
-  - mn_score: modifiedcosine # modifiedcosine or cosinegreedy
+  - mn_score: modifiedcosine # modifiedcosine, cosinegreedy, ms2deepscore
+  - mn_model_path: 'data_loc/MS2DeepScore_allGNPSpositive_10k_500_500_200.hdf5'
 
 repond_params:
   - top_to_output: 1
@@ -38,7 +40,6 @@ repond_params:
   - top_N_chemical_consistency: 15
   - min_score_taxo_ms1: 6
   - min_score_chemo_ms1: 2
-
 
 output_params:
   - isdb_output_suffix: '_isdb_matched_pos'
