@@ -146,7 +146,7 @@ for sample_dir in repository_path_list:
     
     if samples_metadata[sampletype_header][0] == 'sample':
         print('''
-        Treating file''' + sample
+        Treating file: ''' + sample
         )
 
         isdb_results_path = sample_dir + '/' + sample + isdb_output_suffix + '.tsv'
@@ -390,106 +390,106 @@ for sample_dir in repository_path_list:
         df_species_tnrs_matched = json_normalize(jsondic,
                     record_path=['results', 'matches']
                     )
-        df_species_tnrs_unmatched = json_normalize(jsondic,
-                    record_path=['unmatched_names']
-                    )
-
-        #df_species_tnrs_matched.info()
 
         # We then want to match with the accepted name instead of the synonym in case both are present. 
         # We thus order by matched_name and then by is_synonym status prior to returning the first row.
+        if len(df_species_tnrs_matched) != 0:
+            df_species_tnrs_matched.sort_values(['search_string', 'is_synonym'], axis = 0, inplace = True)
+            df_species_tnrs_matched_unique = df_species_tnrs_matched.drop_duplicates('search_string', keep = 'first')
 
-        df_species_tnrs_matched.sort_values(['search_string', 'is_synonym'], axis = 0, inplace = True)
-        df_species_tnrs_matched_unique = df_species_tnrs_matched.drop_duplicates('search_string', keep = 'first')
+            # both df are finally merged
+            merged_df = pd.merge(samples_metadata, df_species_tnrs_matched_unique, how='left', left_on=organism_header, right_on='search_string', indicator=True)
 
-        # both df are finally merged
-        merged_df = pd.merge(samples_metadata, df_species_tnrs_matched_unique, how='left', left_on=organism_header, right_on='search_string', indicator=True)
+            # converting 'ott_ids' from float to int (check the astype('Int64') whic will work while the astype('int') won't see https://stackoverflow.com/a/54194908)
+            merged_df['taxon.ott_id'] = merged_df['taxon.ott_id'].astype('Int64')
 
-        # converting 'ott_ids' from float to int (check the astype('Int64') whic will work while the astype('int') won't see https://stackoverflow.com/a/54194908)
-        merged_df['taxon.ott_id'] = merged_df['taxon.ott_id'].astype('Int64')
+            # However, we then need to put them back to 
+            merged_df['taxon.ott_id']
+            ott_list = list(merged_df['taxon.ott_id'].dropna().astype('int'))
 
-        # However, we then need to put them back to 
-        merged_df['taxon.ott_id']
-        ott_list = list(merged_df['taxon.ott_id'].dropna().astype('int'))
+            taxon_info = []
 
-        taxon_info = []
+            for i in ott_list:
+                query = OT.taxon_info(i, include_lineage=True)
+                taxon_info.append(query)
 
-        for i in ott_list:
-            query = OT.taxon_info(i, include_lineage=True)
-            taxon_info.append(query)
+            tl = []
 
-        tl = []
+            for i in taxon_info:
+                with open(str(taxon_info_output_path), 'w') as out:
+                    tl.append(i.response_dict)
+                    yo = json.dumps(tl)
+                    out.write('{}\n'.format(yo))
 
-        for i in taxon_info:
-            with open(str(taxon_info_output_path), 'w') as out:
-                tl.append(i.response_dict)
-                yo = json.dumps(tl)
-                out.write('{}\n'.format(yo))
+            with open(str(taxon_info_output_path)) as tmpfile:
+                jsondic = json.loads(tmpfile.read())
 
-        with open(str(taxon_info_output_path)) as tmpfile:
-            jsondic = json.loads(tmpfile.read())
+            df = json_normalize(jsondic)
 
-        df = json_normalize(jsondic)
+            df_tax_lineage = json_normalize(jsondic,
+                        record_path=['lineage'],
+                        meta = ['ott_id', 'unique_name'],
+                        record_prefix='sub_',
+                        errors='ignore'
+                        )
 
-        df_tax_lineage = json_normalize(jsondic,
-                    record_path=['lineage'],
-                    meta = ['ott_id', 'unique_name'],
-                    record_prefix='sub_',
-                    errors='ignore'
-                    )
+            # This keeps the last occurence of each ott_id / sub_rank grouping https://stackoverflow.com/a/41886945
+            df_tax_lineage_filtered = df_tax_lineage.groupby(['ott_id', 'sub_rank'], as_index=False).last()
 
-        # This keeps the last occurence of each ott_id / sub_rank grouping https://stackoverflow.com/a/41886945
-        df_tax_lineage_filtered = df_tax_lineage.groupby(['ott_id', 'sub_rank'], as_index=False).last()
+            #Here we pivot long to wide to get the taxonomy
+            df_tax_lineage_filtered_flat = df_tax_lineage_filtered.pivot(index='ott_id', columns='sub_rank', values='sub_name')
 
-        #Here we pivot long to wide to get the taxonomy
-        df_tax_lineage_filtered_flat = df_tax_lineage_filtered.pivot(index='ott_id', columns='sub_rank', values='sub_name')
+            # Here we actually also want the lowertaxon (species usually) name
+            df_tax_lineage_filtered_flat = pd.merge(df_tax_lineage_filtered_flat, df_tax_lineage_filtered[['ott_id', 'unique_name']], how='left', on='ott_id', )
 
-        # Here we actually also want the lowertaxon (species usually) name
-        df_tax_lineage_filtered_flat = pd.merge(df_tax_lineage_filtered_flat, df_tax_lineage_filtered[['ott_id', 'unique_name']], how='left', on='ott_id', )
+            #Despite the left join ott_id are duplicated 
+            df_tax_lineage_filtered_flat.drop_duplicates(subset = ['ott_id', 'unique_name'], inplace = True)
 
-        #Despite the left join ott_id are duplicated 
-        df_tax_lineage_filtered_flat.drop_duplicates(subset = ['ott_id', 'unique_name'], inplace = True)
+            # here we want to have these columns whatevere happens
+            col_list = ['ott_id', 'domain', 'kingdom', 'phylum',
+                                    'class', 'order', 'family', 'genus', 'unique_name']
 
-        # here we want to have these columns whatevere happens
-        col_list = ['ott_id', 'domain', 'kingdom', 'phylum',
-                                'class', 'order', 'family', 'genus', 'unique_name']
+            df_tax_lineage_filtered_flat = df_tax_lineage_filtered_flat.reindex(columns=col_list, fill_value = np.NaN)
 
-        df_tax_lineage_filtered_flat = df_tax_lineage_filtered_flat.reindex(columns=col_list, fill_value = np.NaN)
+            # We now rename our columns of interest
+            renaming_dict = {'domain': 'query_otol_domain',
+                        'kingdom': 'query_otol_kingdom',
+                        'phylum': 'query_otol_phylum',
+                        'class': 'query_otol_class',
+                        'order': 'query_otol_order',
+                        'family': 'query_otol_family',
+                        'genus': 'query_otol_genus',
+                        'unique_name': 'query_otol_species'}
 
-        # We now rename our columns of interest
-        renaming_dict = {'domain': 'query_otol_domain',
-                    'kingdom': 'query_otol_kingdom',
-                    'phylum': 'query_otol_phylum',
-                    'class': 'query_otol_class',
-                    'order': 'query_otol_order',
-                    'family': 'query_otol_family',
-                    'genus': 'query_otol_genus',
-                    'unique_name': 'query_otol_species'}
+            df_tax_lineage_filtered_flat.rename(columns=renaming_dict, inplace=True)
 
-        df_tax_lineage_filtered_flat.rename(columns=renaming_dict, inplace=True)
+            # We select columns of interest 
+            cols_to_keep = ['ott_id',
+                        'query_otol_domain',
+                        'query_otol_kingdom',
+                        'query_otol_phylum',
+                        'query_otol_class',
+                        'query_otol_order',
+                        'query_otol_family',
+                        'query_otol_genus',
+                        'query_otol_species']
 
-        # We select columns of interest 
-        cols_to_keep = ['ott_id',
-                    'query_otol_domain',
-                    'query_otol_kingdom',
-                    'query_otol_phylum',
-                    'query_otol_class',
-                    'query_otol_order',
-                    'query_otol_family',
-                    'query_otol_genus',
-                    'query_otol_species']
+            df_tax_lineage_filtered_flat = df_tax_lineage_filtered_flat[cols_to_keep]
 
-        df_tax_lineage_filtered_flat = df_tax_lineage_filtered_flat[cols_to_keep]
+            # We merge this back with the samplemetadata only if we have an ott.id in the merged df 
+            samples_metadata = pd.merge(merged_df[pd.notnull(merged_df['taxon.ott_id'])], df_tax_lineage_filtered_flat, how='left', left_on='taxon.ott_id', right_on='ott_id' )
 
-        # We merge this back with the samplemetadata only if we have an ott.id in the merged df 
-        samples_metadata = pd.merge(merged_df[pd.notnull(merged_df['taxon.ott_id'])], df_tax_lineage_filtered_flat, how='left', left_on='taxon.ott_id', right_on='ott_id' )
-
-        # Here we will add three columns (even for the simple repond this way it will be close to the multiple species repond)
-        # these line will need to be defined as function arguments
-        cols_att = ['query_otol_domain', 'query_otol_kingdom', 'query_otol_phylum', 'query_otol_class',
-                    'query_otol_order', 'query_otol_family', 'query_otol_genus', 'query_otol_species']
-        for col in cols_att:
-            dt_isdb_results[col] = samples_metadata[col][0]
+            # Here we will add three columns (even for the simple repond this way it will be close to the multiple species repond)
+            # these line will need to be defined as function arguments
+            cols_att = ['query_otol_domain', 'query_otol_kingdom', 'query_otol_phylum', 'query_otol_class',
+                        'query_otol_order', 'query_otol_family', 'query_otol_genus', 'query_otol_species']
+            for col in cols_att:
+                dt_isdb_results[col] = samples_metadata[col][0]
+        else:
+            cols_att = ['query_otol_domain', 'query_otol_kingdom', 'query_otol_phylum', 'query_otol_class',
+                        'query_otol_order', 'query_otol_family', 'query_otol_genus', 'query_otol_species']
+            for col in cols_att:
+                dt_isdb_results[col] = 'no_species_matched_from_metadata'
 
         print('''
         Proceeding to taxonomically informed reponderation ...
@@ -522,8 +522,8 @@ for sample_dir in repository_path_list:
             dt_isdb_results['libname'] == 'ISDB')]
 
 
-        print('Total number of annotations after filtering MS1 annotations not reweighted at taxonomical level min: ' +
-            str(len(dt_isdb_results)))
+        # print('Total number of annotations after filtering MS1 annotations not reweighted at taxonomical level min: ' +
+        #     str(len(dt_isdb_results)))
 
         print('Number of annotations reweighted at the domain level: ' +
             str(dt_isdb_results['matched_domain'].count()))
@@ -610,12 +610,12 @@ for sample_dir in repository_path_list:
 
 
 
-        print('Number of annotations reweighted at the NPClassifier pathway level: ' +
-            str(len(dt_isdb_results[(dt_isdb_results['structure_taxonomy_npclassifier_01pathway_score'] == 1)])))
-        print('Number of annotations reweighted at the NPClassifier superclass level: ' +
-            str(len(dt_isdb_results[(dt_isdb_results['structure_taxonomy_npclassifier_02superclass_score'] == 2)])))
-        print('Number of annotations reweighted at the NPClassifier class level: ' +
-            str(len(dt_isdb_results[(dt_isdb_results['structure_taxonomy_npclassifier_03class_score'] == 3)])))
+        # print('Number of annotations reweighted at the NPClassifier pathway level: ' +
+        #     str(len(dt_isdb_results[(dt_isdb_results['structure_taxonomy_npclassifier_01pathway_score'] == 1)])))
+        # print('Number of annotations reweighted at the NPClassifier superclass level: ' +
+        #     str(len(dt_isdb_results[(dt_isdb_results['structure_taxonomy_npclassifier_02superclass_score'] == 2)])))
+        # print('Number of annotations reweighted at the NPClassifier class level: ' +
+        #     str(len(dt_isdb_results[(dt_isdb_results['structure_taxonomy_npclassifier_03class_score'] == 3)])))
 
         
         # dt_isdb_results_chem_rew = dt_isdb_results_chem_rew[
