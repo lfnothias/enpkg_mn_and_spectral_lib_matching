@@ -35,7 +35,7 @@ from matchms.networking import SimilarityNetwork
 
 pd.options.mode.chained_assignment = None
 
-os.chdir('C:/Users/gaudrya.FARMA/Github/indifiles_annotation')
+os.chdir(os.getcwd())
 
 with open (r'configs/default/default.yaml') as file:    
     params_list = yaml.load(file, Loader=yaml.FullLoader)
