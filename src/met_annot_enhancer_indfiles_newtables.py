@@ -351,13 +351,12 @@ for sample_dir in repository_path_list:
 
         # now we merge with the Occurences DB metadata after selection of our columns of interest
 
-        cols_to_use = ['structure_inchikey', 'structure_inchi',
-                    'structure_smiles', 'structure_molecular_formula',
+        cols_to_use = ['structure_smiles_2D', 'structure_molecular_formula',
                     'structure_exact_mass', 'short_inchikey', 'structure_taxonomy_npclassifier_01pathway', 
                     'structure_taxonomy_npclassifier_02superclass', 'structure_taxonomy_npclassifier_03class',
-                    'organism_name', 'organism_taxonomy_ottid',
-                    'organism_taxonomy_01domain', 'organism_taxonomy_02kingdom', 'organism_taxonomy_03phylum',
-                    'organism_taxonomy_04class', 'organism_taxonomy_05order', 'organism_taxonomy_06family', 'organism_taxonomy_08genus', 'organism_taxonomy_09species', 'organism_taxonomy_10varietas' ]
+                    'organism_name', 'organism_taxonomy_ottid', 'organism_taxonomy_01domain', 'organism_taxonomy_02kingdom', 'organism_taxonomy_03phylum',
+                    'organism_taxonomy_04class', 'organism_taxonomy_05order', 'organism_taxonomy_06family', 'organism_taxonomy_08genus',
+                    'organism_taxonomy_09species', 'organism_taxonomy_10varietas' ]
 
         dt_isdb_results = pd.merge(
             left=dt_isdb_results, right=db_metadata[cols_to_use], left_on='short_inchikey', right_on='short_inchikey', how='outer')
@@ -646,7 +645,7 @@ for sample_dir in repository_path_list:
             dt_isdb_results_chem_rew[col] = dt_isdb_results_chem_rew[col].replace('nan', np.NaN)  
             dt_isdb_results_chem_rew['lowest_matched_taxon'].fillna(dt_isdb_results_chem_rew[col], inplace=True)
 
-        annot_attr = ['rank_spec', 'score_input', 'libname', 'structure_inchikey', 'structure_inchi', 'structure_smiles', 'structure_molecular_formula', 'adduct',
+        annot_attr = ['rank_spec', 'score_input', 'libname', 'short_inchikey', 'structure_smiles_2D', 'structure_molecular_formula', 'adduct',
                     'structure_exact_mass', 'structure_taxonomy_npclassifier_01pathway', 'structure_taxonomy_npclassifier_02superclass', 'structure_taxonomy_npclassifier_03class',
                     'query_otol_species', 'lowest_matched_taxon', 'score_taxo', 'score_max_consistency', 'final_score', 'rank_final']
 
