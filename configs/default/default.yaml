@@ -5,7 +5,7 @@
 # parameters
 
 paths:
-  - repository_path: 'C:/Users/gaudrya.FARMA/Desktop/test_individual_files/' #VGF_individual_files_no_sirius_zipped/ # The path were you want your folder to be placed
+  - repository_path: 'C:\Users\gaudrya.FARMA\Desktop\isdb_round_3\' #VGF_individual_files_no_sirius_zipped/ # The path were you want your folder to be placed
   - spectra_suffix: '_features_ms2_pos.mgf' # The path were you want your folder to be placed 
   - metadata_sample_suffix: '_metadata.tsv' # The path were you want your folder to be placed  
   - metadata_path: db_metadata/210715_inhouse_metadata.csv  # Path to your spectral library file
