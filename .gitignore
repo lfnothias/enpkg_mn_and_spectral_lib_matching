@@ -4,3 +4,4 @@ db_metadata/*
 db_spectra/*
 data_loc/*
 src/__pycache__/
+user.yaml

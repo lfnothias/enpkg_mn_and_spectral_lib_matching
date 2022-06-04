@@ -33,9 +33,23 @@ from matchms.networking import SimilarityNetwork
 # from ms2deepscore import MS2DeepScore
 # from ms2deepscore.models import load_model
 
+
+from plotter import *
+from loaders import *
+from formatters import *
+
+
+
 pd.options.mode.chained_assignment = None
 
 os.chdir(os.getcwd())
+
+# for debug ony should be commented later
+from pathlib import Path
+p = Path(__file__).parents[1]
+print(p)
+os.chdir(p)
+
 
 # you can copy the configs/default/default.yaml to configs/user/user.yaml
 
@@ -45,10 +59,11 @@ with open (r'configs/user/user.yaml') as file:
 repository_path = params_list['paths'][0]['repository_path']
 spectra_suffix = params_list['paths'][1]['spectra_suffix']
 metadata_sample_suffix = params_list['paths'][2]['metadata_sample_suffix']
-metadata_path = params_list['paths'][3]['metadata_path']
-db_file_path = params_list['paths'][4]['db_file_path']
-adducts_pos_path = params_list['paths'][5]['adducts_pos_path']
-adducts_neg_path = params_list['paths'][6]['adducts_neg_path']
+feature_table_suffix = params_list['paths'][3]['feature_table_suffix']
+metadata_path = params_list['paths'][4]['metadata_path']
+db_file_path = params_list['paths'][5]['db_file_path']
+adducts_pos_path = params_list['paths'][6]['adducts_pos_path']
+adducts_neg_path = params_list['paths'][7]['adducts_neg_path']
 
 parent_mz_tol = params_list['spectral_match_params'][0]['parent_mz_tol']
 msms_mz_tol = params_list['spectral_match_params'][1]['msms_mz_tol']
@@ -78,6 +93,8 @@ min_score_chemo_ms1 = params_list['repond_params'][8]['min_score_chemo_ms1']
 isdb_output_suffix = params_list['output_params'][0]['isdb_output_suffix']
 mn_output_suffix = params_list['output_params'][1]['mn_output_suffix']
 repond_table_suffix = params_list['output_params'][2]['repond_table_suffix']
+
+
 
 # Defining functions 
 
@@ -143,6 +160,10 @@ for sample_dir in repository_path_list:
     if len(glob.glob(sample_dir+'/*'+metadata_sample_suffix)) != 0 :
         metadata_sample_path = glob.glob(sample_dir +'/*' + metadata_sample_suffix)[0]
         samples_metadata = pd.read_csv(metadata_sample_path, sep='\t')
+        
+    if len(glob.glob(sample_dir+'/*'+feature_table_suffix)) != 0 :
+        feature_table_path = glob.glob(sample_dir +'/*' + feature_table_suffix)[0]
+        feature_table = pd.read_csv(feature_table_path, sep=',')
     else:
         continue
     
@@ -158,6 +179,8 @@ for sample_dir in repository_path_list:
         mn_graphml_ouput_path = sample_dir + '/' + sample + mn_output_suffix + '_mn.graphml'
         species_output_path = sample_dir + '/' + sample + '_species.json'
         taxon_info_output_path = sample_dir + '/' + sample + '_taxon_info.json'
+        treemap_chemo_counted_results_path = sample_dir + '/' + sample + '_treemap_chemo_counted.html'
+        treemap_chemo_intensity_results_path = sample_dir + '/' + sample + '_treemap_chemo_intensity.html'
 
         print('''
         Proceeding to spectral matching...
@@ -671,5 +694,173 @@ for sample_dir in repository_path_list:
         df4cyto_flat.to_csv(repond_table_flat_path, sep='\t')
 
         df4cyto.to_csv(repond_table_path, sep='\t')
+        
+                        
+        # %%
+        ######################################################################################################
+        ######################################################################################################
+        # Preparing tables for plots
+        ######################################################################################################
+        # Loading clean tables
+        #feature_table.reset_index(inplace=True)
+
+        feature_intensity_table_formatted = feature_intensity_table_formatter(feature_intensity_table=feature_table,
+                                                                            file_extension='.mzML',
+                                                                            msfile_suffix=' Peak area')
+
+        
+        def samples_metadata_loader_simple(samples_metadata_table_path, organism_header):
+            # the metadata table is loaded using the organism column specified before
+            samples_metadata = pd.read_csv(samples_metadata_table_path, sep='\t',
+                                        usecols=['filename', organism_header])
+            return samples_metadata
+        
+        dt_samples_metadata = samples_metadata_loader_simple(
+            samples_metadata_table_path=metadata_sample_path,
+            organism_header=organism_header)
+
+        def table_for_plots_formatter(df_flat, feature_intensity_table_formatted, dt_samples_metadata, organism_header, sampletype_header, multi_plot):
+
+            """Formats a feature intensity table to an appropriate format for biosource_contribution_fetcher()
+            Args:
+                feature_intensity_table_path (str): a path to a feature intensity table 
+                file_extension (str): a string to match the filename extension(typically .mzXML or similar) defines in the .yml file
+                msfile_suffix (str): a string to match an eventual filename suffix (example Peak height)
+            Returns:
+                feature_intensity_table (dataframe): a formatted feature intensity table 
+            """
+
+
+            feature_intensity_table_t = feature_intensity_table_formatted.transpose()
+
+            feature_intensity_meta = pd.merge(left=dt_samples_metadata, right=feature_intensity_table_t, left_on='filename', right_on='MS_filename',how='inner')
+
+
+            feature_intensity_meta_gp_species = feature_intensity_meta.groupby(organism_header).mean()
+            feature_intensity_meta_gp_species = feature_intensity_meta_gp_species.transpose()
+            feature_intensity_meta_gp_species.index.name = 'row_ID'
+
+
+            feature_intensity_table_formatted.reset_index(inplace=True)
+            feature_intensity_meta_gp_species.reset_index(inplace=True)
+
+
+            ft_merged = pd.merge(feature_intensity_table_formatted, feature_intensity_meta_gp_species, on='row_ID', how='left')
+
+
+            if multi_plot == True:
+                # a security when numeric values are passed
+                feature_intensity_meta_gp_multi = feature_intensity_meta.groupby([organism_header,sampletype_header]).mean()
+                feature_intensity_meta_gp_multi = feature_intensity_meta_gp_multi.transpose()
+                feature_intensity_meta_gp_multi.columns = feature_intensity_meta_gp_multi.columns.map('_'.join)
+                feature_intensity_meta_gp_multi.index.name = 'row_ID'
+                feature_intensity_meta_gp_multi.reset_index(inplace=True)
+
+                ft_merged = pd.merge(ft_merged, feature_intensity_meta_gp_multi, on='row_ID', how='left')
+
+
+            df_flat['feature_id'] = df_flat['feature_id'].astype('int')
+
+            dt_isdb_results_int = pd.merge(
+                df_flat, ft_merged, left_on='feature_id', right_on='row_ID', how='left')
+
+            dt_isdb_results_int['counter'] = 1
+
+
+            return dt_isdb_results_int
+
+        table_for_plots_formatted = table_for_plots_formatter(df_flat=df4cyto_flat,
+                                                            feature_intensity_table_formatted=feature_intensity_table_formatted,
+                                                            dt_samples_metadata=samples_metadata,
+                                                            organism_header=organism_header,
+                                                            sampletype_header=sampletype_header,
+                                                            multi_plot=False)
+
+        # %%
+        ######################################################################################################
+        ######################################################################################################
+        # Plotting figures
+        ######################################################################################################
+        # Single parameters
+
+        def plotter_single(dt_isdb_results_int, dt_samples_metadata,organism_header,treemap_chemo_counted_results_path, treemap_chemo_intensity_results_path):
+
+            """ This function will get the CHEMBL ids from the structure_inchikey field
+
+            Args:
+                dt_isdb_results (dataframe) : a annotation table
+                top_to_output (integer): Top N of candidate to keep
+            Returns:
+                dt_isdb_results_chem_rew (dataframe): a dataframe with the top N annotation ordered by final rank
+            """
+
+            dt_isdb_results_int = dt_isdb_results_int.replace({np.nan:'None'})
+
+
+            unique_group_labels = dt_samples_metadata[organism_header].unique()
+
+            pattern=[{"type": "domain"}]
+
+            rep_pattern = list(itertools.chain.from_iterable(itertools.repeat(x, len(unique_group_labels)) for x in pattern))
+
+
+
+
+            fig = make_subplots(1, len(unique_group_labels),
+            subplot_titles = (unique_group_labels),
+            specs=[rep_pattern])
+
+            i=1
+            for n in unique_group_labels:
+                print(n)
+
+                dt = dt_isdb_results_int[dt_isdb_results_int[n] > 0]
+                fig.add_trace(px.treemap(dt, path=[px.Constant("all"), 'structure_taxonomy_npclassifier_01pathway', 'structure_taxonomy_npclassifier_02superclass', 'structure_taxonomy_npclassifier_03class'], 
+                values='counter').data[0], 
+                row=1,col=i)
+                i+=1
+
+            # fig.update_traces(root_color="lightgrey")
+            fig.update_layout(margin = dict(t=50, l=25, r=25, b=25),
+            title_text="Metabolite annotation overview (size proportional to individual count)")
+            fig.update_annotations(font_size=12)
+            fig.show()
+            fig.write_html(treemap_chemo_counted_results_path,
+                        full_html=False,
+                        include_plotlyjs='cdn')
+
+            fig = make_subplots(1, len(unique_group_labels),
+            subplot_titles = (unique_group_labels),
+            specs=[rep_pattern])
+
+            i=1
+            for n in unique_group_labels:
+                print(n)
+
+                dt = dt_isdb_results_int[dt_isdb_results_int[n] > 0]
+                fig.add_trace(px.treemap(dt, path=[px.Constant("all"), 'structure_taxonomy_npclassifier_01pathway', 'structure_taxonomy_npclassifier_02superclass', 'structure_taxonomy_npclassifier_03class'], 
+                values=n).data[0], 
+                row=1,col=i)
+                i+=1
+
+            # fig.update_traces(root_color="lightgrey")
+            fig.update_layout(margin = dict(t=50, l=25, r=25, b=25),
+            title_text="Metabolite annotation overview (size proportional to mean intensity)")
+            fig.update_annotations(font_size=12)
+            fig.show()
+            fig.write_html(treemap_chemo_intensity_results_path,
+                        full_html=False,
+                        include_plotlyjs='cdn')
+
+        plotter_single(dt_isdb_results_int=table_for_plots_formatted,
+                    dt_samples_metadata=samples_metadata,
+                    organism_header=organism_header,
+                    treemap_chemo_counted_results_path=treemap_chemo_counted_results_path,
+                    treemap_chemo_intensity_results_path=treemap_chemo_intensity_results_path)
+
+
+
+
+
 
 print('Finished in %s seconds.' % (time.time() - start_time))
