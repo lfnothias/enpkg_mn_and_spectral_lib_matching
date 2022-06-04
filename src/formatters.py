@@ -89,7 +89,7 @@ def table_for_plots_formatter(df_flat, feature_intensity_table_formatted, dt_sam
         ft_merged = pd.merge(ft_merged, feature_intensity_meta_gp_multi, on='row_ID', how='left')
 
 
-    # df_flat['feature_id'] = df_flat['feature_id'].astype('int')
+    df_flat['feature_id'] = df_flat['feature_id'].astype('int')
 
     dt_isdb_results_int = pd.merge(
         df_flat, ft_merged, left_on='feature_id', right_on='row_ID', how='left')
@@ -98,8 +98,6 @@ def table_for_plots_formatter(df_flat, feature_intensity_table_formatted, dt_sam
 
 
     return dt_isdb_results_int
-
-
 
 
 def samples_metadata_filterer(dt_samples_metadata, organism_header, sampletype_header, drop_pattern):
