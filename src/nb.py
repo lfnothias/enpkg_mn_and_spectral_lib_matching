@@ -20,7 +20,7 @@ from formatters import *
 import spectral_lib_matcher
 from ms1_matcher import ms1_matcher
 from taxo_resolver import *
-from reponderation_functions import *
+from reweighting_functions import *
 from plotter import *
 
 # %%
