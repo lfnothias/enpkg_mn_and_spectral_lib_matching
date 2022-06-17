@@ -3,13 +3,16 @@ import numpy as np
 from helpers import cluster_counter
 
 def taxonomical_reponderator(dt_isdb_results, min_score_taxo_ms1):
+    """Perform taxonomical consistency reweighting on a list of candidates annotations
 
-    """Generates pathes used by the script according to parameters of the yaml file
     Args:
-        params_list (list) : the yaml parameters
+        dt_isdb_results (DataFrame): An annotation table
+        min_score_taxo_ms1 (int): Minimal score of MS1 annotations 
+
     Returns:
-        pathes (str)
-    """
+        DataFrame: An annotation table
+    """ 
+    
     df = dt_isdb_results.copy()
     cols_ref = ['organism_taxonomy_01domain', 'organism_taxonomy_02kingdom',  'organism_taxonomy_03phylum', 'organism_taxonomy_04class',
                 'organism_taxonomy_05order', 'organism_taxonomy_06family', 'organism_taxonomy_08genus', 'organism_taxonomy_09species']
@@ -84,17 +87,18 @@ def taxonomical_reponderator(dt_isdb_results, min_score_taxo_ms1):
 
 
 def chemical_reponderator(clusterinfo_summary_file, dt_isdb_results, top_N_chemical_consistency):
-
-    """Generates pathes used by the script according to parameters of the yaml file
+    """Perform chemical consistency reweighting on a list of candidates annotations
+    
     Args:
-        params_list (list) : the yaml parameters
+        clusterinfo_summary_file (DataFrame): The MN metadata file
+        dt_isdb_results (DataFrame): An annotation table
+        top_N_chemical_consistency (int): Top N candidates to consider for cluster chemical consistency determination
+        
     Returns:
-        pathes (str)
-
+        DataFrame: An annotation table
     """
+    
     cluster_count = cluster_counter(clusterinfo_summary_file)
-
-
     # Get cluster Chemical class
 
     for col in ['structure_taxonomy_npclassifier_01pathway', 'structure_taxonomy_npclassifier_02superclass', 'structure_taxonomy_npclassifier_03class']:

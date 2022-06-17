@@ -1,37 +1,11 @@
 import pandas as pd
-import numpy as np
-import zipfile
 import glob
 import os
-import sys
-import time
-import shlex
-import subprocess
-import contextlib
-import io
-from tqdm import tqdm
-from tqdm import tqdm_notebook
-from tqdm.contrib import tzip
-from opentree import OT
-import json
-from pandas import json_normalize
 import yaml
-from pandas import json_normalize
-import networkx as nx
 
 from matchms.importing import load_from_mgf
-from matchms.exporting import save_as_mgf
-from matchms.filtering import default_filters
-from matchms.filtering import normalize_intensities
-from matchms.filtering import select_by_intensity
-from matchms.filtering import select_by_mz
 from matchms.filtering import add_precursor_mz
 from matchms.filtering.require_minimum_number_of_peaks  import require_minimum_number_of_peaks 
-from matchms import calculate_scores
-
-from matchms.networking import SimilarityNetwork
-# from ms2deepscore import MS2DeepScore
-# from ms2deepscore.models import load_model
 
 from spectral_db_loader import load_spectral_db
 from spectral_lib_matcher import spectral_matching
@@ -98,14 +72,16 @@ for sample_dir in samples_dir:
         metadata_file_path = os.path.join(repository_path, sample_dir, sample_dir + '_metadata.tsv')
     except FileNotFoundError:
         continue
-     
+    # Check if MS/MS spectra are present 
     if len(glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/*'+ '_features_ms2_' + ionization_mode + '.mgf')) != 0 :
         spectra_file_path = glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/*'+ '_features_ms2_' + ionization_mode + '.mgf')[0]
-        
+    
+    # Check if features intensity table is present
     if len(glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/*'+ '_features_quant_' + ionization_mode + '.csv')) != 0 :
         feature_table_path = glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/*'+ '_features_quant_' + ionization_mode + '.csv')[0]
         feature_table = pd.read_csv(feature_table_path, sep=',')
-        
+    
+    # Check if taxonomical metadata are present
     if len(glob.glob(repository_path + sample_dir + '/taxo_output' + '/*'+ '_taxo_metadata.tsv')) != 0 :
         taxo_metadata_path = glob.glob(repository_path + sample_dir + '/taxo_output' + '/*'+ '_taxo_metadata.tsv')[0]
         taxo_metadata = pd.read_csv(taxo_metadata_path, sep='\t')        
@@ -127,6 +103,7 @@ elif ionization_mode == 'neg':
     adducts_df = pd.read_csv(adducts_neg_path, compression='gzip', sep='\t')
 else:
     raise ValueError('ionization_mode parameter must be pos or neg')
+
 adducts_df['min'] = adducts_df['adduct_mass'] - \
     int(ppm_tol_ms1) * (adducts_df['adduct_mass'] / 1000000)
 adducts_df['max'] = adducts_df['adduct_mass'] + \
@@ -216,8 +193,8 @@ for sample_dir in samples_dir:
     print('Number of features: ' + str(len(clusterinfo_summary)))
     print('Number of MS2 annotation: ' + str(len(dt_isdb_results)))
     print('Number of annotated features: ' + str(len(dt_isdb_results['feature_id'].unique())))
-    # Now we directly do the MS1 matching stage on the cluster_summary. No need to have MS2 annotations
-
+    
+    # Now we directly do the MS1 matching stage on the cluster_summary. 
     print('''
     MS1 annotation
     ''')
@@ -268,6 +245,8 @@ for sample_dir in samples_dir:
             'feature_id')['score_input_taxo'].rank(method='dense', ascending=False)
         dt_isdb_results = dt_isdb_results.groupby(["feature_id"]).apply(
             lambda x: x.sort_values(["rank_spec_taxo"], ascending=True)).reset_index(drop=True)
+        
+    # If valid taxonomy is present for sample, proceed to taxonomical reweighting
     else:
         cols_att = ['query_otol_domain', 'query_otol_kingdom', 'query_otol_phylum', 'query_otol_class',
                 'query_otol_order', 'query_otol_family', 'query_otol_genus', 'query_otol_species']
@@ -289,17 +268,14 @@ for sample_dir in samples_dir:
     Chemically informed reponderation done
     ''')
     
-    dt_taxo_chemo_reweighed_topN = top_N_slicer(dt_isdb_results=dt_isdb_results_chem_rew,
-                                            top_to_output=top_to_output)
-
-    
+    # Select only the top N annotations and formatting
+    dt_taxo_chemo_reweighed_topN = top_N_slicer(input_df=dt_isdb_results_chem_rew,
+                                            top_to_output=top_to_output)   
     df_flat, df_for_cyto = annotation_table_formatter(dt_taxo_chemo_reweighed_topN, min_score_taxo_ms1, min_score_chemo_ms1)
 
-
+    # Export
     df_flat.to_csv(repond_table_flat_path, sep='\t')
-
     df_for_cyto.to_csv(repond_table_path, sep='\t')
-
 
     #Plotting
     feature_intensity_table_formatted = feature_intensity_table_formatter(feature_table)

@@ -1,15 +1,14 @@
 import pandas as pd
-from loaders import feature_intensity_table_loader
 
 def feature_intensity_table_formatter(feature_intensity_table):
 
     """Formats a feature intensity table to an appropriate format for biosource_contribution_fetcher()
+    
     Args:
-        feature_intensity_table_path (str): a path to a feature intensity table 
-        file_extension (str): a string to match the filename extension(typically .mzXML or similar) defines in the .yml file
-        msfile_suffix (str): a string to match an eventual filename suffix (example Peak height)
+        feature_intensity_table (dataframe): an MzMine feature intensity table
+        
     Returns:
-        feature_intensity_table (dataframe): a formatted feature intensity table 
+        dataframe: a formatted MzMine feature intensity table
     """
     # The feature_intensity_table is loaded
 

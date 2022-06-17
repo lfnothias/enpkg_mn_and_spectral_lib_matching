@@ -1,28 +1,16 @@
-# required libraries
-
 import pandas as pd
 import numpy as np
-import zipfile
-import glob
-import os
-import sys
-import shlex
-import subprocess
-import json
-from pandas import json_normalize
-from tqdm import tqdm
-#from pivottablejs import pivot_ui
 
 def cluster_counter(clusterinfo_summary_file):
-    """ Count the numbers of nodes per component index in a molecular network
+    """Count the numbers of nodes per component index in a molecular network
 
     Args:
-        clusterinfo_summary_file (dataframe) : a molecular network clusterinfo_summary_file
+        clusterinfo_summary_file (DataFrame) : A molecular network clusterinfo_summary_file
+
     Returns:
-        cluster_count (dataframe): a dataframe with the number of nodes per component index
-    """
-
-
+        cluster_count (DataFrame): A DataFrame with the number of nodes per component index
+    """    
+    
     cluster_count = clusterinfo_summary_file.drop_duplicates(
         subset=['feature_id', 'component_id']).groupby("component_id").count()
     cluster_count = cluster_count[['feature_id']].rename(
@@ -30,56 +18,58 @@ def cluster_counter(clusterinfo_summary_file):
     return cluster_count
 
 
-def top_N_slicer(dt_isdb_results, top_to_output):
+def top_N_slicer(input_df, top_to_output):
 
     """ Keeps only the top N candidates out of an annotation table and sorts them by rank
 
     Args:
-        dt_isdb_results (dataframe) : a annotation table
-        top_to_output (integer): Top N of candidate to keep
+        input_df (DataFrame) : A DataFrame of candidates annotations
+        top_to_output (int): Top N candidate annotations to keep
+        
     Returns:
-        dt_isdb_results_chem_rew (dataframe): a dataframe with the top N annotation ordered by final rank
+        output_df (DataFrame): a DataFrame with the top N annotation ordered by final rank
     """
 
-    dt_isdb_results_chem_rew = dt_isdb_results.loc[(
-        dt_isdb_results.rank_final <= int(top_to_output))]
-    dt_isdb_results_chem_rew[["feature_id", "rank_final", "component_id"]] = dt_isdb_results_chem_rew[[
+    output_df = input_df.loc[(
+        input_df.rank_final <= int(top_to_output))]
+    output_df[["feature_id", "rank_final", "component_id"]] = output_df[[
         "feature_id", "rank_final", "component_id"]].apply(pd.to_numeric, downcast='signed', axis=1)
-    dt_isdb_results_chem_rew = dt_isdb_results_chem_rew.sort_values(
+    output_df = output_df.sort_values(
         ["feature_id", "rank_final"], ascending=(False, True))
 
-    return dt_isdb_results_chem_rew
+    return output_df
 
 
-def annotation_table_formatter(dt_input, min_score_taxo_ms1, min_score_chemo_ms1):
+def annotation_table_formatter(input_df, min_score_taxo_ms1, min_score_chemo_ms1):
     """ A bunche of formatter frunctions for output
 
     Args:
-        dt_input (dataframe) : an annotation table
-        keep_lowest_taxon (bool): wether to export only the lowest matched taxon or all the taxonomy for annotations
-        top_to_output (integer): Top N of candidate to keep
+        input_df (DataFrame) : A DataFrame of annotations
+        min_score_taxo_ms1 (int): Minimal taxonomical score for MS1 annotations
+        min_score_chemo_ms1 (int): Minimal cluster chemical consistency score for MS1 annotations
     Returns:
-        dt_isdb_results_chem_rew (dataframe): a dataframe with the top N annotation ordered by final rank
+        dt_output_flat (DataFrame): A flat DataFrame one annotation by line
+        dt_output_cyto (DataFrame): A Cytoscape compatible DataFrame with one feature by line (sep = |)
     """
 
     # Here we would like to filter results when short IK are repeated for the same feature_id at the same final rank
 
-    dt_input = dt_input.drop_duplicates(
+    input_df = input_df.drop_duplicates(
         subset=['feature_id', 'short_inchikey'], keep='first')
 
-    dt_input = dt_input.astype(
+    input_df = input_df.astype(
         {'feature_id': 'int64'})
 
-    dt_input['lowest_matched_taxon'] = dt_input['matched_species']
-    dt_input['lowest_matched_taxon'] = dt_input['lowest_matched_taxon'].replace(
+    input_df['lowest_matched_taxon'] = input_df['matched_species']
+    input_df['lowest_matched_taxon'] = input_df['lowest_matched_taxon'].replace(
         'nan', np.NaN)
     col_matched = ['matched_genus', 'matched_family', 'matched_order',
                     'matched_order', 'matched_phylum', 'matched_kingdom', 'matched_domain']
     for col in col_matched:
-        dt_input[col] = dt_input[col].replace(
+        input_df[col] = input_df[col].replace(
             'nan', np.NaN)
-        dt_input['lowest_matched_taxon'].fillna(
-            dt_input[col], inplace=True)
+        input_df['lowest_matched_taxon'].fillna(
+            input_df[col], inplace=True)
 
     annot_attr = ['rank_spec', 'score_input', 'libname', 'short_inchikey', 'structure_smiles_2D', 'structure_molecular_formula', 'adduct',
                     'structure_exact_mass', 'structure_taxonomy_npclassifier_01pathway', 'structure_taxonomy_npclassifier_02superclass',
@@ -92,22 +82,22 @@ def annotation_table_formatter(dt_input, min_score_taxo_ms1, min_score_chemo_ms1
 
     col_to_keep = ['feature_id'] + comp_attr + annot_attr
 
-    # We add the min chemo score at this step
-    dt_input = dt_input[
-        ((dt_input['score_taxo'] >= min_score_taxo_ms1) & (dt_input['score_max_consistency'] >= min_score_chemo_ms1)) | (
-            dt_input['libname'] == 'ISDB')]
-    dt_output_flat = dt_input[col_to_keep]
+    # We add the min chemo score filter at this step
+    input_df = input_df[
+        ((input_df['score_taxo'] >= min_score_taxo_ms1) & (input_df['score_max_consistency'] >= min_score_chemo_ms1)) | (
+            input_df['libname'] == 'ISDB')]
+    dt_output_flat = input_df[col_to_keep]
 
     # Cytoscape formatting 
 
-    all_columns = list(dt_input) # Creates list of all column headers   
-    dt_input[all_columns] = dt_input[all_columns].astype(str)
+    all_columns = list(input_df) # Creates list of all column headers   
+    input_df[all_columns] = input_df[all_columns].astype(str)
     gb_spec = {c: '|'.join for c in annot_attr}
 
     for c in comp_attr:
         gb_spec[c] = 'first'
 
-    dt_output_cyto = dt_input.groupby('feature_id').agg(gb_spec)
+    dt_output_cyto = input_df.groupby('feature_id').agg(gb_spec)
     dt_output_cyto.reset_index(inplace=True)
 
     return dt_output_flat, dt_output_cyto

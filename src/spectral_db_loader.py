@@ -2,6 +2,15 @@ from matchms.importing import load_from_mgf
 from matchms.filtering import default_filters
 
 def load_spectral_db(path_to_db):
+    """Load and clean metadata from a .mgf spectral database
+
+    Args:
+        path_to_db (str): Path to the .mgf file
+
+    Returns:
+        list: List of matchms spectra object
+    """    
+    
     print('''
     Cleaning the spectral database metadata fields
     ''')  

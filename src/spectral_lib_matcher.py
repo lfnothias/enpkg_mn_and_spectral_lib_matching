@@ -29,6 +29,17 @@ def nostdout():
 
 def spectral_matching(spectrums_query, db_clean, parent_mz_tol,
         msms_mz_tol, min_cos, min_peaks, output_file_path):
+    """Performe spectra matching between query spectra and a database usinge cosine score
+
+    Args:
+        spectrums_query (list): List of matchms spectra objects to query
+        db_clean (list): List of reference matchms spectra objects 
+        parent_mz_tol (float): Precursor m/z tolerance in Da for matching
+        msms_mz_tol (float): m/z tolerance in Da for matching fragments
+        min_cos (float): minimal cosine score
+        min_peaks (int): minimum number of matching fragments
+        output_file_path (str): path to write results
+    """    
         
     if os.path.exists(output_file_path):
         os.remove(output_file_path)

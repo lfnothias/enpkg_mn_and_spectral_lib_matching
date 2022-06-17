@@ -1,9 +1,19 @@
 import pandas as pd
 from tqdm import tqdm
 
-pd.options.mode.chained_assignment = None  # default='warn'
+pd.options.mode.chained_assignment = None
 
 def ms1_matcher(input_df, adducts_df, df_metadata):
+    """Perform MS
+
+    Args:
+        input_df (DataFrame): Input table with features m/z
+        adducts_df (DataFrame): Potential adducts m/z
+        df_metadata (DataFrame): Potential adducts metadata
+
+    Returns:
+        DataFrame: An annotation table 
+    """    
 
     super_df = []
 
