@@ -2,6 +2,7 @@ import pandas as pd
 import glob
 import os
 import yaml
+import shutil
 
 from matchms.importing import load_from_mgf
 from matchms.filtering import add_precursor_mz
@@ -149,6 +150,8 @@ for sample_dir in samples_dir:
     mn_graphml_ouput_path = f'{repository_path}{sample_dir}/{ionization_mode}/molecular_network/{sample_dir}_mn_{ionization_mode}.graphml'
     treemap_chemo_counted_results_path = f'{repository_path}{sample_dir}/{ionization_mode}/isdb/{sample_dir}_treemap_chemo_counted_{ionization_mode}.html'
     treemap_chemo_intensity_results_path = f'{repository_path}{sample_dir}/{ionization_mode}/isdb/{sample_dir}_treemap_chemo_intensity{ionization_mode}.html'
+    isdb_config_path = f'{repository_path}{sample_dir}/{ionization_mode}/isdb/config.yaml'
+    mn_config_path = f'{repository_path}{sample_dir}/{ionization_mode}/molecular_network/config.yaml'
 
     # Import query spectra
     spectra_query = list(load_from_mgf(spectra_file_path))
@@ -284,3 +287,11 @@ for sample_dir in samples_dir:
     feature_intensity_table_formatted = feature_intensity_table_formatter(feature_table)
     plotter_count(df_flat, treemap_chemo_counted_results_path)
     plotter_intensity(df_flat, feature_intensity_table_formatted, treemap_chemo_intensity_results_path)
+    
+    # Save params 
+    shutil.copyfile(r'configs/user/user.yaml', isdb_config_path)
+    shutil.copyfile(r'configs/user/user.yaml', mn_config_path)
+    
+    print('''
+    Finished file: ''' + sample_dir
+    )
