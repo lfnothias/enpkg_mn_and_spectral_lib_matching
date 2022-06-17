@@ -35,7 +35,7 @@ This will create adducts 2 adducts files (pos/neg) and the adducts used (params)
 NB: To edit calculated adducts, modify this script according to your needs:  
 https://github.com/mandelbrot-project/indifiles_annotation/blob/main/src/adducts_formatter.py
 
-## 3. Adapt parameters and lauch the process! 🚀
+## 3. Adapt parameters and launch the process! 🚀
 
 1. Copy and rename the parameters file <code>../indifiles_annotation/configs/default/default.yaml</code> into <code>../indifiles_annotation/configs/user/user.yaml</code>
 2. Modifiy the user.yaml file according to your needs (especially the paths).
