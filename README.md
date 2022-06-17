@@ -3,6 +3,28 @@ Repository gathering scripts to perform MS/MS annotation using ISDB, MS1 annotat
 
 ▶️ This processing is part of [enpkg_workflow](https://github.com/mandelbrot-project/enpkg_workflow). Data have to be organized using [data_organization](https://github.com/mandelbrot-project/data_organization) and taxonomy resolved using [taxo_enhancer](https://github.com/mandelbrot-project/taxo_enhancer).  
 
+## Required starting architecture
+
+⚠️ Positive mode only for the moment
+
+```
+data/
+└─── sample_a/
+|     └─── sample_a_metadata.tsv
+|     └─── pos/
+|     |     sample_a_features_quant_pos.csv
+|     |     sample_a_features_ms2_pos.mgf
+|     |     
+|     └─── taxo_output/
+|            └─── sample_a_species.json
+|            └─── sample_a_taxon_info.json
+|            └─── sample_a_taxo_metadata.tsv
+|
+└─── sample_b/
+|
+└─── sample_n/
+```
+
 ## 1. Clone repository and install environment
 
 1. Clone this repository.
@@ -42,4 +64,34 @@ https://github.com/mandelbrot-project/indifiles_annotation/blob/main/src/adducts
 3. Launch the process:
 ```console
 python src/nb_indifile.py
+```
+
+##  Target architecture
+
+```
+data/
+└─── sample_a/
+|     └───  sample_a_metadata.tsv
+|     └─── pos/
+|     |     |  sample_a_features_quant_pos.csv
+|     |     |  sample_a_features_ms2_pos.mgf
+|     |     └─── isdb/
+|     |     |      └─── sample_a_isdb_pos.tsv                       # MS2 annootations
+|     |     |      └─── sample_a_isdb_reweighted_pos.tsv            # MS2 annotations reweighted, cytoscape ready (1 feature by line)
+|     |     |      └─── sample_a_isdb_reweighted_flat_pos.tsv       # MS2 annotations flat (1 annotation by line)
+|     |     |      └─── sample_a_treemap_chemo_counted_pos.html     # NPClassifier treemap using annotation count
+|     |     |      └─── sample_a_treemap_chemo_intensity_pos.html   # NPClassifier treemap using annotation average intensity
+|     |     |      └─── config.yaml                                 # configuration used
+|     |     └─── isdb/
+|     |     |      └─── sample_a_mn_pos.graphml                     # Moleculat network
+|     |     |      └─── sample_a_mn_metadata_pos.tsv                # Moleculat network metadata (component id, precursor m/z)
+|     |     |      └─── config.yaml                                 # configuration used
+|     └─── taxo_output/
+|            └─── sample_a_species.json
+|            └─── sample_a_taxon_info.json
+|            └─── sample_a_taxo_metadata.tsv
+|
+└─── sample_b/
+|
+└─── sample_n/
 ```
