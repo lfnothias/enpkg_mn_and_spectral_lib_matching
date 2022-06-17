@@ -109,6 +109,15 @@ adducts_df['min'] = adducts_df['adduct_mass'] - \
 adducts_df['max'] = adducts_df['adduct_mass'] + \
     int(ppm_tol_ms1) * (adducts_df['adduct_mass'] / 1000000)
 
+# Load structures taxonimcal data
+if taxo_db_metadata_path.endswith('.csv.gz'):
+    db_metadata = pd.read_csv(taxo_db_metadata_path, sep=',', compression='gzip', error_bad_lines=False, low_memory=False)
+elif taxo_db_metadata_path.endswith('.csv'):
+    db_metadata = pd.read_csv(taxo_db_metadata_path, sep=',', error_bad_lines=False, low_memory=False)
+db_metadata['short_inchikey'] = db_metadata.structure_inchikey.str.split(
+    "-", expand=True)[0]
+db_metadata.reset_index(inplace=True)
+    
 # Processing
 for sample_dir in samples_dir:
     try:
@@ -183,12 +192,6 @@ for sample_dir in samples_dir:
 
     # Merge this back with the isdb results 
     dt_isdb_results = pd.merge(dt_isdb_results, clusterinfo_summary, on='feature_id')
-
-    # Load structures taxonimcal data
-    db_metadata = pd.read_csv(taxo_db_metadata_path, sep=',', error_bad_lines=False, low_memory=False)
-    db_metadata['short_inchikey'] = db_metadata.structure_inchikey.str.split(
-        "-", expand=True)[0]
-    db_metadata.reset_index(inplace=True)
 
     print('Number of features: ' + str(len(clusterinfo_summary)))
     print('Number of MS2 annotation: ' + str(len(dt_isdb_results)))
