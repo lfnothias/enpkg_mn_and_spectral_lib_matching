@@ -82,7 +82,7 @@ data/
 |     |     |      └─── sample_a_treemap_chemo_counted_pos.html     # NPClassifier treemap using annotation count
 |     |     |      └─── sample_a_treemap_chemo_intensity_pos.html   # NPClassifier treemap using annotation average intensity
 |     |     |      └─── config.yaml                                 # configuration used
-|     |     └─── isdb/
+|     |     └─── molecular_network/
 |     |     |      └─── sample_a_mn_pos.graphml                     # Moleculat network
 |     |     |      └─── sample_a_mn_metadata_pos.tsv                # Moleculat network metadata (component id, precursor m/z)
 |     |     |      └─── config.yaml                                 # configuration used
