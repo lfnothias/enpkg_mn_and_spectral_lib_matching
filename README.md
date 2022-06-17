@@ -48,6 +48,8 @@ Thanks to the [LOTUS initiative](https://lotus.nprod.net/), a large number of NP
 
 ## 3. Prepare potential adducts
 
+We will use the structure-organism pairs database to compute the *m/z* of potential adducts. To do so, use the following command:
+
 ```console
 python src/adducts_formatter.py -p db_metadata/220525_frozen_metadata.csv.gz # Replace according to your version
 ```
