@@ -1,7 +1,7 @@
 # indifiles_annotation
 Repository gathering scripts to perform MS/MS annotation using ISDB, MS1 annotation, Molecular Networking and annotations reweighting on a set of individual files.  
 
-▶️ This processing is part of [enpkg_workflow](https://github.com/mandelbrot-project/enpkg_workflow). Data have to be organized using [data_organization](https://github.com/mandelbrot-project/data_organization) and taxonomy resolved using [taxo_enhancer](https://github.com/mandelbrot-project/taxo_enhancer).  
+⚙️ Workflow part of [enpkg_workflow](https://github.com/mandelbrot-project/enpkg_workflow). First data have to be organized using [data_organization](https://github.com/mandelbrot-project/data_organization) and taxonomy resolved using [taxo_enhancer](https://github.com/mandelbrot-project/taxo_enhancer).  
 
 ## Required starting architecture
 
