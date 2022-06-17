@@ -149,7 +149,7 @@ for sample_dir in samples_dir:
     repond_table_flat_path = f'{repository_path}{sample_dir}/{ionization_mode}/isdb/{sample_dir}_isdb_reweighted_flat_{ionization_mode}.tsv'
     mn_graphml_ouput_path = f'{repository_path}{sample_dir}/{ionization_mode}/molecular_network/{sample_dir}_mn_{ionization_mode}.graphml'
     treemap_chemo_counted_results_path = f'{repository_path}{sample_dir}/{ionization_mode}/isdb/{sample_dir}_treemap_chemo_counted_{ionization_mode}.html'
-    treemap_chemo_intensity_results_path = f'{repository_path}{sample_dir}/{ionization_mode}/isdb/{sample_dir}_treemap_chemo_intensity{ionization_mode}.html'
+    treemap_chemo_intensity_results_path = f'{repository_path}{sample_dir}/{ionization_mode}/isdb/{sample_dir}_treemap_chemo_intensity_{ionization_mode}.html'
     isdb_config_path = f'{repository_path}{sample_dir}/{ionization_mode}/isdb/config.yaml'
     mn_config_path = f'{repository_path}{sample_dir}/{ionization_mode}/molecular_network/config.yaml'
 
