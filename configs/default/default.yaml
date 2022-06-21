@@ -31,5 +31,5 @@ reweighting_params:
   - ppm_tol_ms1: 2 # Tolerance for MS1 matching (adducts)
   - use_post_taxo: True # Use cluster chemical consistency after taxonomical reweighting (True or False)
   - top_N_chemical_consistency: 15 # Top N candidates to consider for cluster chemical consistency 
-  - min_score_taxo_ms1: 7 # Minimal taxonomical score for MS1-only candidates (6: family, 7 genus, 8 species)
+  - min_score_taxo_ms1: 8 # Minimal taxonomical score for MS1-only candidates (6: family, 7 genus, 8 species)
   - min_score_chemo_ms1: 2 # Minimal cluster chemical consistency score for MS1-only candidates

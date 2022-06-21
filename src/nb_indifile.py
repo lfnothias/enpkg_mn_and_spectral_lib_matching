@@ -95,7 +95,8 @@ if input("Do you wish to continue and process samples? (y/n)") != ("y"):
     exit()
     
 # Load spectral DB
-spectral_db = load_spectral_db(spectral_db_path)
+if ionization_mode == 'pos':
+    spectral_db = load_spectral_db(spectral_db_path)
 
 # Calculate min and max m/z value using user's tolerance for adducts search
 if ionization_mode == 'pos':
@@ -152,23 +153,26 @@ for sample_dir in samples_dir:
     treemap_chemo_intensity_results_path = f'{repository_path}{sample_dir}/{ionization_mode}/isdb/{sample_dir}_treemap_chemo_intensity_{ionization_mode}.html'
     isdb_config_path = f'{repository_path}{sample_dir}/{ionization_mode}/isdb/config.yaml'
     mn_config_path = f'{repository_path}{sample_dir}/{ionization_mode}/molecular_network/config.yaml'
-
+    isdb_folder_path = f'{repository_path}{sample_dir}/{ionization_mode}/isdb/'
+    mn_folder_path = f'{repository_path}{sample_dir}/{ionization_mode}/molecular_network/'
+    
     # Import query spectra
     spectra_query = list(load_from_mgf(spectra_file_path))
     spectra_query = [require_minimum_number_of_peaks(s, n_required=1) for s in spectra_query]
     spectra_query = [add_precursor_mz(s) for s in spectra_query if s]
-    
-    # Spectral matching
-    print('''
-    Spectral matching
-    ''')
-    
-    spectral_matching(spectra_query, spectral_db, parent_mz_tol,
-        msms_mz_tol, min_score, min_peaks, isdb_results_path)
-    
-    print('''
-    Spectral matching done
-    ''')
+       
+    if ionization_mode == 'pos': 
+        # Spectral matching
+        print('''
+        Spectral matching
+        ''')
+        
+        spectral_matching(spectra_query, spectral_db, parent_mz_tol,
+            msms_mz_tol, min_score, min_peaks, isdb_results_path)
+        
+        print('''
+        Spectral matching done
+        ''')
     
     # Molecular networking
     print('''
@@ -176,17 +180,19 @@ for sample_dir in samples_dir:
     ''')
     
     generate_mn(spectra_query, mn_graphml_ouput_path, mn_ci_ouput_path, mn_msms_mz_tol, mn_score_cutoff, mn_top_n, mn_max_links)
-
+    shutil.copyfile(r'configs/user/user.yaml', mn_config_path)
+    
     print('''
     Molecular Networking done
     ''')
 
     # Load ISDB results
-    dt_isdb_results = pd.read_csv(isdb_results_path, sep='\t', \
-        usecols=['msms_score', 'feature_id', 'reference_id', 'short_inchikey'], error_bad_lines=False, low_memory=True)
-    
-    # Add 'libname' column and rename msms_score column
-    dt_isdb_results['libname'] = 'ISDB'
+    if ionization_mode == 'pos':
+        dt_isdb_results = pd.read_csv(isdb_results_path, sep='\t', \
+            usecols=['msms_score', 'feature_id', 'reference_id', 'short_inchikey'], error_bad_lines=False, low_memory=True)
+        
+        # Add 'libname' column and rename msms_score column
+        dt_isdb_results['libname'] = 'ISDB'
 
     # Load MN metadata
     clusterinfo_summary = pd.read_csv(mn_ci_ouput_path, sep='\t', usecols=['feature_id', 'precursor_mz', 'component_id'], \
@@ -194,11 +200,12 @@ for sample_dir in samples_dir:
     clusterinfo_summary.rename(columns={'precursor_mz': 'mz'}, inplace=True)
 
     # Merge this back with the isdb results 
-    dt_isdb_results = pd.merge(dt_isdb_results, clusterinfo_summary, on='feature_id')
+    if ionization_mode == 'pos':
+        dt_isdb_results = pd.merge(dt_isdb_results, clusterinfo_summary, on='feature_id')
 
-    print('Number of features: ' + str(len(clusterinfo_summary)))
-    print('Number of MS2 annotation: ' + str(len(dt_isdb_results)))
-    print('Number of annotated features: ' + str(len(dt_isdb_results['feature_id'].unique())))
+        print('Number of features: ' + str(len(clusterinfo_summary)))
+        print('Number of MS2 annotation: ' + str(len(dt_isdb_results)))
+        print('Number of annotated features: ' + str(len(dt_isdb_results['feature_id'].unique())))
     
     # Now we directly do the MS1 matching stage on the cluster_summary. 
     print('''
@@ -212,7 +219,10 @@ for sample_dir in samples_dir:
     ''')
      
     # Merge MS1 results with MS2 annotations
-    dt_isdb_results = pd.concat([dt_isdb_results, df_MS1])
+    if ionization_mode == 'pos':
+        dt_isdb_results = pd.concat([dt_isdb_results, df_MS1])
+    if ionization_mode == 'neg':
+        dt_isdb_results = df_MS1.copy()
     dt_isdb_results.rename(columns={'msms_score': 'score_input'}, inplace=True)
 
     print('Number of annotated features after MS1: ' + str(len(df_MS1['feature_id'].unique())))
@@ -243,7 +253,7 @@ for sample_dir in samples_dir:
     ''')
     
     # Check if sample has a valid biosource and if not, harmonize ouput 
-    if taxo_metadata['matched_name'][0] == 'None':
+    if (taxo_metadata['matched_name'][0] == 'None') & (ionization_mode == 'pos'):
         dt_isdb_results['score_taxo'] = 0
         dt_isdb_results["score_input"] = pd.to_numeric(dt_isdb_results["score_input"], downcast="float")
         dt_isdb_results['score_input_taxo'] = dt_isdb_results['score_taxo'] +  dt_isdb_results['score_input']
@@ -251,6 +261,10 @@ for sample_dir in samples_dir:
             'feature_id')['score_input_taxo'].rank(method='dense', ascending=False)
         dt_isdb_results = dt_isdb_results.groupby(["feature_id"]).apply(
             lambda x: x.sort_values(["rank_spec_taxo"], ascending=True)).reset_index(drop=True)
+    
+    elif (taxo_metadata['matched_name'][0] == 'None') & (ionization_mode == 'neg'):
+        dt_isdb_results.drop(dt_isdb_results.index, inplace=True)
+
         
     # If valid taxonomy is present for sample, proceed to taxonomical reweighting
     else:
@@ -264,34 +278,42 @@ for sample_dir in samples_dir:
     Taxonomically informed reponderation done
     ''')
     
-    print('''
-    Chemically informed reponderation
-    ''')
+    if len(dt_isdb_results) != 0:
+            
+        print('''
+        Chemically informed reponderation
+        ''')
 
-    dt_isdb_results_chem_rew = chemical_reponderator(clusterinfo_summary, dt_isdb_results, top_N_chemical_consistency)
-    
-    print('''
-    Chemically informed reponderation done
-    ''')
-    
-    # Select only the top N annotations and formatting
-    dt_taxo_chemo_reweighed_topN = top_N_slicer(input_df=dt_isdb_results_chem_rew,
-                                            top_to_output=top_to_output)   
-    df_flat, df_for_cyto = annotation_table_formatter(dt_taxo_chemo_reweighed_topN, min_score_taxo_ms1, min_score_chemo_ms1)
+        dt_isdb_results_chem_rew = chemical_reponderator(clusterinfo_summary, dt_isdb_results, top_N_chemical_consistency)
 
-    # Export
-    df_flat.to_csv(repond_table_flat_path, sep='\t')
-    df_for_cyto.to_csv(repond_table_path, sep='\t')
+        print('''
+        Chemically informed reponderation done
+        ''')
 
-    #Plotting
-    feature_intensity_table_formatted = feature_intensity_table_formatter(feature_table)
-    plotter_count(df_flat, treemap_chemo_counted_results_path)
-    plotter_intensity(df_flat, feature_intensity_table_formatted, treemap_chemo_intensity_results_path)
-    
-    # Save params 
-    shutil.copyfile(r'configs/user/user.yaml', isdb_config_path)
-    shutil.copyfile(r'configs/user/user.yaml', mn_config_path)
-    
+        # Select only the top N annotations and formatting
+        dt_taxo_chemo_reweighed_topN = top_N_slicer(input_df=dt_isdb_results_chem_rew,
+                                                top_to_output=top_to_output)   
+        df_flat, df_for_cyto = annotation_table_formatter(dt_taxo_chemo_reweighed_topN, min_score_taxo_ms1, min_score_chemo_ms1)
+
+        # Export
+        if not os.path.exists(isdb_folder_path):
+                os.makedirs(isdb_folder_path)
+        df_flat.to_csv(repond_table_flat_path, sep='\t')
+        df_for_cyto.to_csv(repond_table_path, sep='\t')
+
+        #Plotting
+        feature_intensity_table_formatted = feature_intensity_table_formatter(feature_table)
+        plotter_count(df_flat, treemap_chemo_counted_results_path)
+        plotter_intensity(df_flat, feature_intensity_table_formatted, treemap_chemo_intensity_results_path)
+
+        # Save params 
+        shutil.copyfile(r'configs/user/user.yaml', isdb_config_path)
+        
+    else: 
+        print('''
+        No annotation for file: ''' + sample_dir
+        )
+        
     print('''
     Finished file: ''' + sample_dir
     )
