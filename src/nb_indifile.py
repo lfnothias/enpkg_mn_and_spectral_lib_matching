@@ -281,6 +281,11 @@ for sample_dir in samples_dir:
         print('''
         Taxonomically informed reponderation done
         ''')
+        
+    # Harmonize format of dt_isdb_results to match post-taxonomical reweighting
+    elif (taxo_metadata is None) & (ionization_mode == 'pos'):
+        dt_isdb_results['score_input_taxo'] = dt_isdb_results['score_input']
+        dt_isdb_results['score_taxo'] = 0
     
     # Drop all annoations for neg MS1 annotation for samples without taxonomy info    
     elif (taxo_metadata is None) & (ionization_mode == 'neg'):
