@@ -73,19 +73,21 @@ for sample_dir in samples_dir:
         metadata_file_path = os.path.join(repository_path, sample_dir, sample_dir + '_metadata.tsv')
     except FileNotFoundError:
         continue
+    metadata = pd.read_csv(metadata_file_path, sep='\t')
+    if metadata['sample_type'][0] == 'sample':
+        pass
+    else:
+        continue
+    
     # Check if MS/MS spectra are present 
     if len(glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/*'+ '_features_ms2_' + ionization_mode + '.mgf')) != 0 :
-        spectra_file_path = glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/*'+ '_features_ms2_' + ionization_mode + '.mgf')[0]
-    
+        pass
+    else:
+        continue
+
     # Check if features intensity table is present
     if len(glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/*'+ '_features_quant_' + ionization_mode + '.csv')) != 0 :
-        feature_table_path = glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/*'+ '_features_quant_' + ionization_mode + '.csv')[0]
-        feature_table = pd.read_csv(feature_table_path, sep=',')
-    
-    # Check if taxonomical metadata are present
-    if len(glob.glob(repository_path + sample_dir + '/taxo_output' + '/*'+ '_taxo_metadata.tsv')) != 0 :
-        taxo_metadata_path = glob.glob(repository_path + sample_dir + '/taxo_output' + '/*'+ '_taxo_metadata.tsv')[0]
-        taxo_metadata = pd.read_csv(taxo_metadata_path, sep='\t')        
+        pass
     else:
         continue
     i += 1
@@ -134,11 +136,12 @@ for sample_dir in samples_dir:
         feature_table_path = glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/*'+ '_features_quant_' + ionization_mode + '.csv')[0]
         feature_table = pd.read_csv(feature_table_path, sep=',')
         
-    if len(glob.glob(repository_path + sample_dir + '/taxo_output' + '/*'+ '_taxo_metadata.tsv')) != 0 :
-        taxo_metadata_path = glob.glob(repository_path + sample_dir + '/taxo_output' + '/*'+ '_taxo_metadata.tsv')[0]
+    #if len(glob.glob(repository_path + sample_dir + '/taxo_output' + '/*'+ '_taxo_metadata.tsv')) != 0 :
+    taxo_metadata_path = glob.glob(repository_path + sample_dir + '/taxo_output' + '/*'+ '_taxo_metadata.tsv')[0]
+    try:
         taxo_metadata = pd.read_csv(taxo_metadata_path, sep='\t')       
-    else:
-        continue
+    except FileNotFoundError:
+        taxo_metadata = None
 
     print('''
     Treating file: ''' + sample_dir
@@ -206,7 +209,7 @@ for sample_dir in samples_dir:
         print('Number of features: ' + str(len(clusterinfo_summary)))
         print('Number of MS2 annotation: ' + str(len(dt_isdb_results)))
         print('Number of annotated features: ' + str(len(dt_isdb_results['feature_id'].unique())))
-    
+        
     # Now we directly do the MS1 matching stage on the cluster_summary. 
     print('''
     MS1 annotation
@@ -217,7 +220,7 @@ for sample_dir in samples_dir:
     print('''
     MS1 annotation done
     ''')
-     
+    
     # Merge MS1 results with MS2 annotations
     if ionization_mode == 'pos':
         dt_isdb_results = pd.concat([dt_isdb_results, df_MS1])
@@ -247,37 +250,42 @@ for sample_dir in samples_dir:
     dt_isdb_results = pd.merge(
         left=dt_isdb_results, right=db_metadata[cols_to_use], left_on='short_inchikey', right_on='short_inchikey', how='outer')
     dt_isdb_results.dropna(subset=['feature_id'], inplace=True)
-
-    print('''
-    Taxonomically informed reponderation
-    ''')
-    
-    # Check if sample has a valid biosource and if not, harmonize ouput 
-    if (taxo_metadata['matched_name'][0] == 'None') & (ionization_mode == 'pos'):
-        dt_isdb_results['score_taxo'] = 0
-        dt_isdb_results["score_input"] = pd.to_numeric(dt_isdb_results["score_input"], downcast="float")
-        dt_isdb_results['score_input_taxo'] = dt_isdb_results['score_taxo'] +  dt_isdb_results['score_input']
-        dt_isdb_results['rank_spec_taxo'] = dt_isdb_results.groupby(
-            'feature_id')['score_input_taxo'].rank(method='dense', ascending=False)
-        dt_isdb_results = dt_isdb_results.groupby(["feature_id"]).apply(
-            lambda x: x.sort_values(["rank_spec_taxo"], ascending=True)).reset_index(drop=True)
-    
-    elif (taxo_metadata['matched_name'][0] == 'None') & (ionization_mode == 'neg'):
-        dt_isdb_results.drop(dt_isdb_results.index, inplace=True)
-
         
-    # If valid taxonomy is present for sample, proceed to taxonomical reweighting
-    else:
-        cols_att = ['query_otol_domain', 'query_otol_kingdom', 'query_otol_phylum', 'query_otol_class',
-                'query_otol_order', 'query_otol_family', 'query_otol_genus', 'query_otol_species']
-        for col in cols_att:
-            dt_isdb_results[col] = taxo_metadata[col][0]
-        dt_isdb_results = taxonomical_reponderator(dt_isdb_results, min_score_taxo_ms1)
-       
-    print('''
-    Taxonomically informed reponderation done
-    ''')
+    if taxo_metadata is not None:
+        print('''
+        Taxonomically informed reponderation
+        ''')
+        
+        # Check if sample has a valid biosource and if not, harmonize ouput 
+        if (taxo_metadata['matched_name'][0] == 'None') & (ionization_mode == 'pos'):
+            dt_isdb_results['score_taxo'] = 0
+            dt_isdb_results["score_input"] = pd.to_numeric(dt_isdb_results["score_input"], downcast="float")
+            dt_isdb_results['score_input_taxo'] = dt_isdb_results['score_taxo'] +  dt_isdb_results['score_input']
+            dt_isdb_results['rank_spec_taxo'] = dt_isdb_results.groupby(
+                'feature_id')['score_input_taxo'].rank(method='dense', ascending=False)
+            dt_isdb_results = dt_isdb_results.groupby(["feature_id"]).apply(
+                lambda x: x.sort_values(["rank_spec_taxo"], ascending=True)).reset_index(drop=True)
+        
+        elif (taxo_metadata['matched_name'][0] == 'None') & (ionization_mode == 'neg'):
+            dt_isdb_results.drop(dt_isdb_results.index, inplace=True)
+
+            
+        # If valid taxonomy is present for sample, proceed to taxonomical reweighting
+        else:
+            cols_att = ['query_otol_domain', 'query_otol_kingdom', 'query_otol_phylum', 'query_otol_class',
+                    'query_otol_order', 'query_otol_family', 'query_otol_genus', 'query_otol_species']
+            for col in cols_att:
+                dt_isdb_results[col] = taxo_metadata[col][0]
+            dt_isdb_results = taxonomical_reponderator(dt_isdb_results, min_score_taxo_ms1)
+
+        print('''
+        Taxonomically informed reponderation done
+        ''')
     
+    # Drop all annoations for neg MS1 annotation for samples without taxonomy info    
+    elif (taxo_metadata is None) & (ionization_mode == 'neg'):
+            dt_isdb_results.drop(dt_isdb_results.index, inplace=True)
+            
     if len(dt_isdb_results) != 0:
             
         print('''
@@ -313,7 +321,9 @@ for sample_dir in samples_dir:
         print('''
         No annotation for file: ''' + sample_dir
         )
-        
+    
+    del(dt_isdb_results, dt_isdb_results_chem_rew)
+    
     print('''
     Finished file: ''' + sample_dir
     )
