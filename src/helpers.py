@@ -40,7 +40,7 @@ def top_N_slicer(input_df, top_to_output):
     return output_df
 
 
-def annotation_table_formatter(input_df, min_score_taxo_ms1, min_score_chemo_ms1):
+def annotation_table_formatter_taxo(input_df, min_score_taxo_ms1, min_score_chemo_ms1):
     """ A bunche of formatter frunctions for output
 
     Args:
@@ -75,6 +75,57 @@ def annotation_table_formatter(input_df, min_score_taxo_ms1, min_score_chemo_ms1
                     'structure_exact_mass', 'structure_taxonomy_npclassifier_01pathway', 'structure_taxonomy_npclassifier_02superclass',
                     'structure_taxonomy_npclassifier_03class',
                     'query_otol_species', 'lowest_matched_taxon', 'score_taxo', 'score_max_consistency', 'final_score', 'rank_final']
+
+    comp_attr = ['component_id', 'structure_taxonomy_npclassifier_01pathway_consensus', 'freq_structure_taxonomy_npclassifier_01pathway',
+                 'structure_taxonomy_npclassifier_02superclass_consensus',
+                 'freq_structure_taxonomy_npclassifier_02superclass', 'structure_taxonomy_npclassifier_03class_consensus', 'freq_structure_taxonomy_npclassifier_03class']
+
+    col_to_keep = ['feature_id'] + comp_attr + annot_attr
+
+    # We add the min chemo score filter at this step
+    input_df = input_df[
+        ((input_df['score_taxo'] >= min_score_taxo_ms1) & (input_df['score_max_consistency'] >= min_score_chemo_ms1)) | (
+            input_df['libname'] == 'ISDB')]
+    dt_output_flat = input_df[col_to_keep]
+
+    # Cytoscape formatting 
+
+    all_columns = list(input_df) # Creates list of all column headers   
+    input_df[all_columns] = input_df[all_columns].astype(str)
+    gb_spec = {c: '|'.join for c in annot_attr}
+
+    for c in comp_attr:
+        gb_spec[c] = 'first'
+
+    dt_output_cyto = input_df.groupby('feature_id').agg(gb_spec)
+    dt_output_cyto.reset_index(inplace=True)
+
+    return dt_output_flat, dt_output_cyto
+
+
+def annotation_table_formatter_no_taxo(input_df, min_score_taxo_ms1, min_score_chemo_ms1):
+    """ A bunche of formatter frunctions for output
+
+    Args:
+        input_df (DataFrame) : A DataFrame of annotations
+        min_score_taxo_ms1 (int): Minimal taxonomical score for MS1 annotations
+        min_score_chemo_ms1 (int): Minimal cluster chemical consistency score for MS1 annotations
+    Returns:
+        dt_output_flat (DataFrame): A flat DataFrame one annotation by line
+        dt_output_cyto (DataFrame): A Cytoscape compatible DataFrame with one feature by line (sep = |)
+    """
+
+    # Here we would like to filter results when short IK are repeated for the same feature_id at the same final rank
+
+    input_df = input_df.drop_duplicates(
+        subset=['feature_id', 'short_inchikey'], keep='first')
+
+    input_df = input_df.astype(
+        {'feature_id': 'int64'})
+    
+    annot_attr = ['rank_spec', 'score_input', 'libname', 'short_inchikey', 'structure_smiles_2D', 'structure_molecular_formula', 'adduct',
+                    'structure_exact_mass', 'structure_taxonomy_npclassifier_01pathway', 'structure_taxonomy_npclassifier_02superclass',
+                    'structure_taxonomy_npclassifier_03class', 'score_max_consistency', 'final_score', 'rank_final']
 
     comp_attr = ['component_id', 'structure_taxonomy_npclassifier_01pathway_consensus', 'freq_structure_taxonomy_npclassifier_01pathway',
                  'structure_taxonomy_npclassifier_02superclass_consensus',

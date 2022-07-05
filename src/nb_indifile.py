@@ -13,7 +13,7 @@ from spectral_lib_matcher import spectral_matching
 from molecular_networking import generate_mn
 from ms1_matcher import ms1_matcher
 from reweighting_functions import taxonomical_reponderator, chemical_reponderator
-from helpers import top_N_slicer, annotation_table_formatter
+from helpers import top_N_slicer, annotation_table_formatter_taxo, annotation_table_formatter_no_taxo
 
 from plotter import plotter_count, plotter_intensity
 from formatters import feature_intensity_table_formatter
@@ -128,6 +128,11 @@ for sample_dir in samples_dir:
         metadata_file_path = os.path.join(repository_path, sample_dir, sample_dir + '_metadata.tsv')
     except FileNotFoundError:
         continue
+    metadata = pd.read_csv(metadata_file_path, sep='\t')
+    if metadata['sample_type'][0] == 'sample':
+        pass
+    else:
+        continue
      
     if len(glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/*'+ '_features_ms2_' + ionization_mode + '.mgf')) != 0 :
         spectra_file_path = glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/*'+ '_features_ms2_' + ionization_mode + '.mgf')[0]
@@ -137,10 +142,12 @@ for sample_dir in samples_dir:
         feature_table = pd.read_csv(feature_table_path, sep=',')
         
     #if len(glob.glob(repository_path + sample_dir + '/taxo_output' + '/*'+ '_taxo_metadata.tsv')) != 0 :
-    taxo_metadata_path = glob.glob(repository_path + sample_dir + '/taxo_output' + '/*'+ '_taxo_metadata.tsv')[0]
     try:
+        taxo_metadata_path = glob.glob(repository_path + sample_dir + '/taxo_output' + '/*'+ '_taxo_metadata.tsv')[0]
         taxo_metadata = pd.read_csv(taxo_metadata_path, sep='\t')       
     except FileNotFoundError:
+        taxo_metadata = None
+    except IndexError:
         taxo_metadata = None
 
     print('''
@@ -255,6 +262,7 @@ for sample_dir in samples_dir:
         print('''
         Taxonomically informed reponderation
         ''')
+        taxo_reweight = True
         
         # Check if sample has a valid biosource and if not, harmonize ouput 
         if (taxo_metadata['matched_name'][0] == 'None') & (ionization_mode == 'pos'):
@@ -284,12 +292,16 @@ for sample_dir in samples_dir:
         
     # Harmonize format of dt_isdb_results to match post-taxonomical reweighting
     elif (taxo_metadata is None) & (ionization_mode == 'pos'):
+        taxo_reweight = False
         dt_isdb_results['score_input_taxo'] = dt_isdb_results['score_input']
         dt_isdb_results['score_taxo'] = 0
+        dt_isdb_results['rank_spec_taxo'] = dt_isdb_results.groupby(
+        'feature_id')['score_input_taxo'].rank(method='dense', ascending=False)
     
     # Drop all annoations for neg MS1 annotation for samples without taxonomy info    
     elif (taxo_metadata is None) & (ionization_mode == 'neg'):
-            dt_isdb_results.drop(dt_isdb_results.index, inplace=True)
+        taxo_reweight = False
+        dt_isdb_results.drop(dt_isdb_results.index, inplace=True)
             
     if len(dt_isdb_results) != 0:
             
@@ -306,8 +318,10 @@ for sample_dir in samples_dir:
         # Select only the top N annotations and formatting
         dt_taxo_chemo_reweighed_topN = top_N_slicer(input_df=dt_isdb_results_chem_rew,
                                                 top_to_output=top_to_output)   
-        df_flat, df_for_cyto = annotation_table_formatter(dt_taxo_chemo_reweighed_topN, min_score_taxo_ms1, min_score_chemo_ms1)
-
+        if taxo_reweight:
+            df_flat, df_for_cyto = annotation_table_formatter_taxo(dt_taxo_chemo_reweighed_topN, min_score_taxo_ms1, min_score_chemo_ms1)
+        else:
+            df_flat, df_for_cyto = annotation_table_formatter_no_taxo(dt_taxo_chemo_reweighed_topN, min_score_taxo_ms1, min_score_chemo_ms1)
         # Export
         if not os.path.exists(isdb_folder_path):
                 os.makedirs(isdb_folder_path)
@@ -321,13 +335,14 @@ for sample_dir in samples_dir:
 
         # Save params 
         shutil.copyfile(r'configs/user/user.yaml', isdb_config_path)
+        del(dt_isdb_results_chem_rew)
         
     else: 
         print('''
         No annotation for file: ''' + sample_dir
         )
     
-    del(dt_isdb_results, dt_isdb_results_chem_rew)
+    del(dt_isdb_results, taxo_reweight)
     
     print('''
     Finished file: ''' + sample_dir

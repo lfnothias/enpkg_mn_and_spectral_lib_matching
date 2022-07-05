@@ -42,18 +42,14 @@ def taxonomical_reponderator(dt_isdb_results, min_score_taxo_ms1):
 
     # Filter out MS1 annotations without a reweighting at a given taxo level prior to chemo repond
 
-    df = df[
-        (df['score_taxo'] >= min_score_taxo_ms1) | (
-        df['libname'] == 'ISDB')]
+    df = df.loc[(df['score_taxo'] >= min_score_taxo_ms1) | (df['libname'] == 'ISDB')]
 
 
     # we set the spectral score column as float
     df["score_input"] = pd.to_numeric(
         df["score_input"], downcast="float")
     # and we add it to the max txo score :
-    df['score_input_taxo'] = df['score_taxo'] + \
-        df['score_input']
-
+    df['score_input_taxo'] = df['score_taxo'] + df['score_input']
 
     df['rank_spec_taxo'] = df.groupby(
         'feature_id')['score_input_taxo'].rank(method='dense', ascending=False)
