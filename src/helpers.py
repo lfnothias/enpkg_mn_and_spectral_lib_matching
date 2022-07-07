@@ -125,7 +125,7 @@ def annotation_table_formatter_no_taxo(input_df, min_score_taxo_ms1, min_score_c
     
     annot_attr = ['rank_spec', 'score_input', 'libname', 'short_inchikey', 'structure_smiles_2D', 'structure_molecular_formula', 'adduct',
                     'structure_exact_mass', 'structure_taxonomy_npclassifier_01pathway', 'structure_taxonomy_npclassifier_02superclass',
-                    'structure_taxonomy_npclassifier_03class', 'score_max_consistency', 'final_score', 'rank_final']
+                    'structure_taxonomy_npclassifier_03class', 'score_taxo', 'score_max_consistency', 'final_score', 'rank_final']
 
     comp_attr = ['component_id', 'structure_taxonomy_npclassifier_01pathway_consensus', 'freq_structure_taxonomy_npclassifier_01pathway',
                  'structure_taxonomy_npclassifier_02superclass_consensus',

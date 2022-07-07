@@ -71,9 +71,11 @@ i = 0
 for sample_dir in samples_dir:
     try:
         metadata_file_path = os.path.join(repository_path, sample_dir, sample_dir + '_metadata.tsv')
+        metadata = pd.read_csv(metadata_file_path, sep='\t')
     except FileNotFoundError:
         continue
-    metadata = pd.read_csv(metadata_file_path, sep='\t')
+    
+    # Check if sample_type == sample
     if metadata['sample_type'][0] == 'sample':
         pass
     else:
@@ -126,9 +128,9 @@ db_metadata.reset_index(inplace=True)
 for sample_dir in samples_dir:
     try:
         metadata_file_path = os.path.join(repository_path, sample_dir, sample_dir + '_metadata.tsv')
+        metadata = pd.read_csv(metadata_file_path, sep='\t')
     except FileNotFoundError:
         continue
-    metadata = pd.read_csv(metadata_file_path, sep='\t')
     if metadata['sample_type'][0] == 'sample':
         pass
     else:
@@ -170,7 +172,7 @@ for sample_dir in samples_dir:
     spectra_query = list(load_from_mgf(spectra_file_path))
     spectra_query = [require_minimum_number_of_peaks(s, n_required=1) for s in spectra_query]
     spectra_query = [add_precursor_mz(s) for s in spectra_query if s]
-    
+
     # Molecular networking
     print('''
     Molecular networking 
@@ -183,7 +185,7 @@ for sample_dir in samples_dir:
     Molecular Networking done
     ''')
 
-    # Load ISDB results
+    # ISDB
     if ionization_mode == 'pos':
         # Spectral matching
         print('''
@@ -208,8 +210,6 @@ for sample_dir in samples_dir:
             error_bad_lines=False, low_memory=True)
         clusterinfo_summary.rename(columns={'precursor_mz': 'mz'}, inplace=True)
 
-    # Merge this back with the isdb results 
-    #if ionization_mode == 'pos':
         dt_isdb_results = pd.merge(dt_isdb_results, clusterinfo_summary, on='feature_id')
 
         print('Number of features: ' + str(len(clusterinfo_summary)))
@@ -258,44 +258,33 @@ for sample_dir in samples_dir:
         dt_isdb_results.dropna(subset=['feature_id'], inplace=True)
             
         if taxo_metadata is not None:
+            
             print('''
             Taxonomically informed reponderation
             ''')
-            taxo_reweight = True
-            
-            # Check if sample has a valid biosource and if not, harmonize ouput 
-            if (taxo_metadata['matched_name'][0] == 'None') & (ionization_mode == 'pos'):
-                dt_isdb_results['score_taxo'] = 0
-                dt_isdb_results["score_input"] = pd.to_numeric(dt_isdb_results["score_input"], downcast="float")
-                dt_isdb_results['score_input_taxo'] = dt_isdb_results['score_taxo'] +  dt_isdb_results['score_input']
-                dt_isdb_results['rank_spec_taxo'] = dt_isdb_results.groupby(
-                    'feature_id')['score_input_taxo'].rank(method='dense', ascending=False)
-                dt_isdb_results = dt_isdb_results.groupby(["feature_id"]).apply(
-                    lambda x: x.sort_values(["rank_spec_taxo"], ascending=True)).reset_index(drop=True)
-            
-            elif (taxo_metadata['matched_name'][0] == 'None') & (ionization_mode == 'neg'):
-                dt_isdb_results.drop(dt_isdb_results.index, inplace=True)
-
                 
             # If valid taxonomy is present for sample, proceed to taxonomical reweighting
-            else:
-                cols_att = ['query_otol_domain', 'query_otol_kingdom', 'query_otol_phylum', 'query_otol_class',
-                        'query_otol_order', 'query_otol_family', 'query_otol_genus', 'query_otol_species']
-                for col in cols_att:
-                    dt_isdb_results[col] = taxo_metadata[col][0]
-                dt_isdb_results = taxonomical_reponderator(dt_isdb_results, min_score_taxo_ms1)
+            taxo_reweight = True
+            cols_att = ['query_otol_domain', 'query_otol_kingdom', 'query_otol_phylum', 'query_otol_class',
+                    'query_otol_order', 'query_otol_family', 'query_otol_genus', 'query_otol_species']
+            for col in cols_att:
+                dt_isdb_results[col] = taxo_metadata[col][0]
+            dt_isdb_results = taxonomical_reponderator(dt_isdb_results, min_score_taxo_ms1)
 
             print('''
             Taxonomically informed reponderation done
             ''')
         
     # Harmonize format of dt_isdb_results to match post-taxonomical reweighting
-        elif (taxo_metadata is None) & (ionization_mode == 'pos'):
+        else:
             taxo_reweight = False
-            dt_isdb_results['score_input_taxo'] = dt_isdb_results['score_input']
             dt_isdb_results['score_taxo'] = 0
+            dt_isdb_results["score_input"] = pd.to_numeric(dt_isdb_results["score_input"], downcast="float")
+            dt_isdb_results['score_input_taxo'] = dt_isdb_results['score_taxo'] +  dt_isdb_results['score_input']
             dt_isdb_results['rank_spec_taxo'] = dt_isdb_results.groupby(
-            'feature_id')['score_input_taxo'].rank(method='dense', ascending=False)
+                'feature_id')['score_input_taxo'].rank(method='dense', ascending=False)
+            dt_isdb_results = dt_isdb_results.groupby(["feature_id"]).apply(
+                lambda x: x.sort_values(["rank_spec_taxo"], ascending=True)).reset_index(drop=True)
     
     # Drop all annoations for neg MS1 annotation for samples without taxonomy info    
     # elif (taxo_metadata is None) & (ionization_mode == 'neg'):
@@ -315,12 +304,13 @@ for sample_dir in samples_dir:
             ''')
 
             # Select only the top N annotations and formatting
-            dt_taxo_chemo_reweighed_topN = top_N_slicer(input_df=dt_isdb_results_chem_rew,
-                                                    top_to_output=top_to_output)   
+            dt_taxo_chemo_reweighed_topN = top_N_slicer(input_df=dt_isdb_results_chem_rew, top_to_output=top_to_output)
+            
             if taxo_reweight:
                 df_flat, df_for_cyto = annotation_table_formatter_taxo(dt_taxo_chemo_reweighed_topN, min_score_taxo_ms1, min_score_chemo_ms1)
             else:
                 df_flat, df_for_cyto = annotation_table_formatter_no_taxo(dt_taxo_chemo_reweighed_topN, min_score_taxo_ms1, min_score_chemo_ms1)
+            
             # Export
             if not os.path.exists(isdb_folder_path):
                     os.makedirs(isdb_folder_path)
@@ -341,7 +331,7 @@ for sample_dir in samples_dir:
         print('''
         No annotation for file: ''' + sample_dir
         )
-        
+                
     print('''
     Finished file: ''' + sample_dir
     )
