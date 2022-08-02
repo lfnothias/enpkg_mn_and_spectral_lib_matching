@@ -20,7 +20,6 @@ spectral_match_params: # Pos only for the moment
   - min_peaks: 6 # the minimal matching peaks number to use for spectral matching (if cosine)
 
 networking_params:
-  - mn_parent_mz_tol: 0.01 # the parent mass tolerance to use for spectral matching (in Da)
   - mn_msms_mz_tol: 0.01 # the msms mass tolerance to use for spectral matching (in Da)
   - mn_score_cutoff: 0.7 # the minimal modified cosine score for edge creation
   - mn_max_links: 10 # Consider edge between spectrumA and spectrumB if score falls into top_n for spectrumA and spectrumB

@@ -47,7 +47,6 @@ msms_mz_tol = params_list['spectral_match_params'][1]['msms_mz_tol']
 min_score = params_list['spectral_match_params'][2]['min_score']
 min_peaks = params_list['spectral_match_params'][3]['min_peaks']
 
-mn_parent_mz_tol = params_list['networking_params'][0]['mn_parent_mz_tol']
 mn_msms_mz_tol = params_list['networking_params'][1]['mn_msms_mz_tol']
 mn_score_cutoff = params_list['networking_params'][2]['mn_score_cutoff']
 mn_max_links = params_list['networking_params'][3]['mn_max_links']
