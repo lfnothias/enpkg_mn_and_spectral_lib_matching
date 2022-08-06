@@ -21,7 +21,6 @@ parser.add_argument('-p', '--db_metadata_path', required=True,
 
 args = parser.parse_args()
 db_metadata_path = os.path.normpath(args.db_metadata_path)
-db_metadata_path = './db_metadata/220701_frozen_metadata.csv.gz'
 
 if db_metadata_path.endswith('.csv.gz'):
     db_metadata = pd.read_csv(db_metadata_path, sep=',', compression='gzip', error_bad_lines=False, low_memory=False)
