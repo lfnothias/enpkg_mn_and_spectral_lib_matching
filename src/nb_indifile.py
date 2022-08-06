@@ -98,6 +98,7 @@ for sample_dir in samples_dir:
     i += 1
     
 print(f'{i} samples with required input files detected')
+
 if input("Do you wish to continue and process samples? (y/n)") != ("y"):
     exit()
     
@@ -324,8 +325,9 @@ for sample_dir in samples_dir:
                 
             #Plotting
             feature_intensity_table_formatted = feature_intensity_table_formatter(feature_table)
-            plotter_count(df_flat, treemap_chemo_counted_results_path)
-            plotter_intensity(df_flat, feature_intensity_table_formatted, treemap_chemo_intensity_results_path)
+            organism_label = taxo_metadata['query_otol_species'][0]
+            plotter_count(df_flat, sample_dir, organism_label, treemap_chemo_counted_results_path)
+            plotter_intensity(df_flat, feature_intensity_table_formatted, sample_dir, organism_label, treemap_chemo_intensity_results_path)
 
             # Save params 
             shutil.copyfile(r'configs/user/user.yaml', isdb_config_path)
