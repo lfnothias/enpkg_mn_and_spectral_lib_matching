@@ -29,7 +29,7 @@ def nostdout():
 
 def spectral_matching(spectrums_query, db_clean, parent_mz_tol,
         msms_mz_tol, min_cos, min_peaks, output_file_path):
-    """Performe spectra matching between query spectra and a database usinge cosine score
+    """Performs spectra matching between query spectra and a database usinge cosine score
 
     Args:
         spectrums_query (list): List of matchms spectra objects to query
