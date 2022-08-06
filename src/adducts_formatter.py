@@ -3,6 +3,7 @@ import argparse
 import textwrap
 from pathlib import Path
 import os
+from pathlib import PurePath
 
 p = Path(__file__).parents[1]
 os.chdir(p)
@@ -20,6 +21,7 @@ parser.add_argument('-p', '--db_metadata_path', required=True,
 
 args = parser.parse_args()
 db_metadata_path = os.path.normpath(args.db_metadata_path)
+db_metadata_path = './db_metadata/220701_frozen_metadata.csv.gz'
 
 if db_metadata_path.endswith('.csv.gz'):
     db_metadata = pd.read_csv(db_metadata_path, sep=',', compression='gzip', error_bad_lines=False, low_memory=False)
@@ -107,12 +109,17 @@ adducts_pos = results_pos[['adduct']].drop_duplicates().rename(columns = {'adduc
 adducts_neg = results_neg[['adduct']].drop_duplicates().rename(columns = {'adduct': 'adduct_neg'})
 params = pd.concat([adducts_pos, adducts_neg], axis=1)
 
-filename = db_metadata_path.split('\\')[-1].split('.')[0]
+#filename = db_metadata_path.split('\\')[-1].split('.')[0]
+
+filename = PurePath(db_metadata_path).stem.split('.')[0]
+
 path_pos = os.path.normpath(os.getcwd() + '/data_loc/' + filename + '/' + filename + '_adducts_pos.tsv.gz')
 path_neg = os.path.normpath(os.getcwd() + '/data_loc/' + filename + '/' + filename + '_adducts_neg.tsv.gz')
 path_params = os.path.normpath(os.getcwd() + '/data_loc/' + filename + '/' + filename + '_params.tsv')
 
 os.makedirs(os.path.normpath(os.getcwd() +'/data_loc/' + filename), exist_ok=True)
+#print("Filename is " + filename)
+#print("Path is " + path_pos)
 results_pos.to_csv(path_pos, sep = '\t', compression='gzip')
 results_neg.to_csv(path_neg, sep = '\t', compression='gzip')
 params.to_csv(path_params, sep = '\t')
