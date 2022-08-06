@@ -151,6 +151,8 @@ for sample_dir in samples_dir:
         metadata = pd.read_csv(metadata_file_path, sep='\t')
     except FileNotFoundError:
         continue
+    except NotADirectoryError:
+        continue
     if metadata['sample_type'][0] == 'sample':
         pass
     else:
