@@ -70,7 +70,7 @@ def spectral_matching(spectrums_query, db_clean, parent_mz_tol,
                                 'matched_peaks':n_matches,
                                 'feature_id': feature_id,
                                 'reference_id':y + 1,
-                                'short_inchikey': db_clean[y].get("name")})
+                                'short_inchikey': db_clean[y].get("compound_name")})
         df = pd.DataFrame(data)
         os.makedirs(os.path.dirname(output_file_path), exist_ok=True)
         df.to_csv(output_file_path, mode='a', header=not os.path.exists(output_file_path), sep = '\t')

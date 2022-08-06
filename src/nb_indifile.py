@@ -103,9 +103,9 @@ if input("Do you wish to continue and process samples? (y/n)") != ("y"):
     
 # Load spectral DB
 if ionization_mode == 'pos':
-    #spectral_db = load_spectral_db(spectral_db_path)
+    spectral_db = load_spectral_db(spectral_db_path)
     #save_spectral_db(spectral_db, 'db_spectra/isdb_pos_clean.mgf')
-    spectral_db = load_clean_spectral_db(spectral_db_path)
+    #spectral_db = load_clean_spectral_db(spectral_db_path)
 
 # Calculate min and max m/z value using user's tolerance for adducts search
 if ionization_mode == 'pos':
@@ -120,7 +120,7 @@ adducts_df['min'] = adducts_df['adduct_mass'] - \
 adducts_df['max'] = adducts_df['adduct_mass'] + \
     int(ppm_tol_ms1) * (adducts_df['adduct_mass'] / 1000000)
 
-# Load structures taxonimcal data
+# Load structures taxonomical data
 if taxo_db_metadata_path.endswith('.csv.gz'):
     db_metadata = pd.read_csv(taxo_db_metadata_path, sep=',', compression='gzip', error_bad_lines=False, low_memory=False)
 elif taxo_db_metadata_path.endswith('.csv'):
