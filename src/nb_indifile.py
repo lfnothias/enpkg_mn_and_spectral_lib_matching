@@ -74,38 +74,61 @@ i = 0
 
 
 for sample_dir in samples_dir:
-    try:
-        metadata_file_path = os.path.join(repository_path, sample_dir, sample_dir + '_metadata.tsv')
-        metadata = pd.read_csv(metadata_file_path, sep='\t')
-    except FileNotFoundError:
-        continue
-    except NotADirectoryError:
-        continue
-    
-    # Check if sample_type == sample
-    if metadata['sample_type'][0] == 'sample':
-        pass
+    if sample_dir != ".DS_Store":
+
+        try:
+            metadata_file_path = os.path.join(repository_path, sample_dir, sample_dir + '_metadata.tsv')
+            metadata = pd.read_csv(metadata_file_path, sep='\t')
+        except FileNotFoundError:
+            continue
+        except NotADirectoryError:
+            continue
+        
+
+        # Check if sample_type == sample
+        if metadata['sample_type'][0] == 'sample':
+            pass
+        else:
+            print(sample_dir + " is a blank, it is removed from the processing list.")
+            samples_dir.remove(sample_dir)
+            continue
+
+
+        # Check if MS/MS spectra are present 
+        if len(glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/*'+ '_features_ms2_' + ionization_mode + '.mgf')) != 0 :
+            pass
+        else:
+            print(sample_dir + " has no MSMS data, it is removed from the processing list.")
+            samples_dir.remove(sample_dir)
+            continue
+
+
+        # Check if features intensity table is present
+        if len(glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/*'+ '_features_quant_' + ionization_mode + '.csv')) != 0 :
+            pass
+        else:
+            print(sample_dir + " has no feature intensity table, it is removed from the processing list.")
+            samples_dir.remove(sample_dir)
+            continue
+
+        i += 1
     else:
-        print(sample_dir + " is a blank, it is removed from the processing list.")
-        samples_dir.remove(sample_dir)
-        continue
-    
-    # Check if MS/MS spectra are present 
-    if len(glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/*'+ '_features_ms2_' + ionization_mode + '.mgf')) != 0 :
-        pass
-    else:
-        print(sample_dir + " has no MSMS data, it is removed from the processing list.")
-        samples_dir.remove(sample_dir)
         continue
 
-    # Check if features intensity table is present
-    if len(glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/*'+ '_features_quant_' + ionization_mode + '.csv')) != 0 :
-        pass
-    else:
-        print(sample_dir + " has no feature intensity table, it is removed from the processing list.")
-        samples_dir.remove(sample_dir)
-        continue
-    i += 1
+if recompute == False :
+
+    for sample_dir in samples_dir:
+        if sample_dir != ".DS_Store":
+
+            # Check if the folder has allready been processed
+            if len(glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/isdb/config.yaml')) != 0:
+                print(sample_dir + " has already been annotated through the ISDB, since the recompute option (user.yaml) is set to False it will be removed from the processing list.")
+                samples_dir.remove(sample_dir)
+                continue
+            else:
+                continue
+        else:
+            continue
     
 # print(f'{i} samples with required input files detected')
 
