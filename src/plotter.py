@@ -1,7 +1,7 @@
 import numpy as np
 import plotly.express as px
 
-def plotter_count(df_input, treemap_chemo_counted_results_path):
+def plotter_count(df_input, sample_dir, organism, treemap_chemo_counted_results_path):
     """Plot a NPClassifer treemap from annotation table using the annotation count
 
     Args:
@@ -20,12 +20,12 @@ def plotter_count(df_input, treemap_chemo_counted_results_path):
                          'Fatty acids': '#8AB17D',
                          'Carbohydrates': '#F4A261',})
     fig.update_layout(margin = dict(t=50, l=25, r=25, b=25),
-    title_text="Metabolite annotation overview (size proportional to number of annotations)")
+    title_text= sample_dir + "("  +  organism + ") " + "- metabolite annotation overview (size proportional to number of annotations)")
     fig.update_annotations(font_size=12)
     fig.write_html(treemap_chemo_counted_results_path)
 
 
-def plotter_intensity(df_input, feature_table, treemap_chemo_intensity_results_path):
+def plotter_intensity(df_input, feature_table, sample_dir, organism, treemap_chemo_intensity_results_path):
     """Plot a NPClassifer treemap from annotation table using the annotation average intensity
 
     Args:
@@ -39,7 +39,7 @@ def plotter_intensity(df_input, feature_table, treemap_chemo_intensity_results_p
                      color='intensity',
                      color_continuous_scale='RdBu_r',)
     fig.update_layout(margin = dict(t=50, l=25, r=25, b=25),
-    title_text="Metabolite annotation overview (size proportional to the average features intensities)")
+    title_text= sample_dir + "("  +  organism + ") " + "- metabolite annotation overview (size proportional to the average features intensities)")
     fig.update_annotations(font_size=12)
     fig.write_html(treemap_chemo_intensity_results_path)
 
