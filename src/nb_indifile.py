@@ -68,7 +68,11 @@ min_score_chemo_ms1 = params_list['reweighting_params'][5]['min_score_chemo_ms1'
 
 samples_dir = [directory for directory in os.listdir(repository_path)]
 
+print(f'{len(samples_dir)} samples folder were detected in the input directory. They will be checked for minimal requirements.')
+
 i = 0 
+
+
 for sample_dir in samples_dir:
     try:
         metadata_file_path = os.path.join(repository_path, sample_dir, sample_dir + '_metadata.tsv')
@@ -82,24 +86,34 @@ for sample_dir in samples_dir:
     if metadata['sample_type'][0] == 'sample':
         pass
     else:
+        print(sample_dir + " is a blank, it is removed from the processing list.")
+        samples_dir.remove(sample_dir)
         continue
     
     # Check if MS/MS spectra are present 
     if len(glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/*'+ '_features_ms2_' + ionization_mode + '.mgf')) != 0 :
         pass
     else:
+        print(sample_dir + " has no MSMS data, it is removed from the processing list.")
+        samples_dir.remove(sample_dir)
         continue
 
     # Check if features intensity table is present
     if len(glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/*'+ '_features_quant_' + ionization_mode + '.csv')) != 0 :
         pass
     else:
+        print(sample_dir + " has no feature intensity table, it is removed from the processing list.")
+        samples_dir.remove(sample_dir)
         continue
     i += 1
     
-print(f'{i} samples with required input files detected')
+# print(f'{i} samples with required input files detected')
+
+print(f'{len(samples_dir)} samples folder were found to be complete and will be processed.')
+
 
 if input("Do you wish to continue and process samples? (y/n)") != ("y"):
+
     exit()
     
 # Load spectral DB
