@@ -39,7 +39,7 @@ conda activate indifiles_annotation_env
 
 ## 2. Get structure-organism pairs and spectral database
 Thanks to the [LOTUS initiative](https://lotus.nprod.net/), a large number of NPs with their associated biosources are made available. *In silico* fragmented spectra of these NPs are also available.  
-1. Download structure-organism pairs: https://zenodo.org/record/6582124#.YqwzU3ZBxPY
+1. Download structure-organism pairs: e.g. https://zenodo.org/record/6582124#.YqwzU3ZBxPY (latest version always available at https://doi.org/10.5281/zenodo.5794106)
 2. Download *in silico* fragmentation spectra: https://zenodo.org/record/5607264#.Yqwwk3ZBxPY
 3. Move the structure-organism pairs file into:  
 <code>../indifiles_annotation/db_metadata/</code>
