@@ -9,6 +9,8 @@ from matchms.filtering import add_precursor_mz
 from matchms.filtering.require_minimum_number_of_peaks  import require_minimum_number_of_peaks 
 
 from spectral_db_loader import load_spectral_db
+from spectral_db_loader import load_clean_spectral_db
+from spectral_db_loader import save_spectral_db
 from spectral_lib_matcher import spectral_matching
 from molecular_networking import generate_mn
 from ms1_matcher import ms1_matcher
@@ -99,7 +101,9 @@ if input("Do you wish to continue and process samples? (y/n)") != ("y"):
     
 # Load spectral DB
 if ionization_mode == 'pos':
-    spectral_db = load_spectral_db(spectral_db_path)
+    #spectral_db = load_spectral_db(spectral_db_path)
+    #save_spectral_db(spectral_db, 'db_spectra/isdb_pos_clean.mgf')
+    spectral_db = load_clean_spectral_db(spectral_db_path)
 
 # Calculate min and max m/z value using user's tolerance for adducts search
 if ionization_mode == 'pos':
