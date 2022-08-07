@@ -3,6 +3,7 @@ import glob
 import os
 import yaml
 import shutil
+import time
 
 from matchms.importing import load_from_mgf
 from matchms.filtering import add_precursor_mz
@@ -71,7 +72,7 @@ samples_dir = [directory for directory in os.listdir(repository_path)]
 print(f'{len(samples_dir)} samples folder were detected in the input directory. They will be checked for minimal requirements.')
 
 i = 0 
-
+print(f"At this step samples_dir len is {len(samples_dir)}")
 
 for sample_dir in samples_dir:
     if sample_dir != ".DS_Store":
@@ -115,24 +116,39 @@ for sample_dir in samples_dir:
     else:
         continue
 
+samples_dir = [directory for directory in os.listdir(repository_path)]
+
+print(f"At this step samples_dir len is {len(samples_dir)}")
+
+
 if recompute == False :
 
     for sample_dir in samples_dir:
         if sample_dir != ".DS_Store":
 
+            print("Treating sample " + sample_dir)
+            print(f"At this step samples_dir len is {len(samples_dir)}")
+
             # Check if the folder has allready been processed
             if len(glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/isdb/config.yaml')) != 0:
                 print(sample_dir + " has already been annotated through the ISDB, since the recompute option (user.yaml) is set to False it will be removed from the processing list.")
                 samples_dir.remove(sample_dir)
-                continue
             else:
+                print(len(glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/isdb/config.yaml')))
+                print(sample_dir + " has not been processed")
                 continue
         else:
+            print("Exiting at sample " + sample_dir)
             continue
     
 # print(f'{i} samples with required input files detected')
 
+print(f"At this step samples_dir len is {len(samples_dir)}")
+
 print(f'{len(samples_dir)} samples folder were found to be complete and will be processed.')
+
+for sample_dir in samples_dir:
+    print(sample_dir)
 
 
 if input("Do you wish to continue and process samples? (y/n)") != ("y"):
