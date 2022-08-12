@@ -73,11 +73,8 @@ samples_dir = [directory for directory in os.listdir(repository_path)]
 print(f'{len(samples_dir)} samples folder were detected in the input directory. They will be checked for minimal requirements.')
 
 i = 0 
-print(f"At this step samples_dir len is {len(samples_dir)}")
-
 for sample_dir in samples_dir:
     if sample_dir != ".DS_Store":
-
         try:
             metadata_file_path = os.path.join(repository_path, sample_dir, sample_dir + '_metadata.tsv')
             metadata = pd.read_csv(metadata_file_path, sep='\t')
@@ -86,15 +83,13 @@ for sample_dir in samples_dir:
         except NotADirectoryError:
             continue
         
-
         # Check if sample_type == sample
         if metadata['sample_type'][0] == 'sample':
             pass
         else:
-            print(sample_dir + " is a blank, it is removed from the processing list.")
+            print(sample_dir + " is a QC or a blank sample, it is removed from the processing list.")
             samples_dir.remove(sample_dir)
             continue
-
 
         # Check if MS/MS spectra are present 
         if len(glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/*'+ '_features_ms2_' + ionization_mode + '.mgf')) != 0 :
@@ -104,7 +99,6 @@ for sample_dir in samples_dir:
             samples_dir.remove(sample_dir)
             continue
 
-
         # Check if features intensity table is present
         if len(glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/*'+ '_features_quant_' + ionization_mode + '.csv')) != 0 :
             pass
@@ -112,45 +106,16 @@ for sample_dir in samples_dir:
             print(sample_dir + " has no feature intensity table, it is removed from the processing list.")
             samples_dir.remove(sample_dir)
             continue
-
+        if recompute == False :
+            if len(glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/isdb/config.yaml')) != 0:
+                print(sample_dir + " has already been annotated through the ISDB, since the recompute option (user.yaml) is set to False it will be removed from the processing list.")
+                samples_dir.remove(sample_dir)
         i += 1
     else:
         continue
 
-samples_dir = [directory for directory in os.listdir(repository_path)]
-
-print(f"At this step samples_dir len is {len(samples_dir)}")
-
-
-if recompute == False :
-
-    for sample_dir in samples_dir:
-        if sample_dir != ".DS_Store":
-
-            print("Treating sample " + sample_dir)
-            print(f"At this step samples_dir len is {len(samples_dir)}")
-
-            # Check if the folder has allready been processed
-            if len(glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/isdb/config.yaml')) != 0:
-                print(sample_dir + " has already been annotated through the ISDB, since the recompute option (user.yaml) is set to False it will be removed from the processing list.")
-                samples_dir.remove(sample_dir)
-            else:
-                print(len(glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/isdb/config.yaml')))
-                print(sample_dir + " has not been processed")
-                continue
-        else:
-            print("Exiting at sample " + sample_dir)
-            continue
-    
-# print(f'{i} samples with required input files detected')
-
-print(f"At this step samples_dir len is {len(samples_dir)}")
 
 print(f'{len(samples_dir)} samples folder were found to be complete and will be processed.')
-
-for sample_dir in samples_dir:
-    print(sample_dir)
-
 
 if input("Do you wish to continue and process samples? (y/n)") != ("y"):
 
@@ -381,8 +346,9 @@ for sample_dir in samples_dir:
         #Plotting
         feature_intensity_table_formatted = feature_intensity_table_formatter(feature_table)
         organism_label = taxo_metadata['query_otol_species'][0]
-        plotter_count(df_flat, treemap_chemo_counted_results_path)
+        plotter_count(df_flat, sample_dir, organism_label, treemap_chemo_counted_results_path)
         plotter_intensity(df_flat, feature_intensity_table_formatted, sample_dir, organism_label, treemap_chemo_intensity_results_path)
+
 
         # Save params 
         shutil.copyfile(r'configs/user/user.yaml', isdb_config_path)
