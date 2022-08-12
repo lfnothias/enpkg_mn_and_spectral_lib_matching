@@ -5,25 +5,26 @@ Repository gathering scripts to perform MS/MS annotation using ISDB, MS1 annotat
 
 ## Required starting architecture
 
-⚠️ Positive mode only for the moment
-
 ```
 data/
 └─── sample_a/
 |     └─── sample_a_metadata.tsv
 |     └─── pos/
 |     |     sample_a_features_quant_pos.csv
-|     |     sample_a_features_ms2_pos.mgf
-|     |     
+|     |     sample_a_features_ms2_pos.mgf     
+|     └─── neg/
+|     |     sample_a_features_quant_neg.csv
+|     |     sample_a_features_ms2_neg.mgf
 |     └─── taxo_output/
-|            └─── sample_a_species.json
-|            └─── sample_a_taxon_info.json
-|            └─── sample_a_taxo_metadata.tsv
+|           └─── sample_a_species.json
+|           └─── sample_a_taxon_info.json
+|           └─── sample_a_taxo_metadata.tsv
 |
 └─── sample_b/
 |
 └─── sample_n/
 ```
+NB: Only one ionization mode is required. 
 
 ## 1. Clone repository and install environment
 
@@ -39,11 +40,11 @@ conda activate indifiles_annotation_env
 
 ## 2. Get structure-organism pairs and spectral database
 Thanks to the [LOTUS initiative](https://lotus.nprod.net/), a large number of NPs with their associated biosources are made available. *In silico* fragmented spectra of these NPs are also available.  
-1. Download structure-organism pairs: https://zenodo.org/record/6582124#.YqwzU3ZBxPY
-2. Download *in silico* fragmentation spectra: https://zenodo.org/record/5607264#.Yqwwk3ZBxPY
-3. Move the structure-organism pairs file into:  
+1. Download structure-organism pairs: e.g. https://zenodo.org/record/6582124#.YqwzU3ZBxPY (latest version always available at https://doi.org/10.5281/zenodo.5794106)
+2. Download *in silico* fragmentation spectra (positive and negative mode): https://zenodo.org/record/6939173#.YvX2Q3ZByUk
+4. Move the structure-organism pairs file into:  
 <code>../indifiles_annotation/db_metadata/</code>
-3. Move the spectra file into:  
+3. Move the spectra file(s) into:  
 <code>../indifiles_annotation/db_spectra/</code>
 
 ## 3. Prepare potential adducts
@@ -56,7 +57,7 @@ python src/adducts_formatter.py -p db_metadata/220525_frozen_metadata.csv.gz # R
 This will create adducts 2 adducts files (pos/neg) and the adducts used (params) in:  
 <code>../indifiles_annotation/data_loc/220525_frozen_metadata/</code>
 
-NB: To edit calculated adducts, modify this script according to your needs:  
+NB: To edit the calculated adducts, modify this script according to your needs:  
 https://github.com/mandelbrot-project/indifiles_annotation/blob/main/src/adducts_formatter.py
 
 ## 3. Adapt parameters and launch the process! 🚀

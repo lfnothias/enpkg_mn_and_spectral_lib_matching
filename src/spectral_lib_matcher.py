@@ -29,7 +29,7 @@ def nostdout():
 
 def spectral_matching(spectrums_query, db_clean, parent_mz_tol,
         msms_mz_tol, min_cos, min_peaks, output_file_path):
-    """Performe spectra matching between query spectra and a database usinge cosine score
+    """Performs spectra matching between query spectra and a database usinge cosine score
 
     Args:
         spectrums_query (list): List of matchms spectra objects to query
@@ -70,7 +70,7 @@ def spectral_matching(spectrums_query, db_clean, parent_mz_tol,
                                 'matched_peaks':n_matches,
                                 'feature_id': feature_id,
                                 'reference_id':y + 1,
-                                'short_inchikey': db_clean[y].get("name")})
+                                'short_inchikey': db_clean[y].get("compound_name")})
         df = pd.DataFrame(data)
         os.makedirs(os.path.dirname(output_file_path), exist_ok=True)
         df.to_csv(output_file_path, mode='a', header=not os.path.exists(output_file_path), sep = '\t')
