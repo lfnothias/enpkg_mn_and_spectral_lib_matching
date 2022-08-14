@@ -7,13 +7,14 @@ general_params:
   - ionization_mode: 'pos' # ionization mode to treat (pos only for the moment)
 
 paths:
-  - repository_path: 'C:\Users\gaudrya.FARMA\Desktop\ordered\' # Path where samples are located
+  - repository_path: 'Path\to\your\data\' # Path where samples are located
   - taxo_db_metadata_path: db_metadata/220525_frozen_metadata.csv.gz  # Path to your spectral library file
-  - spectral_db_path: db_spectra/MultiSources_ISDB_pos.mgf # Path to the metadata of the spectral file
- - adducts_pos_path: data_loc/220525_frozen_metadata/220525_frozen_metadata_adducts_pos.tsv.gz # Path to the adducts file in pos mode
+  - spectral_db_pos_path: db_spectra/isdb_pos.mgf # Path to the metadata of the spectral file in PI mode
+  - spectral_db_neg_path: db_spectra/isdb_neg.mgf # Path to the metadata of the spectral file in NI mode
+  - adducts_pos_path: data_loc/220525_frozen_metadata/220525_frozen_metadata_adducts_pos.tsv.gz # Path to the adducts file in pos mode
   - adducts_neg_path: data_loc/220525_frozen_metadata/220525_frozen_metadata_adducts_neg.tsv.gz # Path to the adducts file in neg mode
 
-spectral_match_params: # Pos only for the moment
+spectral_match_params:
   - parent_mz_tol: 0.01 # the parent mass tolerance to use for spectral matching (in Da) (if cosine)
   - msms_mz_tol: 0.01 # the msms mass tolerance to use for spectral matching (in Da) (if cosine)
   - min_score: 0.2 # the minimal cosine to use for spectral matching (if cosine)
@@ -25,7 +26,7 @@ networking_params:
   - mn_max_links: 10 # Consider edge between spectrumA and spectrumB if score falls into top_n for spectrumA and spectrumB
   - mn_top_n: 15 # Maximum number of links to add per node.
 
-reweighting_params: # Pos only for the moment
+reweighting_params:
   - top_to_output: 1 # Number of candidate structures to output for each feature
   - ppm_tol_ms1: 2 # Tolerance for MS1 matching (adducts)
   - use_post_taxo: True # Use cluster chemical consistency after taxonomical reweighting (True or False)
