@@ -71,10 +71,8 @@ min_score_chemo_ms1 = params_list['reweighting_params'][5]['min_score_chemo_ms1'
 samples_dir = [directory for directory in os.listdir(repository_path)]
 print(f'{len(samples_dir)} samples folder were detected in the input directory. They will be checked for minimal requirements.')
 
-print(samples_dir)
 
-for sample_dir in samples_dir:
-    print(sample_dir)
+for sample_dir in samples_dir[:]:
     # if sample_dir != ".DS_Store":
     try:
         metadata_file_path = os.path.join(repository_path, sample_dir, sample_dir + '_metadata.tsv')
@@ -152,24 +150,24 @@ db_metadata.reset_index(inplace=True)
     
 # Processing
 for sample_dir in samples_dir:
-    try:
-        metadata_file_path = os.path.join(repository_path, sample_dir, sample_dir + '_metadata.tsv')
-        metadata = pd.read_csv(metadata_file_path, sep='\t')
-    except FileNotFoundError:
-        continue
-    except NotADirectoryError:
-        continue
-    if metadata['sample_type'][0] == 'sample':
-        pass
-    else:
-        continue
+    # try:
+    metadata_file_path = os.path.join(repository_path, sample_dir, sample_dir + '_metadata.tsv')
+    metadata = pd.read_csv(metadata_file_path, sep='\t')
+    # except FileNotFoundError:
+    #     continue
+    # except NotADirectoryError:
+    #     continue
+    # if metadata['sample_type'][0] == 'sample':
+    #     pass
+    # else:
+    #     continue
      
-    if len(glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/*'+ '_features_ms2_' + ionization_mode + '.mgf')) != 0 :
-        spectra_file_path = glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/*'+ '_features_ms2_' + ionization_mode + '.mgf')[0]
+    # if len(glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/*'+ '_features_ms2_' + ionization_mode + '.mgf')) != 0 :
+    spectra_file_path = glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/*'+ '_features_ms2_' + ionization_mode + '.mgf')[0]
         
-    if len(glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/*'+ '_features_quant_' + ionization_mode + '.csv')) != 0 :
-        feature_table_path = glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/*'+ '_features_quant_' + ionization_mode + '.csv')[0]
-        feature_table = pd.read_csv(feature_table_path, sep=',')
+    # if len(glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/*'+ '_features_quant_' + ionization_mode + '.csv')) != 0 :
+    feature_table_path = glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/*'+ '_features_quant_' + ionization_mode + '.csv')[0]
+    feature_table = pd.read_csv(feature_table_path, sep=',')
         
     #if len(glob.glob(repository_path + sample_dir + '/taxo_output' + '/*'+ '_taxo_metadata.tsv')) != 0 :
     try:
@@ -227,9 +225,12 @@ for sample_dir in samples_dir:
     Spectral matching done
     ''')
     
-    dt_isdb_results = pd.read_csv(isdb_results_path, sep='\t', \
-        usecols=['msms_score', 'feature_id', 'reference_id', 'short_inchikey'], error_bad_lines=False, low_memory=True)
-    
+    try:
+        dt_isdb_results = pd.read_csv(isdb_results_path, sep='\t', \
+            usecols=['msms_score', 'feature_id', 'reference_id', 'short_inchikey'], error_bad_lines=False, low_memory=True)
+    except ValueError:   
+        shutil.copyfile(r'configs/user/user.yaml', isdb_config_path)
+        continue
     # Add 'libname' column and rename msms_score column
     dt_isdb_results['libname'] = 'ISDB'
 
@@ -346,7 +347,12 @@ for sample_dir in samples_dir:
             
         #Plotting
         feature_intensity_table_formatted = feature_intensity_table_formatter(feature_table)
-        organism_label = taxo_metadata['query_otol_species'][0]
+        
+        if taxo_metadata is not None:
+            organism_label = taxo_metadata['query_otol_species'][0]
+        else:
+            organism_label = metadata['organism_species'][0]
+            
         plotter_count(df_flat, sample_dir, organism_label, treemap_chemo_counted_results_path)
         plotter_intensity(df_flat, feature_intensity_table_formatted, sample_dir, organism_label, treemap_chemo_intensity_results_path)
 
