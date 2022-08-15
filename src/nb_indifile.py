@@ -341,7 +341,7 @@ for sample_dir in samples_dir:
         
         # Export
         if not os.path.exists(isdb_folder_path):
-                os.makedirs(isdb_folder_path)
+            os.makedirs(isdb_folder_path)
         df_flat.to_csv(repond_table_flat_path, sep='\t')
         df_for_cyto.to_csv(repond_table_path, sep='\t')
             
