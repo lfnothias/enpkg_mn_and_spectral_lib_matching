@@ -69,51 +69,52 @@ min_score_chemo_ms1 = params_list['reweighting_params'][5]['min_score_chemo_ms1'
 # Iteration over samples directory to count samples with required input files
 
 samples_dir = [directory for directory in os.listdir(repository_path)]
-
 print(f'{len(samples_dir)} samples folder were detected in the input directory. They will be checked for minimal requirements.')
 
-i = 0 
+print(samples_dir)
+
 for sample_dir in samples_dir:
-    if sample_dir != ".DS_Store":
-        try:
-            metadata_file_path = os.path.join(repository_path, sample_dir, sample_dir + '_metadata.tsv')
-            metadata = pd.read_csv(metadata_file_path, sep='\t')
-        except FileNotFoundError:
-            continue
-        except NotADirectoryError:
-            continue
-        
-        # Check if sample_type == sample
-        if metadata['sample_type'][0] == 'sample':
-            pass
-        else:
-            print(sample_dir + " is a QC or a blank sample, it is removed from the processing list.")
-            samples_dir.remove(sample_dir)
-            continue
-
-        # Check if MS/MS spectra are present 
-        if len(glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/*'+ '_features_ms2_' + ionization_mode + '.mgf')) != 0 :
-            pass
-        else:
-            print(sample_dir + " has no MSMS data, it is removed from the processing list.")
-            samples_dir.remove(sample_dir)
-            continue
-
-        # Check if features intensity table is present
-        if len(glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/*'+ '_features_quant_' + ionization_mode + '.csv')) != 0 :
-            pass
-        else:
-            print(sample_dir + " has no feature intensity table, it is removed from the processing list.")
-            samples_dir.remove(sample_dir)
-            continue
-        if recompute == False :
-            if len(glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/isdb/config.yaml')) != 0:
-                print(sample_dir + " has already been annotated through the ISDB, since the recompute option (user.yaml) is set to False it will be removed from the processing list.")
-                samples_dir.remove(sample_dir)
-        i += 1
+    print(sample_dir)
+    # if sample_dir != ".DS_Store":
+    try:
+        metadata_file_path = os.path.join(repository_path, sample_dir, sample_dir + '_metadata.tsv')
+        metadata = pd.read_csv(metadata_file_path, sep='\t')
+    except FileNotFoundError:
+        samples_dir.remove(sample_dir)
+        continue
+    except NotADirectoryError:
+        samples_dir.remove(sample_dir)
+        continue
+    
+    # Check if sample_type == sample
+    if metadata['sample_type'][0] == 'sample':
+        pass
     else:
+        print(sample_dir + " is a QC or a blank sample, it is removed from the processing list.")
+        samples_dir.remove(sample_dir)
         continue
 
+    # Check if MS/MS spectra are present 
+    if len(glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/*'+ '_features_ms2_' + ionization_mode + '.mgf')) != 0 :
+        pass
+    else:
+        print(sample_dir + " has no MSMS data, it is removed from the processing list.")
+        samples_dir.remove(sample_dir)
+        continue
+
+    # Check if features intensity table is present
+    if len(glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/*'+ '_features_quant_' + ionization_mode + '.csv')) != 0 :
+        pass
+    else:
+        print(sample_dir + " has no feature intensity table, it is removed from the processing list.")
+        samples_dir.remove(sample_dir)
+        continue
+    if recompute == False :
+        if len(glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/isdb/config.yaml')) != 0:
+            print(sample_dir + " has already been annotated through the ISDB, since the recompute option (user.yaml) is set to False it will be removed from the processing list.")
+            samples_dir.remove(sample_dir)
+    # else:
+    #     continue
 
 print(f'{len(samples_dir)} samples folder were found to be complete and will be processed.')
 
