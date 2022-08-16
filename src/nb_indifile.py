@@ -150,26 +150,12 @@ db_metadata.reset_index(inplace=True)
     
 # Processing
 for sample_dir in samples_dir:
-    # try:
     metadata_file_path = os.path.join(repository_path, sample_dir, sample_dir + '_metadata.tsv')
-    metadata = pd.read_csv(metadata_file_path, sep='\t')
-    # except FileNotFoundError:
-    #     continue
-    # except NotADirectoryError:
-    #     continue
-    # if metadata['sample_type'][0] == 'sample':
-    #     pass
-    # else:
-    #     continue
-     
-    # if len(glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/*'+ '_features_ms2_' + ionization_mode + '.mgf')) != 0 :
-    spectra_file_path = glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/*'+ '_features_ms2_' + ionization_mode + '.mgf')[0]
-        
-    # if len(glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/*'+ '_features_quant_' + ionization_mode + '.csv')) != 0 :
+    metadata = pd.read_csv(metadata_file_path, sep='\t')   
+    spectra_file_path = glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/*'+ '_features_ms2_' + ionization_mode + '.mgf')[0]        
     feature_table_path = glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/*'+ '_features_quant_' + ionization_mode + '.csv')[0]
     feature_table = pd.read_csv(feature_table_path, sep=',')
         
-    #if len(glob.glob(repository_path + sample_dir + '/taxo_output' + '/*'+ '_taxo_metadata.tsv')) != 0 :
     try:
         taxo_metadata_path = glob.glob(repository_path + sample_dir + '/taxo_output' + '/*'+ '_taxo_metadata.tsv')[0]
         taxo_metadata = pd.read_csv(taxo_metadata_path, sep='\t')       
