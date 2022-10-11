@@ -1,19 +1,18 @@
-# default.yaml
+ default.yaml
 
 ---
 # parameters
 general_params:
   - recompute: True  # Recompute for samples with results already done
-  - ionization_mode: 'pos' # ionization mode to treat (pos only for the moment)
+  - ionization_mode: 'pos' # ionization mode to treat
 
 paths:
-  - repository_path: 'C:/Users/gaudrya.FARMA/Desktop/bug_fix/' #VGF_individual_files_no_sirius_zipped/ # The path were you want your folder to be placed
-  - spectra_suffix: '_features_ms2_pos.mgf' # The path were you want your folder to be placed 
-  - metadata_sample_suffix: '_metadata.tsv' # The path were you want your folder to be placed  
-  - metadata_path: db_metadata/210715_inhouse_metadata.csv  # Path to your spectral library file
-  - db_file_path: db_spectra/LOTUS_DNP_ISDB.mgf # Path to the metadata of the spectral file
-  - adducts_pos_path: data_loc/db_prepared_pos.tsv.gz # Path to the adducts file in pos mode
-  - adducts_neg_path: data_loc/db_prepared_neg.tsv.gz # Path to the adducts file in neg mode
+  - repository_path: 'Path\to\your\data\' # Path where samples are located
+  - taxo_db_metadata_path: db_metadata/220525_frozen_metadata.csv.gz  # Path to your spectral library file
+  - spectral_db_pos_path: db_spectra/isdb_pos.mgf # Path to the metadata of the spectral file in PI mode
+  - spectral_db_neg_path: db_spectra/isdb_neg.mgf # Path to the metadata of the spectral file in NI mode
+  - adducts_pos_path: data_loc/220525_frozen_metadata/220525_frozen_metadata_adducts_pos.tsv.gz # Path to the adducts file in pos mode
+  - adducts_neg_path: data_loc/220525_frozen_metadata/220525_frozen_metadata_adducts_neg.tsv.gz # Path to the adducts file in neg mode
 
 spectral_match_params:
   - parent_mz_tol: 0.01 # the parent mass tolerance to use for spectral matching (in Da) (if cosine)
