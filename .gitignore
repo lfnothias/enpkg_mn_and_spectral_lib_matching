@@ -3,4 +3,6 @@
 db_metadata/*
 db_spectra/*
 data_loc/*
+!data_loc/adducts.tsv
 src/__pycache__/
+user/
