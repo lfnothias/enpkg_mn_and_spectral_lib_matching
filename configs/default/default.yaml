@@ -1,6 +1,3 @@
- default.yaml
-
----
 # parameters
 general_params:
   - recompute: True  # Recompute for samples with results already done
