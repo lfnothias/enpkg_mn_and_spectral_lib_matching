@@ -141,9 +141,9 @@ adducts_df['max'] = adducts_df['adduct_mass'] + \
 
 # Load structures taxonomical data
 if taxo_db_metadata_path.endswith('.csv.gz'):
-    db_metadata = pd.read_csv(taxo_db_metadata_path, sep=',', compression='gzip', error_bad_lines=False, low_memory=False)
+    db_metadata = pd.read_csv(taxo_db_metadata_path, sep=',', compression='gzip', on_bad_lines='skip', low_memory=False)
 elif taxo_db_metadata_path.endswith('.csv'):
-    db_metadata = pd.read_csv(taxo_db_metadata_path, sep=',', error_bad_lines=False, low_memory=False)
+    db_metadata = pd.read_csv(taxo_db_metadata_path, sep=',', on_bad_lines='skip', low_memory=False)
 db_metadata['short_inchikey'] = db_metadata.structure_inchikey.str.split(
     "-", expand=True)[0]
 db_metadata.reset_index(inplace=True)
@@ -213,7 +213,7 @@ for sample_dir in samples_dir:
     
     try:
         dt_isdb_results = pd.read_csv(isdb_results_path, sep='\t', \
-            usecols=['msms_score', 'feature_id', 'reference_id', 'short_inchikey'], error_bad_lines=False, low_memory=True)
+            usecols=['msms_score', 'feature_id', 'reference_id', 'short_inchikey'], on_bad_lines='skip', low_memory=True)
     except ValueError:   
         shutil.copyfile(r'configs/user/user.yaml', isdb_config_path)
         continue
@@ -222,7 +222,7 @@ for sample_dir in samples_dir:
 
     # Load MN metadata
     clusterinfo_summary = pd.read_csv(mn_ci_ouput_path, sep='\t', usecols=['feature_id', 'precursor_mz', 'component_id'], \
-        error_bad_lines=False, low_memory=True)
+        on_bad_lines='skip', low_memory=True)
     clusterinfo_summary.rename(columns={'precursor_mz': 'mz'}, inplace=True)
 
     dt_isdb_results = pd.merge(dt_isdb_results, clusterinfo_summary, on='feature_id')
