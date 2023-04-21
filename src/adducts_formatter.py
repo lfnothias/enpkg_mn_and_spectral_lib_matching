@@ -29,7 +29,7 @@ elif db_metadata_path.endswith('.csv'):
 
 exact_masses = list(db_metadata[['structure_exact_mass']].drop_duplicates()['structure_exact_mass'])
 
-adducts_masses_dic = pd.read_csv('data_loc/adducts.tsv', sep='\t',  index_col=0, squeeze=True).to_dict()
+adducts_masses_dic = pd.read_csv('data_loc/adducts.tsv', sep='\t',  index_col=0).squeeze("columns").to_dict()
 
 results = []
 for exact_mass in exact_masses:
