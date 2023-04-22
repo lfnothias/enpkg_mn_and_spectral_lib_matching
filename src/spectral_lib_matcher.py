@@ -1,10 +1,6 @@
 import os
-import sys
-import numpy as np
 import pandas as pd
 from tqdm.contrib import tzip
-import contextlib
-import io
 from matchms.filtering import default_filters
 from matchms.filtering import normalize_intensities
 from matchms.filtering import select_by_intensity
