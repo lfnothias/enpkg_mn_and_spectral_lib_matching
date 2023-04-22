@@ -36,33 +36,35 @@ os.chdir(p)
 with open (r'configs/user/user.yaml') as file:    
     params_list = yaml.load(file, Loader=yaml.FullLoader)
 
-recompute = params_list['general_params'][0]['recompute']
-ionization_mode = params_list['general_params'][1]['ionization_mode']
+recompute = params_list['general_params']['recompute']
+ionization_mode = params_list['general_params']['ionization_mode']
 
-repository_path = params_list['paths'][0]['repository_path']
-taxo_db_metadata_path = params_list['paths'][1]['taxo_db_metadata_path']
-spectral_db_pos_path = params_list['paths'][2]['spectral_db_pos_path']
-spectral_db_neg_path = params_list['paths'][3]['spectral_db_neg_path']
-adducts_pos_path = params_list['paths'][4]['adducts_pos_path']
-adducts_neg_path = params_list['paths'][5]['adducts_neg_path']
+repository_path = params_list['paths']['repository_path']
+taxo_db_metadata_path = params_list['paths']['taxo_db_metadata_path']
+spectral_db_pos_path = params_list['paths']['spectral_db_pos_path']
+spectral_db_neg_path = params_list['paths']['spectral_db_neg_path']
+adducts_pos_path = params_list['paths']['adducts_pos_path']
+adducts_neg_path = params_list['paths']['adducts_neg_path']
 
-parent_mz_tol = params_list['spectral_match_params'][0]['parent_mz_tol']
-msms_mz_tol = params_list['spectral_match_params'][1]['msms_mz_tol']
-min_score = params_list['spectral_match_params'][2]['min_score']
-min_peaks = params_list['spectral_match_params'][3]['min_peaks']
+parent_mz_tol = params_list['spectral_match_params']['parent_mz_tol']
+msms_mz_tol = params_list['spectral_match_params']['msms_mz_tol']
+min_score = params_list['spectral_match_params']['min_score']
+min_peaks = params_list['spectral_match_params']['min_peaks']
 
-mn_msms_mz_tol = params_list['networking_params'][0]['mn_msms_mz_tol']
-mn_score_cutoff = params_list['networking_params'][1]['mn_score_cutoff']
-mn_max_links = params_list['networking_params'][2]['mn_max_links']
-mn_top_n = params_list['networking_params'][3]['mn_top_n']
+mn_msms_mz_tol = params_list['networking_params']['mn_msms_mz_tol']
+mn_score_cutoff = params_list['networking_params']['mn_score_cutoff']
+mn_max_links = params_list['networking_params']['mn_max_links']
+mn_top_n = params_list['networking_params']['mn_top_n']
 
-top_to_output= params_list['reweighting_params'][0]['top_to_output']
-ppm_tol_ms1 = params_list['reweighting_params'][1]['ppm_tol_ms1']
-use_post_taxo = params_list['reweighting_params'][2]['use_post_taxo']
-top_N_chemical_consistency = params_list['reweighting_params'][3]['top_N_chemical_consistency']
-min_score_taxo_ms1 = params_list['reweighting_params'][4]['min_score_taxo_ms1']
-min_score_chemo_ms1 = params_list['reweighting_params'][5]['min_score_chemo_ms1']
-
+top_to_output= params_list['reweighting_params']['top_to_output']
+ppm_tol_ms1 = params_list['reweighting_params']['ppm_tol_ms1']
+use_post_taxo = params_list['reweighting_params']['use_post_taxo']
+top_N_chemical_consistency = params_list['reweighting_params']['top_N_chemical_consistency']
+min_score_taxo_ms1 = params_list['reweighting_params']['min_score_taxo_ms1']
+min_score_chemo_ms1 = params_list['reweighting_params']['min_score_chemo_ms1']
+msms_weight = params_list['reweighting_params']['msms_weight']
+taxo_weight = params_list['reweighting_params']['taxo_weight']
+chemo_weight = params_list['reweighting_params']['chemo_weight']
 
 ###### START #####
 
@@ -150,6 +152,7 @@ db_metadata.reset_index(inplace=True)
     
 # Processing
 for sample_dir in samples_dir:
+    
     metadata_file_path = os.path.join(repository_path, sample_dir, sample_dir + '_metadata.tsv')
     metadata = pd.read_csv(metadata_file_path, sep='\t')   
     spectra_file_path = glob.glob(repository_path + sample_dir + '/' + ionization_mode + '/*'+ '_features_ms2_' + ionization_mode + '.mgf')[0]        
@@ -238,6 +241,7 @@ for sample_dir in samples_dir:
     
     df_MS1 = ms1_matcher(clusterinfo_summary, adducts_df, db_metadata)
     
+
     print('''
     MS1 annotation done
     ''')
@@ -311,7 +315,12 @@ for sample_dir in samples_dir:
         Chemically informed reponderation
         ''')
 
-        dt_isdb_results_chem_rew = chemical_reponderator(clusterinfo_summary, dt_isdb_results, top_N_chemical_consistency)
+        dt_isdb_results_chem_rew = chemical_reponderator(clusterinfo_summary_file=clusterinfo_summary,
+                                                dt_isdb_results=dt_isdb_results,
+                                                top_N_chemical_consistency=top_N_chemical_consistency,
+                                                msms_weight=msms_weight,
+                                                taxo_weight=taxo_weight,
+                                                chemo_weight=chemo_weight)
 
         print('''
         Chemically informed reponderation done
