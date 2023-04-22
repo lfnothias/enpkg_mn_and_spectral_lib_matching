@@ -12,6 +12,10 @@ from matchms.filtering import select_by_mz
 from matchms.similarity import PrecursorMzMatch
 from matchms import calculate_scores
 from matchms.similarity import CosineGreedy
+from matchms.logging_functions import set_matchms_logger_level
+
+# See https://github.com/matchms/matchms/pull/271
+set_matchms_logger_level("ERROR")
 
 def peak_processing(spectrum):
     spectrum = default_filters(spectrum)
@@ -20,12 +24,6 @@ def peak_processing(spectrum):
     spectrum = select_by_mz(spectrum, mz_from=10, mz_to=1000)
     return spectrum
 
-@contextlib.contextmanager
-def nostdout():
-    save_stdout = sys.stdout
-    sys.stdout = io.StringIO()
-    yield
-    sys.stdout = save_stdout
 
 def spectral_matching(spectrums_query, db_clean, parent_mz_tol,
         msms_mz_tol, min_cos, min_peaks, output_file_path):
@@ -44,8 +42,7 @@ def spectral_matching(spectrums_query, db_clean, parent_mz_tol,
     if os.path.exists(output_file_path):
         os.remove(output_file_path)
 
-    with nostdout():
-        spectrums_query = [peak_processing(s) for s in spectrums_query]
+    spectrums_query = [peak_processing(s) for s in spectrums_query]
 
     similarity_score = PrecursorMzMatch(tolerance=float(parent_mz_tol), tolerance_type="Dalton")
     chunks_query = [spectrums_query[x:x+1000] for x in range(0, len(spectrums_query), 1000)]
