@@ -10,6 +10,9 @@ def connected_component_subgraphs(G):
             for c in nx.connected_components(G):
                 yield G.subgraph(c)
              
+def sorted_connected_component_subgraphs(G):
+            for c in sorted(nx.connected_components(G), key=len, reverse=True):
+                yield G.subgraph(c)
                 
 def generate_mn(spectra_query, mn_graphml_ouput_path, mn_ci_ouput_path, mn_msms_mz_tol, mn_score_cutoff, mn_top_n, mn_max_links):
     """Generate a Molecular Network from MS/MS spectra using the modified cosine score
@@ -26,17 +29,15 @@ def generate_mn(spectra_query, mn_graphml_ouput_path, mn_ci_ouput_path, mn_msms_
         mn_max_links (int): Maximum number of links to add per node.
     """    
     score = ModifiedCosine(tolerance=float(mn_msms_mz_tol))
-    # print(f'mn_msms_mz_tol used is {mn_msms_mz_tol}')
-    # print(f'Score used is {score}')
     scores = calculate_scores(spectra_query, spectra_query, score, is_symmetric=True)
-    # print(f'Calculated scores are {scores}')
     ms_network = SimilarityNetwork(identifier_key="scans", score_cutoff = mn_score_cutoff, top_n = mn_top_n, max_links = mn_max_links, link_method = 'mutual')
     ms_network.create_network(scores, score_name="ModifiedCosine_score")
     os.makedirs(os.path.dirname(mn_graphml_ouput_path), exist_ok=True)
     ms_network.export_to_graphml(mn_graphml_ouput_path)
-    
-    components = connected_component_subgraphs(ms_network.graph)
-    comp_dict = {idx: comp.nodes() for idx, comp in enumerate(components)}
+    # Here we use the sorted_connected_component_subgraphs in ordere to make sure that components are sequentially labelled from the largest to the smallest
+    components = sorted_connected_component_subgraphs(ms_network.graph)
+    # We also increment the key by one to start the numbering at one.
+    comp_dict = {idx + 1 : comp.nodes() for idx, comp in enumerate(components)}
     attr = {n: {'component_id' : comp_id} for comp_id, nodes in comp_dict.items() for n in nodes}
     comp = pd.DataFrame.from_dict(attr, orient = 'index')
     comp.reset_index(inplace = True)
