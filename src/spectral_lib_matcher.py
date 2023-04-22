@@ -52,8 +52,11 @@ def spectral_matching(spectrums_query, db_clean, parent_mz_tol,
 
     for chunk in chunks_query:
         scores = calculate_scores(chunk, db_clean, similarity_score)
-        indices = np.where(np.asarray(scores.scores))
-        idx_row, idx_col = indices
+        # indices = np.where(np.asarray(scores.scores))
+        # idx_row, idx_col = indices
+        # This modification is to handle the Sparse array format (introduced in matchms https://github.com/matchms/matchms/pull/370)
+        idx_row = scores.scores[:,:][0]
+        idx_col = scores.scores[:,:][1]
         scans_id_map = {}
         i = 0
         for s in chunk:
