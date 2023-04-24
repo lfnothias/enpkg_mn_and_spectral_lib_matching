@@ -82,7 +82,7 @@ def taxonomical_reponderator(dt_isdb_results, min_score_taxo_ms1):
 
 
 
-def chemical_reponderator(clusterinfo_summary_file, dt_isdb_results, top_N_chemical_consistency):
+def chemical_reponderator(clusterinfo_summary_file, dt_isdb_results, top_N_chemical_consistency, msms_weight, taxo_weight, chemo_weight):
     """Perform chemical consistency reweighting on a list of candidates annotations
     
     Args:
@@ -139,9 +139,9 @@ def chemical_reponderator(clusterinfo_summary_file, dt_isdb_results, top_N_chemi
         "structure_taxonomy_npclassifier_03class_score"
     ]].max(axis=1)
 
-    dt_isdb_results['final_score'] = dt_isdb_results['score_input'] + \
-        dt_isdb_results['score_taxo'] + \
-        dt_isdb_results['score_max_consistency']
+    dt_isdb_results['final_score'] = msms_weight * dt_isdb_results['score_input'] + \
+        taxo_weight * dt_isdb_results['score_taxo'] + \
+        chemo_weight * dt_isdb_results['score_max_consistency']
 
     dt_isdb_results['rank_final'] = dt_isdb_results.groupby(
         'feature_id')['final_score'].rank(method='dense', ascending=False)

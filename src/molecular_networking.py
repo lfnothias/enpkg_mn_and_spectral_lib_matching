@@ -9,30 +9,35 @@ import networkx as nx
 def connected_component_subgraphs(G):
             for c in nx.connected_components(G):
                 yield G.subgraph(c)
+             
+def sorted_connected_component_subgraphs(G):
+            for c in sorted(nx.connected_components(G), key=len, reverse=True):
+                yield G.subgraph(c)
                 
-def generate_mn(spectra_query, mn_graphml_ouput_path, mn_ci_ouput_path, msms_mz_tol, score_cutoff, top_n, max_links):
+def generate_mn(spectra_query, mn_graphml_ouput_path, mn_ci_ouput_path, mn_msms_mz_tol, mn_score_cutoff, mn_top_n, mn_max_links):
     """Generate a Molecular Network from MS/MS spectra using the modified cosine score
 
     Args:
         spectra_query (list): A list of matchms spectra objects
         mn_graphml_ouput_path (str): Path to export the .graphml MN file
         mn_ci_ouput_path (str): Path to export the .tsv MN metadata file
-        msms_mz_tol (float): Tolerance in Da for MS/MS fragments matching
-        score_cutoff (float): Minimal modified cosine score for edge creation
-        top_n (int): Consider edge between spectrumA and spectrumB if score falls into top_n for spectrumA or spectrumB \
+        mn_msms_mz_tol (float): Tolerance in Da for MS/MS fragments matching
+        mn_score_cutoff (float): Minimal modified cosine score for edge creation
+        mn_top_n (int): Consider edge between spectrumA and spectrumB if score falls into top_n for spectrumA or spectrumB \
             (link_method="single"), or into top_n for spectrumA and spectrumB (link_method="mutual"). From those potential links, \
             only max_links will be kept, so top_n must be >= max_links.
-        max_links (int): Maximum number of links to add per node.
+        mn_max_links (int): Maximum number of links to add per node.
     """    
-    score = ModifiedCosine(tolerance=float(msms_mz_tol))
+    score = ModifiedCosine(tolerance=float(mn_msms_mz_tol))
     scores = calculate_scores(spectra_query, spectra_query, score, is_symmetric=True)
-    ms_network = SimilarityNetwork(identifier_key="scans", score_cutoff = score_cutoff, top_n = top_n, max_links = max_links, link_method = 'mutual')
-    ms_network.create_network(scores)
+    ms_network = SimilarityNetwork(identifier_key="scans", score_cutoff = mn_score_cutoff, top_n = mn_top_n, max_links = mn_max_links, link_method = 'mutual')
+    ms_network.create_network(scores, score_name="ModifiedCosine_score")
     os.makedirs(os.path.dirname(mn_graphml_ouput_path), exist_ok=True)
     ms_network.export_to_graphml(mn_graphml_ouput_path)
-    
-    components = connected_component_subgraphs(ms_network.graph)
-    comp_dict = {idx: comp.nodes() for idx, comp in enumerate(components)}
+    # Here we use the sorted_connected_component_subgraphs in ordere to make sure that components are sequentially labelled from the largest to the smallest
+    components = sorted_connected_component_subgraphs(ms_network.graph)
+    # We also increment the key by one to start the numbering at one.
+    comp_dict = {idx + 1 : comp.nodes() for idx, comp in enumerate(components)}
     attr = {n: {'component_id' : comp_id} for comp_id, nodes in comp_dict.items() for n in nodes}
     comp = pd.DataFrame.from_dict(attr, orient = 'index')
     comp.reset_index(inplace = True)

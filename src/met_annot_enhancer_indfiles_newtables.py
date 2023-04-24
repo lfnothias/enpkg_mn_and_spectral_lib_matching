@@ -291,7 +291,7 @@ for sample_dir in repository_path_list:
             dt_isdb_results = pd.read_csv(isdb_results_path,
                                         sep='\t',
                                         usecols=['msms_score', 'feature_id', 'reference_id', 'inchikey'],
-                                        error_bad_lines=False, low_memory=True)
+                                        on_bad_lines='skip', low_memory=True)
 
             dt_isdb_results['libname'] = 'ISDB'
 
@@ -302,7 +302,7 @@ for sample_dir in repository_path_list:
             clusterinfo_summary = pd.read_csv(mn_ci_ouput_path,
                                             sep='\t',
                                             usecols=['feature_id', 'precursor_mz', 'component_id'],
-                                            error_bad_lines=False, low_memory=True)
+                                            on_bad_lines='skip', low_memory=True)
 
             clusterinfo_summary.rename(columns={'precursor_mz': 'mz'}, inplace=True)
 
@@ -315,7 +315,7 @@ for sample_dir in repository_path_list:
             dt_isdb_results = pd.merge(dt_isdb_results, clusterinfo_summary, on='feature_id')
 
             db_metadata = pd.read_csv(metadata_path,
-                                    sep=',', error_bad_lines=False, low_memory=False)
+                                    sep=',', on_bad_lines='skip', low_memory=False)
 
             db_metadata['short_inchikey'] = db_metadata.structure_inchikey.str.split(
                 "-", expand=True)[0]
