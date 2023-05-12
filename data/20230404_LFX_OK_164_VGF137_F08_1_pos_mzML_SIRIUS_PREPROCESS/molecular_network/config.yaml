@@ -4,13 +4,13 @@ general_params:
 
 paths:
   input_path: 'data' # Path where samples are located
-  spectral_db_path: db_spectra/CASMI.msp # Path to the spectral library file in MSP
+  spectral_db_path: db_spectra/ALL_GNPS.msp # Path to the spectral library file in MSP
 
 spectral_match_params:
   parent_mz_tol: 0.01 # the parent mass tolerance to use for spectral matching (in Da) (if cosine)
   msms_mz_tol: 0.01 # the msms mass tolerance to use for spectral matching (in Da) (if cosine)
-  min_score: 0.7 # the minimal cosine to use for spectral matching (if cosine)
-  min_peaks: 6 # the minimal matching peaks number to use for spectral matching (if cosine)
+  min_score: 0.65 # the minimal cosine to use for spectral matching (if cosine)
+  min_peaks: 4 # the minimal matching peaks number to use for spectral matching (if cosine)
 
 networking_params:
   mn_msms_mz_tol: 0.01 # the msms mass tolerance to use for spectral matching (in Da)

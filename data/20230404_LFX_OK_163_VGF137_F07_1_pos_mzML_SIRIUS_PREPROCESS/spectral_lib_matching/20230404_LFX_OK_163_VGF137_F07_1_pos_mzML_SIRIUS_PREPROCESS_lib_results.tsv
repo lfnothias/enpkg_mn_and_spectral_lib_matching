@@ -1,0 +1,573 @@
+	msms_score	matched_peaks	feature_id	reference_id	short_inchikey
+0	0.7235488011061868	22	118	10928	RH65_2_S01_F9
+1	0.6871968167028221	24	118	22631	Naphtho[2,3-b]furan-2(4H)-one, 4a,5,6,7,8,8a,9,9a-octahydro-9,9a-dihydroxy-3,4a,5-trimethyl-, (4aR,5S)-
+2	0.7374429100452412	5	118	407651	(2S)-6-(2-hydroxyethyl)-2-(hydroxymethyl)-2,5,7-trimethyl-3H-inden-1-one
+3	0.9127218703323554	5	118	407657	(2S)-6-(2-hydroxyethyl)-2-(hydroxymethyl)-2,5,7-trimethyl-3H-inden-1-one
+4	0.8330922255762202	5	118	408064	(2S)-6-(2-hydroxyethyl)-2-(hydroxymethyl)-2,5,7-trimethyl-3H-inden-1-one
+5	0.9435087705991178	15	118	415797	FIO00816 Hypnophilin
+6	0.9393869766139933	11	118	437481	Hydroxyvalerenic Acid
+7	0.7450389753431141	7	118	437482	Hydroxyvalerenic Acid
+8	0.8471925234017196	12	118	443769	2-[(3S)-3-hydroxy-4a,8-dimethyl-2,3,4,5,6,7-hexahydro-1H-naphthalen-2-yl]prop-2-enoic acid
+9	0.9422918176499732	6	118	445800	2-[(2S,4aR,8aS)-2-hydroxy-4a-methyl-8-methylidene-3,4,5,6,7,8a-hexahydro-1H-naphthalen-2-yl]prop-2-enoic acid
+10	0.6529732931199783	6	118	446595	2-[(1S,2S,4aR,8aS)-1-hydroxy-4a-methyl-8-methylidene-1,2,3,4,5,6,7,8a-octahydronaphthalen-2-yl]prop-2-enoic acid
+11	0.8394900453916361	16	118	462556	Pechueloic Acid
+12	0.6972621462718349	9	109	16064	"6-Methyl-5,7a,13,13b-tetraaza-pentaphene-8,14-dione"""
+13	0.7366523602988073	6	109	98251	"""3-Hydroxy-7,2',4'-trimethoxyflavone CollisionEnergy:102040"""
+14	0.6556348714927623	8	109	109829	"""3-Hydroxy-6,2',4'-trimethoxyflavone CollisionEnergy:205060"""
+15	0.6787256024879406	7	109	110162	"""3-Hydroxy-6,2',3'-trimethoxyflavone CollisionEnergy:205060"""
+16	0.9498488237548254	9	149	121986	N-acetylanonaine
+17	0.8404173728688424	25	201	7028	1-methyl-4-(6-methylhept-5-en-2-yl)-2,3-dioxabicyclo[2.2.2]oct-5-ene
+18	0.7196302842217053	26	201	23449	2(1H)-Naphthalenone, 4a,5,6,7,8,8a-hexahydro-6-hydroxy-3,8-dimethyl-5-(1-methylethyl)-, (4aR,5S,6S,8R,8aS)-
+19	0.7906806497803989	26	201	33554	Curcumol
+20	0.8069064195538216	12	201	34379	2,6-Di-tert-butyl-4-hydroxymethylphenol
+21	0.8769883226381319	24	201	34628	Curcumol
+22	0.943870835564851	25	201	37011	2,6-Di-tert-butyl-4-hydroxymethylphenol
+23	0.944151951619177	20	201	37032	2,6-Di-tert-butyl-4-hydroxymethylphenol
+24	0.9782793664045804	26	201	102037	"""(+)-Nootkatone, crystalline, 98+% CollisionEnergy:102040"""
+25	0.9056151584820165	26	201	108439	Zerumbone CollisionEnergy:102040
+26	0.8268865589208644	26	201	113371	"""(+)-Nootkatone, crystalline, 98+% CollisionEnergy:205060"""
+27	0.6964888368736712	26	201	119764	Zerumbone CollisionEnergy:205060
+28	0.8452958254095534	19	201	187507	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+29	0.8741542472500263	16	201	187515	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+30	0.8522174359170425	22	201	187523	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+31	0.8746541444262624	20	201	187531	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+32	0.8892956635084681	22	201	187539	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+33	0.8717913601510663	11	201	187547	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+34	0.878640948169958	20	201	187555	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+35	0.8946100664032746	20	201	187563	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+36	0.8819132162111933	18	201	187571	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+37	0.8709053568367792	21	201	187579	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+38	0.8794240735862436	19	201	187587	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+39	0.9490683702624821	16	201	187595	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+40	0.8468558037170799	11	201	187603	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+41	0.8710525855732594	19	201	187611	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+42	0.8786007291643292	17	201	187619	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+43	0.8081197777921536	15	201	187627	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+44	0.8907314480975231	13	201	187635	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+45	0.8850660092833746	24	201	187643	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+46	0.9240992083928962	13	201	187651	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+47	0.8005540324393895	14	201	187659	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+48	0.8374916396341074	12	201	187667	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+49	0.922207528560351	14	201	187675	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+50	0.8686174073012757	11	201	187683	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+51	0.9152458212752084	13	201	366050	(1S,3R,3aS,4R,6R,8aR,9R)-Decahydro-1,5,5,8a-tetramethyl-1,4-methanoazulene-3,6,9-triol
+52	0.7930812270961796	21	201	366097	(1S,3R,3aS,4R,6R,8aR,9R)-Decahydro-1,5,5,8a-tetramethyl-1,4-methanoazulene-3,6,9-triol
+53	0.9113798894993952	13	201	366649	(1S,3R,3aS,4R,6R,8aR,9R)-Decahydro-1,5,5,8a-tetramethyl-1,4-methanoazulene-3,6,9-triol
+54	0.9745070493918588	26	201	401464	(4R,4aS,6R)-4,4a-dimethyl-6-prop-1-en-2-yl-3,4,5,6,7,8-hexahydronaphthalen-2-one
+55	0.9957807068877554	26	201	404948	(4R,4aS,6R)-4,4a-dimethyl-6-prop-1-en-2-yl-3,4,5,6,7,8-hexahydronaphthalen-2-one
+56	0.9883272150743656	11	201	405356	alpha-Cyperone
+57	0.9914652044472367	26	201	405619	alpha-Cyperone
+58	0.9863458325434944	9	201	406757	alpha-Cyperone
+59	0.9658895078359653	26	201	407029	alpha-Cyperone
+60	0.6893223774416722	26	201	407092	alpha-Cyperone
+61	0.6893223774416722	26	201	407228	alpha-Cyperone
+62	0.9931297710105638	25	201	407534	alpha-Cyperone
+63	0.9160961302198735	26	201	408072	alpha-Cyperone
+64	0.9689396345779403	26	201	408431	alpha-Cyperone
+65	0.8483258416901162	26	201	488627	(+)-Nootkatone - 40.0 eV
+66	0.8468569025317966	26	201	488628	(+)-Nootkatone - 40.0 eV
+67	0.8329869097581145	26	201	488629	(+)-Nootkatone - 40.0 eV
+68	0.8323257122617788	26	201	488630	(+)-Nootkatone - 40.0 eV
+69	0.8354109504884047	26	201	488631	(+)-Nootkatone - 40.0 eV
+70	0.839468979358833	26	43	97018	"""9,10-dihydrojasmonic acid CollisionEnergy:102040"""
+71	0.8746348742498273	26	43	108497	"""3-(2-methylpropyl)-3a,4,5,6-tetrahydro-2-benzofuran-1(3h)-one CollisionEnergy:102040"""
+72	0.7258943727610785	26	43	119821	"""3-(2-methylpropyl)-3a,4,5,6-tetrahydro-2-benzofuran-1(3h)-one CollisionEnergy:205060"""
+73	0.9725418828826726	5	30	10895	corypalmine
+74	0.6848962086959659	22	100	10926	RH80_1238_S01_F20-22
+75	0.6686916163390395	13	100	18634	4-(2,7-dihydroxy-6-methylheptan-2-yl)-3-hydroxybenzoic acid
+76	0.695253887504522	11	100	92199	Abscisic acid
+77	0.6939886663720016	10	100	92202	Abscisic acid
+78	0.6954962206886325	10	100	92205	Abscisic acid
+79	0.6960524341762174	11	100	92215	Abscisic acid
+80	0.6951327357674134	10	100	92220	Abscisic acid
+81	0.6959639361185291	11	100	92225	Absicic Acid
+82	0.6962463452593486	10	100	92228	Absicic Acid
+83	0.6938084367747318	10	100	92231	Absicic Acid
+84	0.6698437849504525	9	100	92845	Gamma_CECH
+85	0.6740972399221743	5	100	92847	Gamma_CECH
+86	0.8167710146393381	22	100	96940	abscisic acid CollisionEnergy:102040
+87	0.8780861993514261	19	100	100110	ABSCISIC ACID CollisionEnergy:102040
+88	0.8332400004617321	28	100	102928	ABSCISIC ACID CollisionEnergy:102040
+89	0.7966912084252621	25	100	102929	ABSCISIC ACID CollisionEnergy:102040
+90	0.8378045993561594	26	100	105237	GNF-Pf-5341 CollisionEnergy:102040
+91	0.8374771843336868	30	100	106505	Artemisinin CollisionEnergy:102040
+92	0.8031929637859747	10	100	108104	"""10,12-dihydroxy-9-methyl-4,13-dimethylene-6-oxatricyclo[7.4.0.0<3,7>]tridecan- 5-one CollisionEnergy:102040"""
+93	0.6906076043203361	26	100	116575	GNF-Pf-5341 CollisionEnergy:205060
+94	0.6965529487388435	27	100	117838	Artemisinin CollisionEnergy:205060
+95	0.6510333827155848	10	100	457593	(1S,8R,9R)-8-hydroxy-4-(propan-2-ylidene)-10-oxatricyclo[7.2.1.01,5]dodecane-8-carboxylic acid
+96	0.6634067215211704	9	100	457594	(1S,8R,9R)-8-hydroxy-4-(propan-2-ylidene)-10-oxatricyclo[7.2.1.01,5]dodecane-8-carboxylic acid
+97	0.9988651978097767	8	140	5102	sphingosin C16 (Artifact)-emf
+98	0.7847386815719981	8	140	401938	2-[dodecyl(2-hydroxyethyl)amino]ethanol
+99	0.9990157298217094	8	140	404801	2-[dodecyl(2-hydroxyethyl)amino]ethanol
+100	0.8087192408748157	34	58	103805	CollisionEnergy:102040
+101	0.8107214004158674	36	58	103806	CollisionEnergy:102040
+102	0.7430382270875951	35	58	115145	CollisionEnergy:205060
+103	0.734893184328668	35	58	115146	CollisionEnergy:205060
+104	0.9303373296902913	10	58	168154	8-acetyl-5,7-dimethoxy-2,2-dimethylchromene
+105	0.9282143104915975	10	58	168182	8-acetyl-5,7-dimethoxy-2,2-dimethylchromene
+106	0.9436072515574975	6	58	168208	8-acetyl-5,7-dimethoxy-2,2-dimethylchromene
+107	0.9291415343167724	10	58	168235	8-acetyl-5,7-dimethoxy-2,2-dimethylchromene
+108	0.9359368091356643	10	58	168262	8-acetyl-5,7-dimethoxy-2,2-dimethylchromene
+109	0.8237088894517509	16	58	352498	BML00523 Austricine
+110	0.8084409322003407	22	163	186707	(1R,4R,6R,10S)-4,12,12-trimethyl-9-methylene-5-oxatricyclo[8.2.0.0~4,6~]dodecane
+111	0.7674388107984131	21	163	186731	(1R,4R,6R,10S)-4,12,12-trimethyl-9-methylene-5-oxatricyclo[8.2.0.0~4,6~]dodecane
+112	0.8252950716810572	19	163	186754	(1R,4R,6R,10S)-4,12,12-trimethyl-9-methylene-5-oxatricyclo[8.2.0.0~4,6~]dodecane
+113	0.8460611736619623	7	163	186778	(1R,4R,6R,10S)-4,12,12-trimethyl-9-methylene-5-oxatricyclo[8.2.0.0~4,6~]dodecane
+114	0.8440472641535536	19	163	186802	(1R,4R,6R,10S)-4,12,12-trimethyl-9-methylene-5-oxatricyclo[8.2.0.0~4,6~]dodecane
+115	0.86081570847675	21	163	186826	(1R,4R,6R,10S)-4,12,12-trimethyl-9-methylene-5-oxatricyclo[8.2.0.0~4,6~]dodecane
+116	0.8316011630881318	23	180	23494	3,9-Diacetoxy-2,6,6,13-tetramethyl-12-oxotetracyclo[11.2.1.0~1,10~.0~2,7~]hexadec-8-yl benzoate
+117	0.7176372588436112	33	41	96939	abscisic acid CollisionEnergy:205060
+118	0.8930226326557461	31	41	96940	abscisic acid CollisionEnergy:102040
+119	0.7605350742163839	28	41	100110	ABSCISIC ACID CollisionEnergy:102040
+120	0.875671386550688	36	41	102928	ABSCISIC ACID CollisionEnergy:102040
+121	0.8823120099832348	35	41	102929	ABSCISIC ACID CollisionEnergy:102040
+122	0.9491890492012287	40	41	105237	GNF-Pf-5341 CollisionEnergy:102040
+123	0.9461057600927123	41	41	106505	Artemisinin CollisionEnergy:102040
+124	0.6816530745657283	12	41	108104	"""10,12-dihydroxy-9-methyl-4,13-dimethylene-6-oxatricyclo[7.4.0.0<3,7>]tridecan- 5-one CollisionEnergy:102040"""
+125	0.7010631569173796	37	41	114264	ABSCISIC ACID CollisionEnergy:205060
+126	0.7211709272836193	36	41	114265	ABSCISIC ACID CollisionEnergy:205060
+127	0.8126772038218059	39	41	116575	GNF-Pf-5341 CollisionEnergy:205060
+128	0.8254210073435855	39	41	117838	Artemisinin CollisionEnergy:205060
+129	0.7342889792117452	23	41	453678	STROBILACTONE A
+130	0.8708525351033823	9	41	457593	(1S,8R,9R)-8-hydroxy-4-(propan-2-ylidene)-10-oxatricyclo[7.2.1.01,5]dodecane-8-carboxylic acid
+131	0.8533388804765225	9	41	457594	(1S,8R,9R)-8-hydroxy-4-(propan-2-ylidene)-10-oxatricyclo[7.2.1.01,5]dodecane-8-carboxylic acid
+132	0.7363338121210543	6	41	461280	zinniol
+133	0.7186413520328105	6	172	6103	Arginine butyl ester
+134	0.7798777231439497	21	84	7463	1-methyl-4-methylidene-7-(propan-2-yl)-1,2,3,3a,4,5,6,8a-octahydroazulen-1-ol
+135	0.7363112885769845	12	363	122789	Arg-C17:0
+136	0.6618712713884576	7	123	458856	(6Z,10E)-4-hydroxy-6-(hydroxymethyl)-10-methyl-3-methylidene-3a,4,5,8,9,11a-hexahydrocyclodeca[b]furan-2-one
+137	0.8564613790248029	13	91	34440	Benzoic acid, 3,5-bis(1,1-dimethylethyl)-4-hydroxy-
+138	0.7301107540315923	43	127	2512	Putative_Alantolactone
+139	0.9160614407504505	34	127	7562	9a-hydroxy-3,4a,5-trimethyl-2H,4H,4aH,5H,6H,7H,8H,8aH,9H,9aH-naphtho[2,3-b]furan-2-one
+140	0.815767689236816	44	127	21527	Naphtho[2,3-b]furan-2(4H)-one, 4a,5,6,7,8,8a,9,9a-octahydro-9a-hydroxy-3,4a,5-trimethyl-, (4aR,5S,8aS,9aR)-
+141	0.7466782537698088	37	127	21978	2(3H)-Naphthalenone, 4,4a,5,6,7,8-hexahydro-3,6-dihydroxy-4a,5-dimethyl-3-(1-methylethenyl)-, (3S,4aR,5R,6R)-
+142	0.7224534689989414	43	127	106722	Isoalantolactone CollisionEnergy:102040
+143	0.8307841025012043	41	127	122119	asterolide
+144	0.8207876487990503	28	127	405326	(3aS,6E,10E,11aR)-6,10-dimethyl-3-methylidene-3a,4,5,8,9,11a-hexahydrocyclodeca[b]furan-2-one
+145	0.8859029650841472	5	127	406570	(3aS,6E,10E,11aR)-6,10-dimethyl-3-methylidene-3a,4,5,8,9,11a-hexahydrocyclodeca[b]furan-2-one
+146	0.8864002123111371	30	127	407128	(3aS,6E,10E,11aR)-6,10-dimethyl-3-methylidene-3a,4,5,8,9,11a-hexahydrocyclodeca[b]furan-2-one
+147	0.8987021928880886	27	127	407187	(3aS,6E,10E,11aR)-6,10-dimethyl-3-methylidene-3a,4,5,8,9,11a-hexahydrocyclodeca[b]furan-2-one
+148	0.6856169466970842	38	127	407990	(3aS,6E,10E,11aR)-6,10-dimethyl-3-methylidene-3a,4,5,8,9,11a-hexahydrocyclodeca[b]furan-2-one
+149	0.7351772802416938	47	127	436239	COSTUNOLIDE
+150	0.7786922286807862	31	46	366159	Verrucarol
+151	0.8032997282993044	28	46	366280	Verrucarol
+152	0.6769976906126807	10	46	366301	Sambucinol
+153	0.8733812119555562	49	205	14270	Drospirenone
+154	0.8773742011022395	47	205	14271	Drospirenone
+155	0.8567675992979755	49	205	15499	Drospirenone
+156	0.6987079531186366	15	205	106983	Umbelliprenin CollisionEnergy:102040
+157	0.6766702080521056	6	205	383981	Dihydrostilbene base + 3O, 2Prenyl
+158	0.7114453609699397	46	205	413068	(1R,2R,4R,10R,11S,14S,15S,16S,18S,19S)-10,14-dimethylspiro[hexacyclo[9.8.0.02,4.05,10.014,19.016,18]nonadec-5-ene-15,5`-oxolane]-2`,7-dione
+159	0.8643843095389002	19	205	413486	(1R,2R,4R,10R,11S,14S,15S,16S,18S,19S)-10,14-dimethylspiro[hexacyclo[9.8.0.02,4.05,10.014,19.016,18]nonadec-5-ene-15,5`-oxolane]-2`,7-dione
+160	0.8625226158845666	48	205	417578	Drospirenone
+161	0.8625226158845666	48	205	483710	Drospirenone
+162	0.777163076579097	7	36	4628	Asimilobine
+163	0.777163076579097	7	36	10832	Asimilobine
+164	0.7819965677983745	17	199	186707	(1R,4R,6R,10S)-4,12,12-trimethyl-9-methylene-5-oxatricyclo[8.2.0.0~4,6~]dodecane
+165	0.7521755100061518	17	199	186731	(1R,4R,6R,10S)-4,12,12-trimethyl-9-methylene-5-oxatricyclo[8.2.0.0~4,6~]dodecane
+166	0.8209729991986149	15	199	186754	(1R,4R,6R,10S)-4,12,12-trimethyl-9-methylene-5-oxatricyclo[8.2.0.0~4,6~]dodecane
+167	0.9063401967867095	6	199	186778	(1R,4R,6R,10S)-4,12,12-trimethyl-9-methylene-5-oxatricyclo[8.2.0.0~4,6~]dodecane
+168	0.8729418158356926	16	199	186802	(1R,4R,6R,10S)-4,12,12-trimethyl-9-methylene-5-oxatricyclo[8.2.0.0~4,6~]dodecane
+169	0.8427125652363022	17	199	186826	(1R,4R,6R,10S)-4,12,12-trimethyl-9-methylene-5-oxatricyclo[8.2.0.0~4,6~]dodecane
+170	0.8241092724664294	29	119	96969	abscisic aldehyde CollisionEnergy:205060
+171	0.9118027383991686	33	119	96971	abscisic aldehyde CollisionEnergy:102040
+172	0.8660787241944825	40	119	103562	Parthenolide CollisionEnergy:102040
+173	0.8777445657995886	39	119	104300	20554-84-1 CollisionEnergy:102040
+174	0.7932054655715679	31	119	106646	Dehydrocostus lactone CollisionEnergy:102040
+175	0.7256774109475765	40	119	114901	Parthenolide CollisionEnergy:205060
+176	0.7228786419083431	39	119	115641	20554-84-1 CollisionEnergy:205060
+177	0.8966583132402574	5	119	210345	Dehydrocostus Lactone
+178	0.7521696925892634	17	159	10928	RH65_2_S01_F9
+179	0.7403387152858969	18	159	22631	Naphtho[2,3-b]furan-2(4H)-one, 4a,5,6,7,8,8a,9,9a-octahydro-9,9a-dihydroxy-3,4a,5-trimethyl-, (4aR,5S)-
+180	0.6854547825545185	12	159	415628	FIO00817 Hypnophilin
+181	0.9419312804421268	8	159	415797	FIO00816 Hypnophilin
+182	0.8842056212125193	9	159	437481	Hydroxyvalerenic Acid
+183	0.717093227669812	7	159	437482	Hydroxyvalerenic Acid
+184	0.8224191574986556	8	159	443769	2-[(3S)-3-hydroxy-4a,8-dimethyl-2,3,4,5,6,7-hexahydro-1H-naphthalen-2-yl]prop-2-enoic acid
+185	0.830216414300415	17	159	462556	Pechueloic Acid
+186	0.7878532498628326	5	51	7843	10-methoxy-4-methyl-12-oxa-4-azapentacyclo[9.6.1.0,.0?,?.0?,?]octadeca-7(18),8,10,15-tetraen-14-ol
+187	0.7738313323951853	6	51	11818	Codeine
+188	0.79006258801079	7	51	121995	codeine
+189	0.7836178959776644	6	51	357383	Methylmorphine
+190	0.7837428266130367	6	51	357389	Methylmorphine
+191	0.6992036764602508	5	51	375064	(4R,4aR,7aR,12bS)-9-methoxy-3-methyl-1,2,4,4a,5,6,7a,13-octahydro-4,12-methanobenzofuro[3,2-e]isoquinoline-7-one
+192	0.7521714444132693	5	51	411640	(4R,4aR,7S,7aR,12bS)-9-methoxy-3-methyl-2,4,4a,7,7a,13-hexahydro-1H-4,12-methanobenzofuro[3,2-e]isoquinoline-7-ol
+193	0.7663801296855057	5	51	414240	(4R,4aR,7S,7aR,12bS)-9-methoxy-3-methyl-2,4,4a,7,7a,13-hexahydro-1H-4,12-methanobenzofuro[3,2-e]isoquinoline-7-ol
+194	0.6992036778749474	5	51	425029	(1S,5R,13R,17R)-10-methoxy-4-methyl-12-oxa-4-azapentacyclo[9.6.1.0^{1,13}.0^{5,17}.0^{7,18}]octadeca-7(18),8,10-trien-14-one
+195	0.7324313279046811	12	50	4607	O-methylisopiline
+196	0.7324313279046811	12	50	10835	O-methylisopiline
+197	0.8583109598536923	10	68	6102	Arginine propyl ester
+198	0.8014428246315817	22	410	29345	B10A30 Faulkner legacy library looks like sterol or lipid needs to be verified
+199	0.933792407436394	38	144	7028	1-methyl-4-(6-methylhept-5-en-2-yl)-2,3-dioxabicyclo[2.2.2]oct-5-ene
+200	0.7488969447669827	34	144	23449	2(1H)-Naphthalenone, 4a,5,6,7,8,8a-hexahydro-6-hydroxy-3,8-dimethyl-5-(1-methylethyl)-, (4aR,5S,6S,8R,8aS)-
+201	0.8749276875673015	40	144	33554	Curcumol
+202	0.7988012486790372	19	144	34379	2,6-Di-tert-butyl-4-hydroxymethylphenol
+203	0.914230074222362	34	144	34628	Curcumol
+204	0.6901065438427035	39	144	35052	Curcumol
+205	0.7199034814297441	40	144	35927	Curcumol
+206	0.9073529658618994	32	144	37011	2,6-Di-tert-butyl-4-hydroxymethylphenol
+207	0.9041587769599262	26	144	37032	2,6-Di-tert-butyl-4-hydroxymethylphenol
+208	0.9592515417092197	40	144	102037	"""(+)-Nootkatone, crystalline, 98+% CollisionEnergy:102040"""
+209	0.9176504113048346	40	144	108439	Zerumbone CollisionEnergy:102040
+210	0.8454620312779364	39	144	113371	"""(+)-Nootkatone, crystalline, 98+% CollisionEnergy:205060"""
+211	0.7551229734918767	40	144	119764	Zerumbone CollisionEnergy:205060
+212	0.8032982359114756	20	144	187507	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+213	0.8293931687955992	16	144	187515	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+214	0.8105835260892712	24	144	187523	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+215	0.8308944718592367	22	144	187531	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+216	0.8478606490846209	24	144	187539	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+217	0.8247651126488175	11	144	187547	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+218	0.8364630601206237	20	144	187555	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+219	0.8499961298593076	20	144	187563	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+220	0.8370187209354948	18	144	187571	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+221	0.8261553834076885	20	144	187579	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+222	0.8342225565462298	18	144	187587	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+223	0.9003237771912986	15	144	187595	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+224	0.8007232634932591	11	144	187603	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+225	0.8280105664581399	19	144	187611	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+226	0.8348774426874406	18	144	187619	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+227	0.7673651960524374	15	144	187627	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+228	0.8437789009372701	13	144	187635	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+229	0.8450530074177308	29	144	187643	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+230	0.8740853942775091	13	144	187651	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+231	0.758643271423178	14	144	187659	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+232	0.7933820036525694	12	144	187667	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+233	0.8726438085985028	14	144	187675	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+234	0.8216097594339206	11	144	187683	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+235	0.9378061871955135	17	144	366050	(1S,3R,3aS,4R,6R,8aR,9R)-Decahydro-1,5,5,8a-tetramethyl-1,4-methanoazulene-3,6,9-triol
+236	0.7623516206598538	35	144	366070	(1S,3R,3aS,4R,6R,8aR,9R)-Decahydro-1,5,5,8a-tetramethyl-1,4-methanoazulene-3,6,9-triol
+237	0.8669900579232123	28	144	366097	(1S,3R,3aS,4R,6R,8aR,9R)-Decahydro-1,5,5,8a-tetramethyl-1,4-methanoazulene-3,6,9-triol
+238	0.9357034223005627	17	144	366649	(1S,3R,3aS,4R,6R,8aR,9R)-Decahydro-1,5,5,8a-tetramethyl-1,4-methanoazulene-3,6,9-triol
+239	0.9537314452871828	39	144	401464	(4R,4aS,6R)-4,4a-dimethyl-6-prop-1-en-2-yl-3,4,5,6,7,8-hexahydronaphthalen-2-one
+240	0.961639877081455	37	144	404948	(4R,4aS,6R)-4,4a-dimethyl-6-prop-1-en-2-yl-3,4,5,6,7,8-hexahydronaphthalen-2-one
+241	0.9466077855836265	10	144	405356	alpha-Cyperone
+242	0.962564234091483	33	144	405619	alpha-Cyperone
+243	0.9439174297322726	9	144	406757	alpha-Cyperone
+244	0.9494248889021623	32	144	407029	alpha-Cyperone
+245	0.701561152463168	36	144	407092	alpha-Cyperone
+246	0.701561152463168	36	144	407228	alpha-Cyperone
+247	0.9591369797674664	28	144	407534	alpha-Cyperone
+248	0.9184973861091629	33	144	408072	alpha-Cyperone
+249	0.9561509080074094	33	144	408431	alpha-Cyperone
+250	0.8637948246975113	38	144	488627	(+)-Nootkatone - 40.0 eV
+251	0.8611813821004082	38	144	488628	(+)-Nootkatone - 40.0 eV
+252	0.8502082054408768	37	144	488629	(+)-Nootkatone - 40.0 eV
+253	0.8490167813594731	36	144	488630	(+)-Nootkatone - 40.0 eV
+254	0.8535166892442713	37	144	488631	(+)-Nootkatone - 40.0 eV
+255	0.9198430498786266	11	412	10659	Pheophytin a
+256	0.8600930799066592	13	146	23156	4-Hydroxy-1-methoxy-6,6,9a-trimethyl-4,5,5a,6,7,8,9,9a-octahydronaphtho[1,2-c]furan-3(1H)-one
+257	0.8075979330424626	11	186	7028	1-methyl-4-(6-methylhept-5-en-2-yl)-2,3-dioxabicyclo[2.2.2]oct-5-ene
+258	0.6823732817769156	11	186	23449	2(1H)-Naphthalenone, 4a,5,6,7,8,8a-hexahydro-6-hydroxy-3,8-dimethyl-5-(1-methylethyl)-, (4aR,5S,6S,8R,8aS)-
+259	0.7415673345272435	11	186	33554	Curcumol
+260	0.8529616095899266	9	186	34628	Curcumol
+261	0.9532276799884297	10	186	37011	2,6-Di-tert-butyl-4-hydroxymethylphenol
+262	0.955790452524746	6	186	37032	2,6-Di-tert-butyl-4-hydroxymethylphenol
+263	0.9584081402517605	11	186	102037	"""(+)-Nootkatone, crystalline, 98+% CollisionEnergy:102040"""
+264	0.8778443730491672	11	186	108439	Zerumbone CollisionEnergy:102040
+265	0.7884404424895611	11	186	113371	"""(+)-Nootkatone, crystalline, 98+% CollisionEnergy:205060"""
+266	0.8385832509041572	10	186	187507	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+267	0.8688455970604322	9	186	187515	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+268	0.8436367705398159	11	186	187523	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+269	0.8672635448202838	11	186	187531	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+270	0.8807785739834033	11	186	187539	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+271	0.8664809689932156	7	186	187547	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+272	0.8724400287765911	11	186	187555	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+273	0.8861640348028181	10	186	187563	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+274	0.8750659627979938	9	186	187571	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+275	0.8609307756683618	11	186	187579	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+276	0.8725437184321334	9	186	187587	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+277	0.943229438050731	10	186	187595	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+278	0.8446297406710788	7	186	187603	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+279	0.8624156075101056	10	186	187611	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+280	0.8722651780548746	10	186	187619	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+281	0.8066438625181056	9	186	187627	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+282	0.8883820447694373	7	186	187635	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+283	0.8707027107520373	11	186	187643	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+284	0.9195195146125406	8	186	187651	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+285	0.7961404680722629	9	186	187659	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+286	0.8353504859028653	8	186	187667	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+287	0.9147911956230359	9	186	187675	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+288	0.8651887552344963	7	186	187683	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+289	0.7660458455942578	9	186	366097	(1S,3R,3aS,4R,6R,8aR,9R)-Decahydro-1,5,5,8a-tetramethyl-1,4-methanoazulene-3,6,9-triol
+290	0.9513331979536007	11	186	401464	(4R,4aS,6R)-4,4a-dimethyl-6-prop-1-en-2-yl-3,4,5,6,7,8-hexahydronaphthalen-2-one
+291	0.9936523820188158	11	186	404948	(4R,4aS,6R)-4,4a-dimethyl-6-prop-1-en-2-yl-3,4,5,6,7,8-hexahydronaphthalen-2-one
+292	0.998198644835096	7	186	405356	alpha-Cyperone
+293	0.9885327276239727	11	186	405619	alpha-Cyperone
+294	0.9974896820950157	7	186	406757	alpha-Cyperone
+295	0.9522422123452804	11	186	407029	alpha-Cyperone
+296	0.9953073617691864	11	186	407534	alpha-Cyperone
+297	0.8790117969693039	11	186	408072	alpha-Cyperone
+298	0.9490510264535622	11	186	408431	alpha-Cyperone
+299	0.8100413925850856	11	186	488627	(+)-Nootkatone - 40.0 eV
+300	0.8093563246802609	11	186	488628	(+)-Nootkatone - 40.0 eV
+301	0.7967063640341054	11	186	488629	(+)-Nootkatone - 40.0 eV
+302	0.7946374668879612	11	186	488630	(+)-Nootkatone - 40.0 eV
+303	0.7976013294832134	11	186	488631	(+)-Nootkatone - 40.0 eV
+304	0.774624791442661	5	161	33537	2',4',6'-Trimethoxychalcone
+305	0.768359505573233	6	161	35465	2',4',6'-Trimethoxychalcone
+306	0.7638900495639297	6	161	36430	2',4',6'-Trimethoxychalcone
+307	0.9780142358632328	6	161	98640	"""2',4',6'-Trimethoxychalcone CollisionEnergy:102040"""
+308	0.8879012989553433	7	161	109974	"""2',4',6'-Trimethoxychalcone CollisionEnergy:205060"""
+309	0.9382856266122768	7	57	16024	Propranolol HCl
+310	0.980868311294108	11	57	354790	1-(1-naphthalenyloxy)-3-(propan-2-ylamino)-2-propanol
+311	0.6824764864777362	12	57	354791	1-(1-naphthalenyloxy)-3-(propan-2-ylamino)-2-propanol
+312	0.981089927103761	12	57	354796	1-(1-naphthalenyloxy)-3-(propan-2-ylamino)-2-propanol
+313	0.8823473307017823	12	57	365593	1-Naphthalen-1-yloxy-3-(propan-2-ylamino)propan-2-ol
+314	0.9689713039630382	12	57	369625	1-(1-naphthalenyloxy)-3-(propan-2-ylamino)-2-propanol
+315	0.9824371608029273	12	57	371614	1-(1-naphthalenyloxy)-3-(propan-2-ylamino)-2-propanol
+316	0.9586037292770725	12	57	399520	1-naphthalen-1-yloxy-3-(propan-2-ylamino)propan-2-ol
+317	0.9712366634606265	11	57	404841	1-naphthalen-1-yloxy-3-(propan-2-ylamino)propan-2-ol
+318	0.9539459362706937	6	57	412620	1-naphthalen-1-yloxy-3-(propan-2-ylamino)propan-2-ol
+319	0.9919650918654926	12	57	417456	1-naphthalen-1-yloxy-3-(propan-2-ylamino)propan-2-ol
+320	0.7708522648765102	12	57	417681	MoNA:4695 Dociton
+321	0.9776268073853883	12	57	468077	PROPRANOLOL
+322	0.9838605093589351	9	57	470004	PROPRANOLOL
+323	0.9882282993187879	11	57	470396	PROPRANOLOL
+324	0.9919650918654926	12	57	483541	Propranolol
+325	0.9794621066494484	12	57	488215	propranolol - 40.0 eV
+326	0.9783560846069089	12	57	488216	propranolol - 40.0 eV
+327	0.9765395926152631	12	57	488217	propranolol - 40.0 eV
+328	0.9846580846030205	12	57	488218	propranolol - 40.0 eV
+329	0.9712871322279129	12	57	488219	propranolol - 40.0 eV
+330	0.6680014066178779	12	57	488227	propranolol - 40.0 eV
+331	0.9092590271790117	5	40	10896	tetrahydropalmatine
+332	0.9482451733619915	5	40	18142	2,3,9,10-tetramethoxy-6,8,13,13a-tetrahydro-5H-isoquinolino[2,1-b]isoquinoline
+333	0.9482451733619915	5	40	37603	Tetrahydropalmatine
+334	0.738507529719904	5	40	98246	tetrahydropalmatine CollisionEnergy:102040
+335	0.9605174837969471	5	40	109582	tetrahydropalmatine CollisionEnergy:205060
+336	0.8504303426919277	5	40	209131	Rotundine
+337	0.887918827072995	5	40	405152	(13aR)-2,3,9,10-tetramethoxy-6,8,13,13a-tetrahydro-5H-isoquinolino[2,1-b]isoquinoline
+338	0.8933738852006521	5	40	406302	(13aR)-2,3,9,10-tetramethoxy-6,8,13,13a-tetrahydro-5H-isoquinolino[2,1-b]isoquinoline
+339	0.972243410968342	5	40	406402	(13aR)-2,3,9,10-tetramethoxy-6,8,13,13a-tetrahydro-5H-isoquinolino[2,1-b]isoquinoline
+340	0.8970563617316231	5	40	407134	(13aR)-2,3,9,10-tetramethoxy-6,8,13,13a-tetrahydro-5H-isoquinolino[2,1-b]isoquinoline
+341	0.9326055780199413	5	40	407254	(13aR)-2,3,9,10-tetramethoxy-6,8,13,13a-tetrahydro-5H-isoquinolino[2,1-b]isoquinoline
+342	0.9059890179258066	5	40	408547	(13aR)-2,3,9,10-tetramethoxy-6,8,13,13a-tetrahydro-5H-isoquinolino[2,1-b]isoquinoline
+343	0.9609374984142659	5	40	437676	tetrahydropalmatine
+344	0.9075602455367753	5	40	437677	tetrahydropalmatine
+345	0.9303193192330196	7	310	20718	2,3-dihydroxypropyl hexadecanoate
+346	0.9579281890659493	7	64	25315	(3S,6R,6aS,7S)-6,6a,7,8-tetrahydroxy-3-methyl-3,4,5,6,7,12a-hexahydro-2H-benzo[a]anthracene-1,12-dione [IIN-based on: CCMSLIB00000848934]
+347	0.9054531949887827	11	170	22441	7b,9-Dihydroxy-3-(hydroxymethyl)-1,1,6,8-tetramethyl-5-oxo-1,1a,1b,4,4a,5,7a,7b,8,9-decahydro-9aH-cyclopropa[3,4]benzo[1,2-e]azulen-9a-yl acetate
+348	0.9772163833067714	11	170	124444	6-[3-[(3,4-dimethoxyphenyl)methyl]-4-methoxy-2-(methoxymethyl)butyl]-4-methoxy-1,3-benzodioxole [IIN-based on: CCMSLIB00000848625]
+349	0.9774219821709186	13	170	124561	2H-Oxireno[1,10a]phenanthro[3,2-b]furan-10(11bH)-one, 5,7-bis(acetyloxy)-3,3a,4,5,6,7,7a,7b,8,8a-decahydro-4,4,7a,11-tetramethyl-, (1aS,3aR,5S,7S,7aR,7bS,8aR,11bR)- [IIN-based on: CCMSLIB00000853048]
+350	0.9351855664311548	9	170	124919	7b,9-Dihydroxy-3-(hydroxymethyl)-1,1,6,8-tetramethyl-5-oxo-1,1a,1b,4,4a,5,7a,7b,8,9-decahydro-9aH-cyclopropa[3,4]benzo[1,2-e]azulen-9a-yl acetate [IIN-based: Match]
+351	0.9213726495201929	9	170	124924	2H-Oxireno[1,10a]phenanthro[3,2-b]furan-10(11bH)-one, 5,7-bis(acetyloxy)-3,3a,4,5,6,7,7a,7b,8,8a-decahydro-4,4,7a,11-tetramethyl-, (1aS,3aR,5S,7S,7aR,7bS,8aR,11bR)- [IIN-based on: CCMSLIB00000853048]
+352	0.8357314257662355	5	121	369847	8-(4-sulfophenyl)octanoic acid
+353	0.6761805535578443	9	121	455505	(3aR,4R,6E,10Z,11aR)-4-hydroxy-10-(hydroxymethyl)-3-methylidene-2-oxo-3a,4,5,8,9,11a-hexahydrocyclodeca[b]furan-6-carbaldehyde
+354	0.9724385586834904	18	309	109175	AC1L1X1Z CollisionEnergy:102040
+355	0.7816368383308856	17	309	120503	AC1L1X1Z CollisionEnergy:205060
+356	0.8615441825270475	5	113	15733	Menadione
+357	0.6711372889025802	6	105	109820	Karanjin CollisionEnergy:205060
+358	0.6569339325427063	5	78	98251	"""3-Hydroxy-7,2',4'-trimethoxyflavone CollisionEnergy:102040"""
+359	0.6606968773120303	5	78	99689	"""3-Hydroxy-6,3',4'-trimethoxyflavone CollisionEnergy:102040"""
+360	0.6803650655662018	5	33	133824	thymol
+361	0.7258674782376896	5	33	133869	thymol
+362	0.7108787289666538	5	33	133915	thymol
+363	0.7681034060247884	5	33	133961	thymol
+364	0.7648365103100446	5	33	134006	thymol
+365	0.7573280193371166	5	33	134052	thymol
+366	0.748638795546873	5	33	134097	thymol
+367	0.7631373435655687	5	33	134142	thymol
+368	0.8163598936704605	5	33	134188	thymol
+369	0.8053397230383875	5	33	134233	thymol
+370	0.7754177228030262	5	33	134278	thymol
+371	0.8132311435174137	5	33	134323	thymol
+372	0.8702537062004073	5	137	109758	"""6,7-dimethoxy-1-(2-methylpropyl)-3,4-dihydroisoquinoline CollisionEnergy:205060"""
+373	0.8922336699103369	5	28	208298	Norisoboldine
+374	0.9210670891386563	38	129	7028	1-methyl-4-(6-methylhept-5-en-2-yl)-2,3-dioxabicyclo[2.2.2]oct-5-ene
+375	0.7736638996992529	38	129	23449	2(1H)-Naphthalenone, 4a,5,6,7,8,8a-hexahydro-6-hydroxy-3,8-dimethyl-5-(1-methylethyl)-, (4aR,5S,6S,8R,8aS)-
+376	0.8671547590716395	48	129	33554	Curcumol
+377	0.79645239809866	24	129	34379	2,6-Di-tert-butyl-4-hydroxymethylphenol
+378	0.9141310102971479	37	129	34628	Curcumol
+379	0.6875567731699294	45	129	35052	Curcumol
+380	0.7242521629290698	47	129	35927	Curcumol
+381	0.9096916222694861	39	129	37011	2,6-Di-tert-butyl-4-hydroxymethylphenol
+382	0.9058339823680267	29	129	37032	2,6-Di-tert-butyl-4-hydroxymethylphenol
+383	0.9635130768250366	43	129	102037	"""(+)-Nootkatone, crystalline, 98+% CollisionEnergy:102040"""
+384	0.9150024427104914	43	129	108439	Zerumbone CollisionEnergy:102040
+385	0.8408396543842723	42	129	113371	"""(+)-Nootkatone, crystalline, 98+% CollisionEnergy:205060"""
+386	0.742391673833652	44	129	119764	Zerumbone CollisionEnergy:205060
+387	0.8107408328657563	21	129	187507	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+388	0.8370464081123373	17	129	187515	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+389	0.8174173642745576	25	129	187523	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+390	0.8387526519902496	22	129	187531	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+391	0.8551071642250222	25	129	187539	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+392	0.832191326121908	11	129	187547	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+393	0.8429698741854017	20	129	187555	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+394	0.8577763573775622	21	129	187563	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+395	0.8443182946008596	17	129	187571	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+396	0.8350540830403684	20	129	187579	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+397	0.8421535793527447	19	129	187587	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+398	0.9085991979882744	15	129	187595	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+399	0.808006182136941	12	129	187603	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+400	0.8355164705250561	19	129	187611	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+401	0.842677267413218	18	129	187619	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+402	0.773106021592695	15	129	187627	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+403	0.8512623969028866	12	129	187635	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+404	0.8536182944358853	30	129	187643	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+405	0.8825405114529221	12	129	187651	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+406	0.7659753800374131	14	129	187659	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+407	0.8005605633853254	13	129	187667	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+408	0.8813635693346897	13	129	187675	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+409	0.8285157801668654	10	129	187683	(4R,4aS,6R)-6-isopropenyl-4,4a-dimethyl-4,4a,5,6,7,8-hexahydro-2(3H)-naphthalenone
+410	0.9434817499950842	17	129	366050	(1S,3R,3aS,4R,6R,8aR,9R)-Decahydro-1,5,5,8a-tetramethyl-1,4-methanoazulene-3,6,9-triol
+411	0.7560903124250044	35	129	366070	(1S,3R,3aS,4R,6R,8aR,9R)-Decahydro-1,5,5,8a-tetramethyl-1,4-methanoazulene-3,6,9-triol
+412	0.8675966624971402	27	129	366097	(1S,3R,3aS,4R,6R,8aR,9R)-Decahydro-1,5,5,8a-tetramethyl-1,4-methanoazulene-3,6,9-triol
+413	0.9404107580298179	17	129	366649	(1S,3R,3aS,4R,6R,8aR,9R)-Decahydro-1,5,5,8a-tetramethyl-1,4-methanoazulene-3,6,9-triol
+414	0.9581406136969717	43	129	401464	(4R,4aS,6R)-4,4a-dimethyl-6-prop-1-en-2-yl-3,4,5,6,7,8-hexahydronaphthalen-2-one
+415	0.9669967879487424	39	129	404948	(4R,4aS,6R)-4,4a-dimethyl-6-prop-1-en-2-yl-3,4,5,6,7,8-hexahydronaphthalen-2-one
+416	0.951303444093826	10	129	405356	alpha-Cyperone
+417	0.9744607644072046	35	129	405619	alpha-Cyperone
+418	0.948142909134175	8	129	406757	alpha-Cyperone
+419	0.9528129785684819	33	129	407029	alpha-Cyperone
+420	0.7020694060701035	41	129	407092	alpha-Cyperone
+421	0.7020694060701035	41	129	407228	alpha-Cyperone
+422	0.9662739550984822	28	129	407534	alpha-Cyperone
+423	0.9460557357712368	35	129	408072	alpha-Cyperone
+424	0.9765926586330558	35	129	408431	alpha-Cyperone
+425	0.8628296420746707	41	129	488627	(+)-Nootkatone - 40.0 eV
+426	0.8614793031535464	42	129	488628	(+)-Nootkatone - 40.0 eV
+427	0.8474323175723054	41	129	488629	(+)-Nootkatone - 40.0 eV
+428	0.8484374274134753	40	129	488630	(+)-Nootkatone - 40.0 eV
+429	0.8502725463102925	41	129	488631	(+)-Nootkatone - 40.0 eV
+430	0.8843181485078262	18	77	7031	1-methyl-4-(6-methylhept-5-en-2-yl)-2,3-dioxabicyclo[2.2.2]oct-5-ene
+431	0.9761825752504095	17	77	102039	"""(+)-Nootkatone, crystalline, 98+% CollisionEnergy:102040"""
+432	0.9803184149652384	19	77	108440	Zerumbone CollisionEnergy:102040
+433	0.9405302527278042	19	77	113373	"""(+)-Nootkatone, crystalline, 98+% CollisionEnergy:205060"""
+434	0.9235870672049041	25	348	33918	Glycerol 1-stearate
+435	0.650985035363495	20	348	35880	Glycerol 1-stearate
+436	0.6816212605646077	23	348	37184	Glycerol 1-stearate
+437	0.8236853171700966	21	60	18238	7-methoxy-6-(3-methylbut-2-enyl)chromen-2-one
+438	0.8210038284366898	12	60	464408	suberosin
+439	0.6897777780684659	6	270	32332	2',4',6'-Trimethoxychalcone
+440	0.754876225713176	6	270	33537	2',4',6'-Trimethoxychalcone
+441	0.7486240787625329	7	270	35465	2',4',6'-Trimethoxychalcone
+442	0.7440486835481729	6	270	36430	2',4',6'-Trimethoxychalcone
+443	0.9708948457337766	6	270	98640	"""2',4',6'-Trimethoxychalcone CollisionEnergy:102040"""
+444	0.876304586484192	8	270	109974	"""2',4',6'-Trimethoxychalcone CollisionEnergy:205060"""
+445	0.8983189494794167	17	400	4782	Contaminants septum vial Thermo C4000-53 and C4000-54 serie
+446	0.7581878268793991	49	234	24930	8-hydroxy-8-(3-octyloxiran-2-yl)octanoic acid [IIN-based on: CCMSLIB00000846585]
+447	0.7755668957406809	58	234	33290	Pinolenic acid
+448	0.7107495942631058	59	234	33897	Pinolenic acid
+449	0.7388128905297308	62	234	34954	Pinolenic acid
+450	0.7774665820868093	61	234	35407	12(13)-Epoxy-9Z-octadecenoic acid
+451	0.6753965903184038	9	234	133268	linolenic acid
+452	0.6733666568778461	8	234	133313	linolenic acid
+453	0.6772665255250201	9	234	133358	linolenic acid
+454	0.6796238917932919	9	234	133402	linolenic acid
+455	0.6818416579486589	10	234	133447	linolenic acid
+456	0.6801110838480542	10	234	133493	linolenic acid
+457	0.6780262975153979	9	234	133539	linolenic acid
+458	0.6763782973375372	10	234	133585	linolenic acid
+459	0.6795790155679199	8	234	133631	linolenic acid
+460	0.6797287539789146	9	234	133677	linolenic acid
+461	0.6712080829460858	10	234	133722	linolenic acid
+462	0.6777637442030443	9	234	133767	linolenic acid
+463	0.6923766274530552	16	234	377306	(6Z,9Z,12Z)-octadeca-6,9,12-trienoic acid
+464	0.6893906322532272	30	234	377553	(9Z,12Z,15Z)-octadeca-9,12,15-trienoic acid
+465	0.6518733281706469	5	234	447256	Chaulmoogric Acid
+466	0.6531449950644519	5	234	455430	9-stearolic acid
+467	0.7612710774252969	34	234	473210	LINOLENIC ACID
+468	0.7361916517358824	39	76	10928	RH65_2_S01_F9
+469	0.7209348375599743	41	76	22631	Naphtho[2,3-b]furan-2(4H)-one, 4a,5,6,7,8,8a,9,9a-octahydro-9,9a-dihydroxy-3,4a,5-trimethyl-, (4aR,5S)-
+470	0.8559039271577823	5	76	407651	(2S)-6-(2-hydroxyethyl)-2-(hydroxymethyl)-2,5,7-trimethyl-3H-inden-1-one
+471	0.9499102524443895	5	76	407657	(2S)-6-(2-hydroxyethyl)-2-(hydroxymethyl)-2,5,7-trimethyl-3H-inden-1-one
+472	0.6825575292231317	5	76	407664	(2S)-6-(2-hydroxyethyl)-2-(hydroxymethyl)-2,5,7-trimethyl-3H-inden-1-one
+473	0.9118070649228618	5	76	408064	(2S)-6-(2-hydroxyethyl)-2-(hydroxymethyl)-2,5,7-trimethyl-3H-inden-1-one
+474	0.7208432134594938	24	76	415628	FIO00817 Hypnophilin
+475	0.9405399333577605	19	76	415797	FIO00816 Hypnophilin
+476	0.8788591036114475	21	76	437481	Hydroxyvalerenic Acid
+477	0.7284838898275212	14	76	437482	Hydroxyvalerenic Acid
+478	0.8125466568736784	22	76	443769	2-[(3S)-3-hydroxy-4a,8-dimethyl-2,3,4,5,6,7-hexahydro-1H-naphthalen-2-yl]prop-2-enoic acid
+479	0.8655808590198834	10	76	445800	2-[(2S,4aR,8aS)-2-hydroxy-4a-methyl-8-methylidene-3,4,5,6,7,8a-hexahydro-1H-naphthalen-2-yl]prop-2-enoic acid
+480	0.8246215785700908	5	76	445801	2-[(2S,4aR,8aS)-2-hydroxy-4a-methyl-8-methylidene-3,4,5,6,7,8a-hexahydro-1H-naphthalen-2-yl]prop-2-enoic acid
+481	0.8232212108450478	36	76	462556	Pechueloic Acid
+482	0.6924815126252238	5	174	32332	2',4',6'-Trimethoxychalcone
+483	0.7617838100594175	5	174	33537	2',4',6'-Trimethoxychalcone
+484	0.7552417517339945	5	174	35465	2',4',6'-Trimethoxychalcone
+485	0.7506463527851728	5	174	36430	2',4',6'-Trimethoxychalcone
+486	0.8834475816420351	6	174	109974	"""2',4',6'-Trimethoxychalcone CollisionEnergy:205060"""
+487	0.797329793873265	32	75	96969	abscisic aldehyde CollisionEnergy:205060
+488	0.9019130335466935	34	75	96971	abscisic aldehyde CollisionEnergy:102040
+489	0.8619959639763718	38	75	103562	Parthenolide CollisionEnergy:102040
+490	0.8730368419973704	38	75	104300	20554-84-1 CollisionEnergy:102040
+491	0.7907745621808461	27	75	106646	Dehydrocostus lactone CollisionEnergy:102040
+492	0.7054394643355493	39	75	114901	Parthenolide CollisionEnergy:205060
+493	0.7038923184913954	38	75	115641	20554-84-1 CollisionEnergy:205060
+494	0.8959642295231871	6	75	210345	Dehydrocostus Lactone
+495	0.8100558267131837	19	183	25702	(2S,8R)-8-hydroxy-2-[(1S)-1-hydroxyheptyl]-2,3,4,6,7,8-hexahydrochromen-5-one [IIN-based on: CCMSLIB00000846680]
+496	0.9265761331001761	10	183	124605	1,3-Dicyclohexylurea  [IIN-based on: CCMSLIB00003136080]
+497	0.7304746183799914	42	143	7027	1-methyl-4-(6-methylhept-5-en-2-yl)-2,3-dioxabicyclo[2.2.2]oct-5-ene
+498	0.7819031232829575	51	143	22548	(4S,4aR)-4-(Hydroxymethyl)-3,4a,8,8-tetramethyl-4a,5,6,7,8,8a-hexahydro-1(4H)-naphthalenone
+499	0.865280409403935	19	143	365842	(1S,3R,3aS,4R,6R,8aR,9R)-Decahydro-1,5,5,8a-tetramethyl-1,4-methanoazulene-3,6,9-triol
+500	0.6686922584444469	37	143	366498	(1S,3R,3aS,4R,6R,8aR,9R)-Decahydro-1,5,5,8a-tetramethyl-1,4-methanoazulene-3,6,9-triol
+501	0.8660619868957409	20	143	366551	(1S,3R,3aS,4R,6R,8aR,9R)-Decahydro-1,5,5,8a-tetramethyl-1,4-methanoazulene-3,6,9-triol
+502	0.8262841899837825	15	143	415693	FIO01064 (-)-Curcumol
+503	0.6831763092953702	5	229	12224	Endolide A
+504	0.6939852167335677	43	160	96969	abscisic aldehyde CollisionEnergy:205060
+505	0.7249121523158132	41	160	96971	abscisic aldehyde CollisionEnergy:102040
+506	0.671884248614894	52	160	103562	Parthenolide CollisionEnergy:102040
+507	0.6832460463319551	52	160	104300	20554-84-1 CollisionEnergy:102040
+508	0.8131735011810082	25	67	366110	(1R,4S,5S,6R,9R)-5,6-dihydroxy-4,11,11-trimethyl-8-methylidenebicyclo[7.2.0]undecan-3-one
+509	0.8008574694833778	25	67	366584	(1R,4S,5S,6R,9R)-5,6-dihydroxy-4,11,11-trimethyl-8-methylidenebicyclo[7.2.0]undecan-3-one
+510	0.8018959380190793	12	191	366110	(1R,4S,5S,6R,9R)-5,6-dihydroxy-4,11,11-trimethyl-8-methylidenebicyclo[7.2.0]undecan-3-one
+511	0.7889835553944073	12	191	366584	(1R,4S,5S,6R,9R)-5,6-dihydroxy-4,11,11-trimethyl-8-methylidenebicyclo[7.2.0]undecan-3-one
+512	0.824383802100546	5	39	10120	Arginine - 20.00 eV
+513	0.7835868897157094	7	39	10121	Arginine - 30.00 eV
+514	0.7877523345496177	5	39	33438	N-.alpha.-Acetyl-L-ornithine
+515	0.9439504452249474	15	39	37617	(-)-Perillyl alcohol
+516	0.9217211042179888	5	72	105057	Dihydrotanshinone I CollisionEnergy:102040
+517	0.7393486141434383	8	72	116395	Dihydrotanshinone I CollisionEnergy:205060
+518	0.7134039852111643	7	72	122129	dihydrotanshinone I
+519	0.7524628547098278	5	27	7849	5,6-dimethoxy-11-methyl-2-oxa-11-azatetracyclo[8.7.1.0,?.0?,?]octadeca-1(18),3,5,7,14,16-hexaen-17-ol
+520	0.9528515831657952	9	27	10893	discretamine
+521	0.9639370872459525	9	27	10894	(-)-stepholidine
+522	0.7967661733899567	8	27	10897	salutaridine
+523	0.7236518468190984	6	27	99477	"""2,9-Dihydroxy-1,10-dimethoxyaporphine CollisionEnergy:102040"""
+524	0.7225197668081474	6	27	101297	Boldine CollisionEnergy:102040
+525	0.7369576238857324	5	27	215205	L-Sinoacutine
+526	0.7446042451852701	5	27	215243	L-Sinoacutine
+527	0.7537333633157008	5	27	215282	L-Sinoacutine
+528	0.7439648149109405	5	27	215321	L-Sinoacutine
+529	0.6710057484421255	5	27	378132	Boldine
+530	0.6703911245448535	5	27	382256	Boldine
+531	0.671776778704359	7	27	383499	Boldine
+532	0.6995605569954201	6	27	385411	Boldine
+533	0.8935824164231916	7	148	6102	Arginine propyl ester
+534	0.8533596825801798	31	87	366159	Verrucarol
+535	0.8729323811296399	28	87	366280	Verrucarol
+536	0.8283345385171907	28	327	29345	B10A30 Faulkner legacy library looks like sterol or lipid needs to be verified
+537	0.7000443352507576	10	124	35021	15-Deoxy-.DELTA.12,14-prostaglandin J2-2-glycerol ester
+538	0.6891670480188106	12	38	4607	O-methylisopiline
+539	0.6891670480188106	12	38	10835	O-methylisopiline
+540	0.678284605936886	15	55	365981	(1R,4S,5S,6R,9R)-5,6-dihydroxy-4,11,11-trimethyl-8-methylidenebicyclo[7.2.0]undecan-3-one
+541	0.680297314088234	15	55	366670	(1R,4S,5S,6R,9R)-5,6-dihydroxy-4,11,11-trimethyl-8-methylidenebicyclo[7.2.0]undecan-3-one
+542	0.7252757441047575	10	182	21065	1-[(2E,4E)-6,7-Dihydroxy-2,4-octadienoyl]prolyl-N-methylvalyl-N~2~-methylalaninamide
+543	0.7158552581999372	21	182	458721	1-[(2E,4E)-6,7-Dihydroxy-2,4-octadienoyl]prolyl-N-methylvalyl-N2-methylalaninamide
+544	0.6743080852380602	15	182	458722	1-[(2E,4E)-6,7-Dihydroxy-2,4-octadienoyl]prolyl-N-methylvalyl-N2-methylalaninamide
+545	0.8934511277586358	11	110	39470	hyocholic acid
+546	0.7742427957408753	50	90	2512	Putative_Alantolactone
+547	0.9435589574472484	30	90	7562	9a-hydroxy-3,4a,5-trimethyl-2H,4H,4aH,5H,6H,7H,8H,8aH,9H,9aH-naphtho[2,3-b]furan-2-one
+548	0.8337901415195279	46	90	21527	Naphtho[2,3-b]furan-2(4H)-one, 4a,5,6,7,8,8a,9,9a-octahydro-9a-hydroxy-3,4a,5-trimethyl-, (4aR,5S,8aS,9aR)-
+549	0.6859735214704442	46	90	21558	7,8-Bis(hydroxymethyl)-1,4a-dimethyl-3,4,4a,5,6,7-hexahydro-2H-benzo[7]annulen-2-one
+550	0.8405521897249328	41	90	21978	2(3H)-Naphthalenone, 4,4a,5,6,7,8-hexahydro-3,6-dihydroxy-4a,5-dimethyl-3-(1-methylethenyl)-, (3S,4aR,5R,6R)-
+551	0.7607328015592587	43	90	106722	Isoalantolactone CollisionEnergy:102040
+552	0.898580180233209	44	90	122119	asterolide
+553	0.864718118927835	28	90	405326	(3aS,6E,10E,11aR)-6,10-dimethyl-3-methylidene-3a,4,5,8,9,11a-hexahydrocyclodeca[b]furan-2-one
+554	0.9461498406705484	5	90	406570	(3aS,6E,10E,11aR)-6,10-dimethyl-3-methylidene-3a,4,5,8,9,11a-hexahydrocyclodeca[b]furan-2-one
+555	0.9402661668050935	29	90	407128	(3aS,6E,10E,11aR)-6,10-dimethyl-3-methylidene-3a,4,5,8,9,11a-hexahydrocyclodeca[b]furan-2-one
+556	0.955132840202556	25	90	407187	(3aS,6E,10E,11aR)-6,10-dimethyl-3-methylidene-3a,4,5,8,9,11a-hexahydrocyclodeca[b]furan-2-one
+557	0.7160759655758652	33	90	407990	(3aS,6E,10E,11aR)-6,10-dimethyl-3-methylidene-3a,4,5,8,9,11a-hexahydrocyclodeca[b]furan-2-one
+558	0.7890119763940454	57	90	436239	COSTUNOLIDE
+559	0.8792781416955314	9	102	6102	Arginine propyl ester
+560	0.9995278676226428	8	141	5102	sphingosin C16 (Artifact)-emf
+561	0.7932562151279543	8	141	401938	2-[dodecyl(2-hydroxyethyl)amino]ethanol
+562	0.9986600176202963	8	141	404801	2-[dodecyl(2-hydroxyethyl)amino]ethanol
+563	0.8541604109068683	25	101	366110	(1R,4S,5S,6R,9R)-5,6-dihydroxy-4,11,11-trimethyl-8-methylidenebicyclo[7.2.0]undecan-3-one
+564	0.8408940326970041	25	101	366584	(1R,4S,5S,6R,9R)-5,6-dihydroxy-4,11,11-trimethyl-8-methylidenebicyclo[7.2.0]undecan-3-one
+565	0.8376904223629503	9	393	10659	Pheophytin a
+566	0.8968387051411817	16	165	7031	1-methyl-4-(6-methylhept-5-en-2-yl)-2,3-dioxabicyclo[2.2.2]oct-5-ene
+567	0.9898728793721333	16	165	102039	"""(+)-Nootkatone, crystalline, 98+% CollisionEnergy:102040"""
+568	0.9873274887662588	16	165	108440	Zerumbone CollisionEnergy:102040
+569	0.9591993121898881	18	165	113373	"""(+)-Nootkatone, crystalline, 98+% CollisionEnergy:205060"""
+570	0.6573152779085658	42	125	24664	3-[4-methyl-1-(2-methylpropanoyl)-3-oxocyclohexyl]butanoic acid [IIN-based on: CCMSLIB00000846465]
+571	0.7563948919867725	11	125	34440	Benzoic acid, 3,5-bis(1,1-dimethylethyl)-4-hydroxy-
