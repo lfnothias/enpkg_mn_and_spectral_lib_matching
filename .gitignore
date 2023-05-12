@@ -1,4 +1,5 @@
 .DS_Store
 *.json
 src/__pycache__/
+db_spectra/ALL_GNPS*
 user/
