@@ -177,13 +177,16 @@ for sample_dir in samples_dir:
 
     try:
         dt_db_results = pd.read_csv(lib_results_path, sep='\t',
-            usecols=['msms_score', 'feature_id', 'reference_id', 'short_inchikey'], on_bad_lines='skip', low_memory=True)
+            usecols=['msms_score', 'feature_id', 'reference_id',
+                     'matched_peaks', 'adduct',	'charge',
+                     'ionmode',	'instrument',	'instrument_type',	'comment',
+                     'inchikey', 'inchi',	'smiles','compound_name'], on_bad_lines='skip', low_memory=True)
     except:   
         continue
     # Add 'libname' column and rename msms_score column
-    dt_db_results['libname'] = 'PublicSpecLibrary'
+    dt_db_results['libname'] = spectral_db_path
     # Load MN metadata
-    clusterinfo_summary = pd.read_csv(mn_ci_ouput_path, sep='\t', usecols=['feature_id', 'precursor_mz', 'component_id'], \
+    clusterinfo_summary = pd.read_csv(mn_ci_ouput_path, sep='\t', \
         on_bad_lines='skip', low_memory=True)
     clusterinfo_summary.rename(columns={'precursor_mz': 'mz'}, inplace=True)
 

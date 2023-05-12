@@ -4,7 +4,7 @@ general_params:
 
 paths:
   input_path: 'data' # Path where samples are located
-  spectral_db_path: db_spectra/ALL_GNPS.msp # Path to the spectral library file in MSP
+  spectral_db_path: db_spectra/CASMI.msp # Path to the spectral library file in MSP
 
 spectral_match_params:
   parent_mz_tol: 0.01 # the parent mass tolerance to use for spectral matching (in Da) (if cosine)
