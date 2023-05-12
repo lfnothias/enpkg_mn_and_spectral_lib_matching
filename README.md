@@ -38,7 +38,7 @@ wget https://external.gnps2.org/gnpslibrary/ALL_GNPS.msp
 
 Move the spectral library into:
 ```console
-mv ALL_GNPS.msp /db_spectra
+mv ALL_GNPS.msp db_spectra/
 ```
 
 ## 3. Adapt parameters and launch the process! 🚀
