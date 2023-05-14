@@ -36,8 +36,7 @@ def spectral_matching(spectrums_query, db_clean, parent_mz_tol,
         min_cos (float): minimal cosine score
         min_peaks (int): minimum number of matching fragments
         output_file_path (str): path to write results
-    """    
-    
+    """
     if os.path.exists(output_file_path):
         os.remove(output_file_path)
 
@@ -46,8 +45,6 @@ def spectral_matching(spectrums_query, db_clean, parent_mz_tol,
     similarity_score = PrecursorMzMatch(tolerance=parent_mz_tol, tolerance_type="Dalton")
     chunks_query = [spectrums_query[x:x+1000] for x in range(0, len(spectrums_query), 1000)]
 
-
-    # Assuming 'y' is the column name in the dataframe 'db_clean'
     data = []
     for chunk in chunks_query:
         scores = calculate_scores(chunk, db_clean, similarity_score)
@@ -57,24 +54,15 @@ def spectral_matching(spectrums_query, db_clean, parent_mz_tol,
 
         scans_id_map = {i: int(s.metadata['scans']) for i, s in enumerate(chunk)}
 
-        # Initialize CosineGreedy object with a given tolerance for MS/MS m/z values
         cosinegreedy = CosineGreedy(tolerance=msms_mz_tol)
         
-        # Loop over pairs of indices (x,y) extracted from idx_row and idx_col arrays
         for x, y in zip(idx_row, idx_col):
-            # Only evaluate one-half of the symmetric similarity matrix
             if x < y:
-                # Compute MS/MS spectrum similarity score and number of matching peaks between 
-                # query spectrum chunk[x] and reference spectrum db_clean[y]
                 msms_score, n_matches = cosinegreedy.pair(chunk[x], db_clean[y])[()]
 
-                # Check if MS/MS spectrum similarity score and number of matching peaks meet 
-                # minimum thresholds for feature matching
                 if msms_score > min_cos and n_matches > min_peaks:
-                    # Map index x to feature ID based on metadata information
                     feature_id = scans_id_map[x]
                     
-                    # Append relevant data to the list of dictionaries 'data'
                     data.append({'msms_score': msms_score,
                                  'matched_peaks': n_matches,
                                  'feature_id': feature_id,
@@ -86,13 +74,25 @@ def spectral_matching(spectrums_query, db_clean, parent_mz_tol,
                                  'instrument_type': db_clean[y].get("instrumenttype"),  
                                  'comment': db_clean[y].get("comment"),  
                                  'inchikey': db_clean[y].get("inchikey"),
-                                 'inchi': db_clean[y].get("inchi"),
+                                 'inchi': (db_clean[y].get("inchi") or '').lstrip('\'"').rstrip('\'"'),
                                  'smiles': db_clean[y].get("smiles"),
                                  'compound_name': db_clean[y].get("compound_name")})
 
-    df = pd.DataFrame(data)
+    if len(data) > 0:
+        df = pd.DataFrame(data)
+        df['Spectral_library_ID'] = df['comment'].str.extract(r'DB#=(.*?);')
+        df['Spectral_library'] = df['comment'].str.extract(r'origin=(.*?)(?:;|$)')
+    else:
+        print("             No spectral library annotations.")
+        # Create an empty DataFrame with the same structure
+        df = pd.DataFrame(columns=['msms_score', 'matched_peaks', 'feature_id', 'reference_id',
+                                   'adduct', 'charge', 'ionmode', 'instrument', 'instrument_type', 
+                                   'comment', 'inchikey', 'inchi', 'smiles', 'compound_name',
+                                   'Spectral_library_ID', 'Spectral_library'])
     os.makedirs(os.path.dirname(output_file_path), exist_ok=True)
     df.to_csv(output_file_path, mode='a', header=not os.path.exists(output_file_path), sep='\t')
+
+
 
 
 

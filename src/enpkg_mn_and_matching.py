@@ -249,7 +249,7 @@ for sample_dir in samples_dir:
             usecols=['msms_score', 'feature_id', 'reference_id',
                      'matched_peaks', 'adduct',	'charge',
                      'ionmode',	'instrument',	'instrument_type',	'comment',
-                     'inchikey', 'inchi',	'smiles','compound_name'], on_bad_lines='skip', low_memory=True)
+                     'inchikey', 'inchi',	'smiles','compound_name','Spectral_library','Spectral_library_ID'], on_bad_lines='skip', low_memory=True)
     except:   
         continue
 
