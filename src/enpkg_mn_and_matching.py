@@ -162,8 +162,8 @@ print(f'{len(samples_dir)} samples folder were detected in the input directory. 
 valid_sample_dirs = []
 
 for sample_dir in samples_dir:
-    spectra_file_path = glob.glob(os.path.join(data_directory, sample_dir, '*.mgf'))
-    feature_table_path = glob.glob(os.path.join(data_directory, sample_dir, '*feature_table.csv'))
+    spectra_file_path = glob.glob(os.path.join(data_directory, sample_dir, '*ms2_'+polarity+'.mgf'))
+    feature_table_path = glob.glob(os.path.join(data_directory, sample_dir, '*quant_'+polarity+'.csv'))
 
     if len(spectra_file_path) == 0 :
         print(sample_dir + " folder has no MSMS data, it is removed from the processing list.")
@@ -187,8 +187,8 @@ for sample_dir in samples_dir:
     else:
         print("No '/' character found in the string.")
 
-    spectra_file_path = glob.glob(os.path.join(data_directory, sample_dir, '*.mgf'))[0]
-    feature_table_path = glob.glob(os.path.join(data_directory, sample_dir, '*feature_table.csv'))[0]
+    spectra_file_path = glob.glob(os.path.join(data_directory, sample_dir, '*ms2_'+polarity+'.mgf'))[0]
+    feature_table_path = glob.glob(os.path.join(data_directory, sample_dir, '*quant_'+polarity+'.csv'))[0]
     feature_table = pd.read_csv(feature_table_path, sep=',')
     # Additional processing code goes here
 
