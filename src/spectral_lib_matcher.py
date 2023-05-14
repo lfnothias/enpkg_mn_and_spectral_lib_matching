@@ -9,6 +9,9 @@ from matchms.similarity import PrecursorMzMatch
 from matchms import calculate_scores
 from matchms.similarity import CosineGreedy
 from matchms.logging_functions import set_matchms_logger_level
+import contextlib
+import os
+import sys
 
 # See https://github.com/matchms/matchms/pull/271
 set_matchms_logger_level("ERROR")
