@@ -26,8 +26,8 @@ def check_for_ionmode_folder_and_restruct_if_needed(path, polarity):
 
             dir_path = os.path.join(path, directory)
             for entry in os.scandir(dir_path):
-                if entry.is_file() and entry.name != 'metadata.tsv':
-                    shutil.move(entry.path, os.path.join(target_dir, entry.name))
+                if entry.is_file(): #and entry.name != 'metadata.tsv':
+                    shutil.copy(entry.path, os.path.join(target_dir, entry.name))
             print(target_dir)
 
 # We check for pos or neg presence and we construct from the SIRIUS folder
