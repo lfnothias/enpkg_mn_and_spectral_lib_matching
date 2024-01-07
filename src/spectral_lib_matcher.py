@@ -37,61 +37,65 @@ def spectral_matching(spectrums_query, db_clean, parent_mz_tol,
         min_peaks (int): minimum number of matching fragments
         output_file_path (str): path to write results
     """
-    if os.path.exists(output_file_path):
-        os.remove(output_file_path)
+    try:
+        if os.path.exists(output_file_path):
+            os.remove(output_file_path)
 
-    spectrums_query = [peak_processing(s) for s in spectrums_query]
+        spectrums_query = [peak_processing(s) for s in spectrums_query]
 
-    similarity_score = PrecursorMzMatch(tolerance=parent_mz_tol, tolerance_type="Dalton")
-    chunks_query = [spectrums_query[x:x+1000] for x in range(0, len(spectrums_query), 1000)]
+        similarity_score = PrecursorMzMatch(tolerance=parent_mz_tol, tolerance_type="Dalton")
+        chunks_query = [spectrums_query[x:x+1000] for x in range(0, len(spectrums_query), 1000)]
 
-    data = []
-    for chunk in chunks_query:
-        scores = calculate_scores(chunk, db_clean, similarity_score)
-        idx_row = scores.scores[:, :][0]
-        idx_col = scores.scores[:, :][1]
-        import numpy as np
+        data = []
+        for chunk in chunks_query:
+            scores = calculate_scores(chunk, db_clean, similarity_score)
+            idx_row = scores.scores[:, :][0]
+            idx_col = scores.scores[:, :][1]
+            import numpy as np
 
-        scans_id_map = {i: int(s.metadata['scans']) for i, s in enumerate(chunk)}
+            scans_id_map = {i: int(s.metadata['scans']) for i, s in enumerate(chunk)}
 
-        cosinegreedy = CosineGreedy(tolerance=msms_mz_tol)
-        
-        for x, y in zip(idx_row, idx_col):
-            if x < y:
-                msms_score, n_matches = cosinegreedy.pair(chunk[x], db_clean[y])[()]
+            cosinegreedy = CosineGreedy(tolerance=msms_mz_tol)
+            
+            for x, y in zip(idx_row, idx_col):
+                if x < y:
+                    msms_score, n_matches = cosinegreedy.pair(chunk[x], db_clean[y])[()]
 
-                if msms_score > min_cos and n_matches > min_peaks:
-                    feature_id = scans_id_map[x]
-                    
-                    data.append({'msms_score': msms_score,
-                                 'matched_peaks': n_matches,
-                                 'feature_id': feature_id,
-                                 'reference_id': y + 1,
-                                 'adduct': db_clean[y].get("precusortype"),
-                                 'charge': db_clean[y].get("charge"),
-                                 'ionmode': db_clean[y].get("ionmode"),
-                                 'instrument': db_clean[y].get("instrument"),
-                                 'instrument_type': db_clean[y].get("instrumenttype"),  
-                                 'comment': db_clean[y].get("comment"),  
-                                 'inchikey': db_clean[y].get("inchikey"),
-                                 'inchi': (db_clean[y].get("inchi") or '').lstrip('\'"').rstrip('\'"'),
-                                 'smiles': db_clean[y].get("smiles"),
-                                 'compound_name': db_clean[y].get("compound_name")})
+                    if msms_score > min_cos and n_matches > min_peaks:
+                        feature_id = scans_id_map[x]
+                        data.append({'msms_score': msms_score,
+                                    'matched_peaks': n_matches,
+                                    'feature_id': feature_id,
+                                    'reference_id': y + 1,
+                                    'adduct': db_clean[y].get("precusortype"),
+                                    'charge': db_clean[y].get("charge"),
+                                    'ionmode': db_clean[y].get("ionmode"),
+                                    'instrument': db_clean[y].get("instrument"),
+                                    'instrument_type': db_clean[y].get("instrumenttype"),  
+                                    'comment': db_clean[y].get("comment"),  
+                                    'inchikey': db_clean[y].get("inchikey"),
+                                    'inchi': (db_clean[y].get("inchi") or '').lstrip('\'"').rstrip('\'"'),
+                                    'smiles': db_clean[y].get("smiles"),
+                                    'compound_name': db_clean[y].get("compound_name")})
 
-    if len(data) > 0:
-        df = pd.DataFrame(data)
-        df['Spectral_library_ID'] = df['comment'].str.extract(r'DB#=(.*?);')
-        df['Spectral_library'] = df['comment'].str.extract(r'origin=(.*?)(?:;|$)')
-    else:
-        print("             No spectral library annotations.")
-        # Create an empty DataFrame with the same structure
-        df = pd.DataFrame(columns=['msms_score', 'matched_peaks', 'feature_id', 'reference_id',
-                                   'adduct', 'charge', 'ionmode', 'instrument', 'instrument_type', 
-                                   'comment', 'inchikey', 'inchi', 'smiles', 'compound_name',
-                                   'Spectral_library_ID', 'Spectral_library'])
-    os.makedirs(os.path.dirname(output_file_path), exist_ok=True)
-    df.to_csv(output_file_path, mode='a', header=not os.path.exists(output_file_path), sep='\t')
+        if len(data) > 0:
+            df = pd.DataFrame(data)
+            df['Spectral_library_ID'] = df['comment'].str.extract(r'DB#=(.*?);')
+            df['Spectral_library'] = df['comment'].str.extract(r'origin=(.*?)(?:;|$)')
+        else:
+            print("No spectral library annotations. Creating an empty DataFrame.")
+            # Create an empty DataFrame with the same structure
+            df = pd.DataFrame(columns=['msms_score', 'matched_peaks', 'feature_id', 'reference_id',
+                                    'adduct', 'charge', 'ionmode', 'instrument', 'instrument_type', 
+                                    'comment', 'inchikey', 'inchi', 'smiles', 'compound_name',
+                                    'Spectral_library_ID', 'Spectral_library','libname'])
+        os.makedirs(os.path.dirname(output_file_path), exist_ok=True)
+        df.to_csv(output_file_path, mode='a', header=not os.path.exists(output_file_path), sep='\t')
+        print(f"Results successfully saved to {output_file_path}")
 
+    except Exception as e:
+        print(f"An error occurred in spectral_matching: {e}")
+        raise
 
 
 
