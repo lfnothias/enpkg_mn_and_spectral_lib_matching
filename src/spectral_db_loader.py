@@ -35,7 +35,7 @@ def load_clean_spectral_db(path_to_db):
     """    
     
     print('''
-    Loading the spectral library ... this can take minutes ...
+    Loading the spectral library ... this can take minutes but will be done once at the beginning of the process ...
     ''')  
     spectrums_db = list(load_from_msp(path_to_db))
     print(f'''
@@ -56,7 +56,7 @@ def save_spectral_db(spectrums_db, output_path):
     """    
     
     print('''
-    Saving the spectral database
+    Saving the spectral database (it can take minutes ...)
     ''')  
     save_as_msp(spectrums_db, output_path)
 
