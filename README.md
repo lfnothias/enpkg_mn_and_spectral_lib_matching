@@ -61,9 +61,20 @@ mv ALL_GNPS.msp db_spectra/
 2. Modifiy the ``user.yaml`` file according to your needs (especially the paths).
 3. Launch the process:
 ```
-python src/enpkg_mn_and_matching.py -p data -ion pos
+python src/enpkg_mn_and_matching_parrallel.py -p data -ion pos -c 10 -r
 ```
-
+```
+'-p', '--sample_dir_path', required=True, help='The path to the directory where samples folders to process are located'
+```
+```
+'-ion', '--ionization_mode', required=True, choices=['pos', 'neg'], help='The ionization mode to perform spectral library matching'
+```
+```
+'-c', '--cpus', Number of cpu to use. Default is 80% of available CPUs.'
+```
+```
+'-r', '--recompute', Recompute even if the files are already present
+```                     
 ##  Target architecture
 
 ```
