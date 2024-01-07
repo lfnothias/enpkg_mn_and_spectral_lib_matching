@@ -59,6 +59,7 @@ mv ALL_GNPS.msp db_spectra/
 
 1. Copy and rename the parameters file <code>configs/default/default.yaml</code> into <code>configs/user/user.yaml</code>
 2. Modifiy the ``user.yaml`` file according to your needs (especially the paths).
+3. The feature table and MS2 MGF file must have the following suffixes (FBMN.mgf, feature_table.csv)
 3. Launch the process:
 
 #### Running it
@@ -88,16 +89,16 @@ python src/enpkg_mn_and_matching_parrallel.py -p data_neg -ion neg -c 10 -r
 ```
 data/
 └─── sample_a_folder/
-|     └───  pos/
-|			  └───  molecular_network/
-|	            └───  sample_a_folder_mn.graphml
-|	            └───  sample_a_folder_mn.metadata
-				  └───  config.yaml
-|		     └───  spectral_lib_matching/
-|		         └───  sample_a_folder_lib_results_pos.tsv
-|		         └───  sample_a_folder_lib_results_final_pos.tsv
-|		     └───  sample_a_features_quant_pos.csv
-|		     └───  sample_a_features_ms2_pos.csv 
+|  └───  pos/
+|      └───  molecular_network/
+|          └───  sample_a_folder_mn.graphml
+|          └───  sample_a_folder_mn.metadata
+|          └───  config.yaml
+|      └───  spectral_lib_matching/
+|          └───  sample_a_folder_lib_results_pos.tsv
+|          └───  sample_a_folder_lib_results_final_pos.tsv
+|      └───  sample_a_features_quant_pos*-feature_table.csv'
+|      └───  sample_a_features_ms2_pos-*FBMN.mgf'
 |
 └─── sample_b_folder/
 |
